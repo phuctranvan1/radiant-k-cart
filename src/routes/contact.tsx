@@ -11,7 +11,12 @@ import { Mail, MapPin, Phone, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({ meta: [{ title: "Contact — GLOW" }, { name: "description", content: "Get in touch with the GLOW team." }] }),
+  head: () => ({
+    meta: [
+      { title: "Contact — GLOW" },
+      { name: "description", content: "Get in touch with the GLOW team." },
+    ],
+  }),
   component: ContactPage,
 });
 
@@ -31,13 +36,20 @@ function ContactPage() {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const parsed = schema.safeParse(Object.fromEntries(fd));
-    if (!parsed.success) { toast.error(parsed.error.issues[0].message); return; }
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0].message);
+      return;
+    }
     setLoading(true);
     const { error } = await supabase.from("support_tickets").insert({
-      ...parsed.data, user_id: user?.id ?? null,
+      ...parsed.data,
+      user_id: user?.id ?? null,
     });
     setLoading(false);
-    if (error) { toast.error("Could not send message"); return; }
+    if (error) {
+      toast.error("Could not send message");
+      return;
+    }
     setSent(true);
   };
 
@@ -75,12 +87,33 @@ function ContactPage() {
           ) : (
             <form onSubmit={submit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div><Label>Name</Label><Input name="name" required defaultValue={user?.user_metadata?.display_name || ""} /></div>
-                <div><Label>Email</Label><Input type="email" name="email" required defaultValue={user?.email || ""} /></div>
+                <div>
+                  <Label>Name</Label>
+                  <Input
+                    name="name"
+                    required
+                    defaultValue={user?.user_metadata?.display_name || ""}
+                  />
+                </div>
+                <div>
+                  <Label>Email</Label>
+                  <Input type="email" name="email" required defaultValue={user?.email || ""} />
+                </div>
               </div>
-              <div><Label>Subject</Label><Input name="subject" required /></div>
-              <div><Label>Message</Label><Textarea name="message" rows={6} required /></div>
-              <Button type="submit" size="lg" className="w-full bg-gradient-gold text-primary-foreground" disabled={loading}>
+              <div>
+                <Label>Subject</Label>
+                <Input name="subject" required />
+              </div>
+              <div>
+                <Label>Message</Label>
+                <Textarea name="message" rows={6} required />
+              </div>
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full bg-gradient-gold text-primary-foreground"
+                disabled={loading}
+              >
                 {loading ? "Sending..." : "Send message"}
               </Button>
             </form>

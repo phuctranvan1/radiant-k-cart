@@ -27,17 +27,25 @@ function OrderLookup() {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const parsed = schema.safeParse(Object.fromEntries(fd));
-    if (!parsed.success) { toast.error("Enter a valid order number and email"); return; }
+    if (!parsed.success) {
+      toast.error("Enter a valid order number and email");
+      return;
+    }
     setLoading(true);
     const { data: o } = await supabase.rpc("lookup_order", {
-      _order_number: parsed.data.order_number, _email: parsed.data.email,
+      _order_number: parsed.data.order_number,
+      _email: parsed.data.email,
     });
     if (!o || (o as any[]).length === 0) {
-      toast.error("Order not found"); setLoading(false); setOrder(null); return;
+      toast.error("Order not found");
+      setLoading(false);
+      setOrder(null);
+      return;
     }
     setOrder((o as any[])[0]);
     const { data: it } = await supabase.rpc("lookup_order_items", {
-      _order_number: parsed.data.order_number, _email: parsed.data.email,
+      _order_number: parsed.data.order_number,
+      _email: parsed.data.email,
     });
     setItems((it as any[]) ?? []);
     setLoading(false);
@@ -48,13 +56,25 @@ function OrderLookup() {
       <div className="text-center mb-8">
         <Search className="mx-auto mb-3" size={28} style={{ color: "var(--gold)" }} />
         <h1 className="font-display text-4xl">Track your order</h1>
-        <p className="text-sm text-muted-foreground mt-2">Enter your order number and email to view status.</p>
+        <p className="text-sm text-muted-foreground mt-2">
+          Enter your order number and email to view status.
+        </p>
       </div>
 
       <form onSubmit={lookup} className="luxe-card rounded-xl p-6 space-y-4">
-        <div><Label>Order number</Label><Input name="order_number" placeholder="GLW-XXXXXXXX" required /></div>
-        <div><Label>Email</Label><Input type="email" name="email" required /></div>
-        <Button type="submit" className="w-full bg-gradient-gold text-primary-foreground" disabled={loading}>
+        <div>
+          <Label>Order number</Label>
+          <Input name="order_number" placeholder="GLW-XXXXXXXX" required />
+        </div>
+        <div>
+          <Label>Email</Label>
+          <Input type="email" name="email" required />
+        </div>
+        <Button
+          type="submit"
+          className="w-full bg-gradient-gold text-primary-foreground"
+          disabled={loading}
+        >
           {loading ? "Looking up..." : "Track order"}
         </Button>
       </form>
@@ -66,21 +86,31 @@ function OrderLookup() {
               <p className="text-xs tracking-widest text-muted-foreground">ORDER</p>
               <p className="font-mono text-gold text-xl">{order.order_number}</p>
             </div>
-            <span className="text-xs px-3 py-1 border border-gold rounded-full text-gold uppercase tracking-wider">{order.status}</span>
+            <span className="text-xs px-3 py-1 border border-gold rounded-full text-gold uppercase tracking-wider">
+              {order.status}
+            </span>
           </div>
-          <p className="text-sm text-muted-foreground mb-4">Placed {new Date(order.created_at).toLocaleDateString()}</p>
+          <p className="text-sm text-muted-foreground mb-4">
+            Placed {new Date(order.created_at).toLocaleDateString()}
+          </p>
           <div className="border-t border-border pt-4 space-y-2">
             {items.map((it, i) => (
               <div key={i} className="flex justify-between text-sm">
-                <span>{it.quantity}× {it.product_name}</span>
+                <span>
+                  {it.quantity}× {it.product_name}
+                </span>
                 <span>${(Number(it.unit_price) * it.quantity).toFixed(2)}</span>
               </div>
             ))}
           </div>
           <div className="border-t border-border pt-4 mt-4 flex justify-between font-semibold">
-            <span>Total</span><span className="text-gold">${Number(order.total).toFixed(2)}</span>
+            <span>Total</span>
+            <span className="text-gold">${Number(order.total).toFixed(2)}</span>
           </div>
-          <p className="text-xs text-muted-foreground mt-4">Shipping to {order.full_name}, {order.shipping_address}, {order.shipping_city}, {order.shipping_country}</p>
+          <p className="text-xs text-muted-foreground mt-4">
+            Shipping to {order.full_name}, {order.shipping_address}, {order.shipping_city},{" "}
+            {order.shipping_country}
+          </p>
         </div>
       )}
     </div>

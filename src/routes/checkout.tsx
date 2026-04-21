@@ -43,14 +43,24 @@ function CheckoutPage() {
   const applyPromo = async () => {
     const code = promo.trim().toUpperCase();
     if (!code) return;
-    const { data } = await supabase.from("promo_codes").select("*").eq("code", code).eq("active", true).maybeSingle();
-    if (!data) { toast.error("Invalid promo code"); return; }
-    if (data.min_order && subtotal < Number(data.min_order)) {
-      toast.error(`Minimum order $${data.min_order} required`); return;
+    const { data } = await supabase
+      .from("promo_codes")
+      .select("*")
+      .eq("code", code)
+      .eq("active", true)
+      .maybeSingle();
+    if (!data) {
+      toast.error("Invalid promo code");
+      return;
     }
-    const d = data.discount_type === "percent"
-      ? subtotal * (Number(data.discount_value) / 100)
-      : Number(data.discount_value);
+    if (data.min_order && subtotal < Number(data.min_order)) {
+      toast.error(`Minimum order $${data.min_order} required`);
+      return;
+    }
+    const d =
+      data.discount_type === "percent"
+        ? subtotal * (Number(data.discount_value) / 100)
+        : Number(data.discount_value);
     setDiscount(d);
     setAppliedCode(code);
     toast.success(`Code ${code} applied — saved $${d.toFixed(2)}`);
@@ -58,33 +68,52 @@ function CheckoutPage() {
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (count === 0) { toast.error("Your bag is empty"); return; }
+    if (count === 0) {
+      toast.error("Your bag is empty");
+      return;
+    }
     const fd = new FormData(e.currentTarget);
     const parsed = schema.safeParse(Object.fromEntries(fd));
-    if (!parsed.success) { toast.error(parsed.error.issues[0].message); return; }
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0].message);
+      return;
+    }
 
     setSubmitting(true);
-    const { data: order, error } = await supabase.from("orders").insert({
-      user_id: user?.id ?? null,
-      ...parsed.data,
-      phone: parsed.data.phone || null,
-      shipping_postal: parsed.data.shipping_postal || null,
-      notes: parsed.data.notes || null,
-      subtotal, discount, shipping_fee: shipping, total,
-      promo_code: appliedCode,
-      status: "pending",
-    }).select().single();
+    const { data: order, error } = await supabase
+      .from("orders")
+      .insert({
+        user_id: user?.id ?? null,
+        ...parsed.data,
+        phone: parsed.data.phone || null,
+        shipping_postal: parsed.data.shipping_postal || null,
+        notes: parsed.data.notes || null,
+        subtotal,
+        discount,
+        shipping_fee: shipping,
+        total,
+        promo_code: appliedCode,
+        status: "pending",
+      })
+      .select()
+      .single();
 
-    if (error || !order) { toast.error("Could not place order"); setSubmitting(false); return; }
+    if (error || !order) {
+      toast.error("Could not place order");
+      setSubmitting(false);
+      return;
+    }
 
-    const lines = items.filter((i) => i.product).map((i) => ({
-      order_id: order.id,
-      product_id: i.product_id,
-      product_name: i.product!.name,
-      product_image: i.product!.image_url,
-      unit_price: i.product!.sale_price ?? i.product!.price,
-      quantity: i.quantity,
-    }));
+    const lines = items
+      .filter((i) => i.product)
+      .map((i) => ({
+        order_id: order.id,
+        product_id: i.product_id,
+        product_name: i.product!.name,
+        product_image: i.product!.image_url,
+        unit_price: i.product!.sale_price ?? i.product!.price,
+        quantity: i.quantity,
+      }));
     await supabase.from("order_items").insert(lines);
 
     await clearCart();
@@ -102,8 +131,12 @@ function CheckoutPage() {
         <p className="text-sm text-muted-foreground mb-6">
           Save your order number to track it anytime. A confirmation will be sent to your email.
         </p>
-        <Link to="/order-lookup"><Button className="bg-gradient-gold text-primary-foreground">Track Order</Button></Link>
-        <Link to="/products" className="block mt-4 text-sm text-muted-foreground hover:text-gold">Continue shopping</Link>
+        <Link to="/order-lookup">
+          <Button className="bg-gradient-gold text-primary-foreground">Track Order</Button>
+        </Link>
+        <Link to="/products" className="block mt-4 text-sm text-muted-foreground hover:text-gold">
+          Continue shopping
+        </Link>
       </div>
     );
   }
@@ -112,7 +145,9 @@ function CheckoutPage() {
     return (
       <div className="container py-20 text-center">
         <p className="text-muted-foreground mb-4">Your bag is empty.</p>
-        <Link to="/products" className="text-gold underline">Browse products</Link>
+        <Link to="/products" className="text-gold underline">
+          Browse products
+        </Link>
       </div>
     );
   }
@@ -125,26 +160,59 @@ function CheckoutPage() {
           <section className="luxe-card rounded-xl p-6">
             <h2 className="font-display text-2xl mb-4">Contact</h2>
             <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-2"><Label>Full name</Label><Input name="full_name" required defaultValue={user?.user_metadata?.full_name || ""} /></div>
-              <div><Label>Email</Label><Input type="email" name="email" required defaultValue={user?.email || ""} /></div>
-              <div><Label>Phone (optional)</Label><Input name="phone" /></div>
+              <div className="col-span-2">
+                <Label>Full name</Label>
+                <Input
+                  name="full_name"
+                  required
+                  defaultValue={user?.user_metadata?.full_name || ""}
+                />
+              </div>
+              <div>
+                <Label>Email</Label>
+                <Input type="email" name="email" required defaultValue={user?.email || ""} />
+              </div>
+              <div>
+                <Label>Phone (optional)</Label>
+                <Input name="phone" />
+              </div>
             </div>
           </section>
           <section className="luxe-card rounded-xl p-6">
             <h2 className="font-display text-2xl mb-4">Shipping address</h2>
             <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-2"><Label>Street address</Label><Input name="shipping_address" required /></div>
-              <div><Label>City</Label><Input name="shipping_city" required /></div>
-              <div><Label>Postal code</Label><Input name="shipping_postal" /></div>
-              <div className="col-span-2"><Label>Country</Label><Input name="shipping_country" required defaultValue="United States" /></div>
-              <div className="col-span-2"><Label>Order notes (optional)</Label><Textarea name="notes" rows={3} /></div>
+              <div className="col-span-2">
+                <Label>Street address</Label>
+                <Input name="shipping_address" required />
+              </div>
+              <div>
+                <Label>City</Label>
+                <Input name="shipping_city" required />
+              </div>
+              <div>
+                <Label>Postal code</Label>
+                <Input name="shipping_postal" />
+              </div>
+              <div className="col-span-2">
+                <Label>Country</Label>
+                <Input name="shipping_country" required defaultValue="United States" />
+              </div>
+              <div className="col-span-2">
+                <Label>Order notes (optional)</Label>
+                <Textarea name="notes" rows={3} />
+              </div>
             </div>
           </section>
           <section className="luxe-card rounded-xl p-6">
             <h2 className="font-display text-2xl mb-2">Payment</h2>
             <p className="text-sm text-muted-foreground mb-4">
-              <Sparkles size={14} className="inline text-gold mr-1" style={{color:"var(--gold)"}} />
-              Demo checkout — no payment will be charged. Real payment processing can be enabled later.
+              <Sparkles
+                size={14}
+                className="inline text-gold mr-1"
+                style={{ color: "var(--gold)" }}
+              />
+              Demo checkout — no payment will be charged. Real payment processing can be enabled
+              later.
             </p>
           </section>
         </div>
@@ -152,30 +220,58 @@ function CheckoutPage() {
         <aside className="luxe-card rounded-xl p-6 h-fit sticky top-24">
           <h2 className="font-display text-2xl mb-4">Summary</h2>
           <div className="space-y-2 max-h-60 overflow-y-auto mb-4">
-            {items.map((i) => i.product && (
-              <div key={i.product_id} className="flex gap-2 text-sm">
-                <span className="text-muted-foreground">{i.quantity}×</span>
-                <span className="flex-1 truncate">{i.product.name}</span>
-                <span>${((i.product.sale_price ?? i.product.price) * i.quantity).toFixed(2)}</span>
-              </div>
-            ))}
+            {items.map(
+              (i) =>
+                i.product && (
+                  <div key={i.product_id} className="flex gap-2 text-sm">
+                    <span className="text-muted-foreground">{i.quantity}×</span>
+                    <span className="flex-1 truncate">{i.product.name}</span>
+                    <span>
+                      ${((i.product.sale_price ?? i.product.price) * i.quantity).toFixed(2)}
+                    </span>
+                  </div>
+                ),
+            )}
           </div>
           <div className="border-t border-border pt-4 mb-4">
             <Label>Promo code</Label>
             <div className="flex gap-2 mt-1">
-              <Input value={promo} onChange={(e) => setPromo(e.target.value)} placeholder="WELCOME10" />
-              <Button type="button" variant="outline" onClick={applyPromo}>Apply</Button>
+              <Input
+                value={promo}
+                onChange={(e) => setPromo(e.target.value)}
+                placeholder="WELCOME10"
+              />
+              <Button type="button" variant="outline" onClick={applyPromo}>
+                Apply
+              </Button>
             </div>
           </div>
           <div className="space-y-2 text-sm border-t border-border pt-4">
-            <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
-            {discount > 0 && <div className="flex justify-between text-gold"><span>Discount</span><span>−${discount.toFixed(2)}</span></div>}
-            <div className="flex justify-between"><span className="text-muted-foreground">Shipping</span><span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span></div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Subtotal</span>
+              <span>${subtotal.toFixed(2)}</span>
+            </div>
+            {discount > 0 && (
+              <div className="flex justify-between text-gold">
+                <span>Discount</span>
+                <span>−${discount.toFixed(2)}</span>
+              </div>
+            )}
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Shipping</span>
+              <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+            </div>
             <div className="flex justify-between text-lg font-semibold pt-2 border-t border-border">
-              <span>Total</span><span className="text-gold">${total.toFixed(2)}</span>
+              <span>Total</span>
+              <span className="text-gold">${total.toFixed(2)}</span>
             </div>
           </div>
-          <Button type="submit" size="lg" className="w-full mt-6 bg-gradient-gold text-primary-foreground" disabled={submitting}>
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full mt-6 bg-gradient-gold text-primary-foreground"
+            disabled={submitting}
+          >
             {submitting ? "Placing order..." : "Place order"}
           </Button>
         </aside>

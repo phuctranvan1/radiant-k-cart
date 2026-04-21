@@ -11,7 +11,11 @@ type AuthCtx = {
 };
 
 const Ctx = createContext<AuthCtx>({
-  user: null, session: null, loading: true, isAdmin: false, signOut: async () => {},
+  user: null,
+  session: null,
+  loading: true,
+  isAdmin: false,
+  signOut: async () => {},
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -22,15 +26,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, sess) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, sess) => {
       setSession(sess);
       setUser(sess?.user ?? null);
       if (sess?.user) {
         // defer DB call
         setTimeout(() => {
-          supabase.from("user_roles").select("role").eq("user_id", sess.user.id).then(({ data }) => {
-            setIsAdmin(!!data?.some((r) => r.role === "admin"));
-          });
+          supabase
+            .from("user_roles")
+            .select("role")
+            .eq("user_id", sess.user.id)
+            .then(({ data }) => {
+              setIsAdmin(!!data?.some((r) => r.role === "admin"));
+            });
         }, 0);
       } else {
         setIsAdmin(false);
@@ -42,9 +52,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(sess?.user ?? null);
       setLoading(false);
       if (sess?.user) {
-        supabase.from("user_roles").select("role").eq("user_id", sess.user.id).then(({ data }) => {
-          setIsAdmin(!!data?.some((r) => r.role === "admin"));
-        });
+        supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", sess.user.id)
+          .then(({ data }) => {
+            setIsAdmin(!!data?.some((r) => r.role === "admin"));
+          });
       }
     });
 
@@ -55,7 +69,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut();
   };
 
-  return <Ctx.Provider value={{ user, session, loading, isAdmin, signOut }}>{children}</Ctx.Provider>;
+  return (
+    <Ctx.Provider value={{ user, session, loading, isAdmin, signOut }}>{children}</Ctx.Provider>
+  );
 }
 
 export const useAuth = () => useContext(Ctx);

@@ -36,12 +36,16 @@ export function useCart() {
           product_id: r.product_id,
           quantity: r.quantity,
           product: r.products,
-        }))
+        })),
       );
     } else {
       const raw = typeof window !== "undefined" ? localStorage.getItem(GUEST_KEY) : null;
       const guest: { product_id: string; quantity: number }[] = raw ? JSON.parse(raw) : [];
-      if (guest.length === 0) { setItems([]); setLoading(false); return; }
+      if (guest.length === 0) {
+        setItems([]);
+        setLoading(false);
+        return;
+      }
       const ids = guest.map((g) => g.product_id);
       const { data } = await supabase
         .from("products")
@@ -52,15 +56,19 @@ export function useCart() {
     setLoading(false);
   }, [user]);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   const addItem = async (product_id: string, quantity = 1) => {
     if (user) {
       const existing = items.find((i) => i.product_id === product_id);
       if (existing) {
-        await supabase.from("cart_items")
+        await supabase
+          .from("cart_items")
           .update({ quantity: existing.quantity + quantity })
-          .eq("user_id", user.id).eq("product_id", product_id);
+          .eq("user_id", user.id)
+          .eq("product_id", product_id);
       } else {
         await supabase.from("cart_items").insert({ user_id: user.id, product_id, quantity });
       }
@@ -79,8 +87,11 @@ export function useCart() {
   const updateQty = async (product_id: string, quantity: number) => {
     if (quantity <= 0) return removeItem(product_id);
     if (user) {
-      await supabase.from("cart_items").update({ quantity })
-        .eq("user_id", user.id).eq("product_id", product_id);
+      await supabase
+        .from("cart_items")
+        .update({ quantity })
+        .eq("user_id", user.id)
+        .eq("product_id", product_id);
     } else {
       const raw = localStorage.getItem(GUEST_KEY);
       const guest: { product_id: string; quantity: number }[] = raw ? JSON.parse(raw) : [];
@@ -93,12 +104,18 @@ export function useCart() {
 
   const removeItem = async (product_id: string) => {
     if (user) {
-      await supabase.from("cart_items").delete()
-        .eq("user_id", user.id).eq("product_id", product_id);
+      await supabase
+        .from("cart_items")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("product_id", product_id);
     } else {
       const raw = localStorage.getItem(GUEST_KEY);
       const guest: { product_id: string; quantity: number }[] = raw ? JSON.parse(raw) : [];
-      localStorage.setItem(GUEST_KEY, JSON.stringify(guest.filter((g) => g.product_id !== product_id)));
+      localStorage.setItem(
+        GUEST_KEY,
+        JSON.stringify(guest.filter((g) => g.product_id !== product_id)),
+      );
     }
     await refresh();
   };
@@ -110,7 +127,8 @@ export function useCart() {
   };
 
   const subtotal = items.reduce(
-    (s, i) => s + ((i.product?.sale_price ?? i.product?.price ?? 0) * i.quantity), 0
+    (s, i) => s + (i.product?.sale_price ?? i.product?.price ?? 0) * i.quantity,
+    0,
   );
   const count = items.reduce((s, i) => s + i.quantity, 0);
 

@@ -20,7 +20,11 @@ function AccountPage() {
 
   useEffect(() => {
     if (!user) return;
-    supabase.from("orders").select("*").eq("user_id", user.id).order("created_at", { ascending: false })
+    supabase
+      .from("orders")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
       .then(({ data }) => setOrders(data ?? []));
   }, [user]);
 
@@ -31,12 +35,22 @@ function AccountPage() {
       <div className="flex justify-between items-start mb-8">
         <div>
           <p className="text-xs tracking-[0.3em] text-gold mb-2">MY ACCOUNT</p>
-          <h1 className="font-display text-4xl">Hello, {user.user_metadata?.display_name || user.email?.split("@")[0]}</h1>
+          <h1 className="font-display text-4xl">
+            Hello, {user.user_metadata?.display_name || user.email?.split("@")[0]}
+          </h1>
           <p className="text-muted-foreground text-sm mt-1">{user.email}</p>
         </div>
         <div className="flex gap-2">
-          {isAdmin && <Link to="/admin"><Button variant="outline" className="border-gold text-gold">Admin</Button></Link>}
-          <Button onClick={signOut} variant="outline">Sign out</Button>
+          {isAdmin && (
+            <Link to="/admin">
+              <Button variant="outline" className="border-gold text-gold">
+                Admin
+              </Button>
+            </Link>
+          )}
+          <Button onClick={signOut} variant="outline">
+            Sign out
+          </Button>
         </div>
       </div>
 
@@ -47,10 +61,15 @@ function AccountPage() {
         ) : (
           <div className="space-y-3">
             {orders.map((o) => (
-              <div key={o.id} className="flex items-center justify-between p-4 border border-border rounded-lg">
+              <div
+                key={o.id}
+                className="flex items-center justify-between p-4 border border-border rounded-lg"
+              >
                 <div>
                   <p className="font-mono text-gold">{o.order_number}</p>
-                  <p className="text-xs text-muted-foreground">{new Date(o.created_at).toLocaleDateString()} · {o.status}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {new Date(o.created_at).toLocaleDateString()} · {o.status}
+                  </p>
                 </div>
                 <p className="font-semibold">${Number(o.total).toFixed(2)}</p>
               </div>

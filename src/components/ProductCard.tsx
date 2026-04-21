@@ -39,14 +39,22 @@ export function ProductCard({ product }: { product: Product }) {
           )}
         </div>
         <div className="p-4">
-          {product.brand && <p className="text-[10px] tracking-widest text-muted-foreground uppercase mb-1">{product.brand}</p>}
-          <h3 className="font-display text-lg leading-tight mb-2 group-hover:text-gold transition-colors">{product.name}</h3>
+          {product.brand && (
+            <p className="text-[10px] tracking-widest text-muted-foreground uppercase mb-1">
+              {product.brand}
+            </p>
+          )}
+          <h3 className="font-display text-lg leading-tight mb-2 group-hover:text-gold transition-colors">
+            {product.name}
+          </h3>
           <div className="flex items-center justify-between">
             <div className="flex items-baseline gap-2">
               {onSale ? (
                 <>
                   <span className="text-gold font-semibold">${product.sale_price?.toFixed(2)}</span>
-                  <span className="text-xs text-muted-foreground line-through">${product.price.toFixed(2)}</span>
+                  <span className="text-xs text-muted-foreground line-through">
+                    ${product.price.toFixed(2)}
+                  </span>
                 </>
               ) : (
                 <span className="font-semibold">${product.price.toFixed(2)}</span>
