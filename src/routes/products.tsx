@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ProductCard } from "@/components/ProductCard";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -39,6 +40,7 @@ type Category = { id: string; name: string; slug: string };
 function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [sort, setSort] = useState("featured");
@@ -48,7 +50,10 @@ function ProductsPage() {
     supabase
       .from("products")
       .select("*")
-      .then(({ data }) => setProducts(data ?? []));
+      .then(({ data }) => {
+        setProducts(data ?? []);
+        setLoadingProducts(false);
+      });
     supabase
       .from("categories")
       .select("id,name,slug")
@@ -143,8 +148,21 @@ function ProductsPage() {
         </aside>
 
         <div>
-          <p className="text-sm text-muted-foreground mb-4">{filtered.length} products</p>
-          {filtered.length === 0 ? (
+          <p className="text-sm text-muted-foreground mb-4">
+            {loadingProducts ? "Loading..." : `${filtered.length} products`}
+          </p>
+          {loadingProducts ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="space-y-3">
+                  <Skeleton className="aspect-square rounded-xl" />
+                  <Skeleton className="h-3 w-1/3" />
+                  <Skeleton className="h-5 w-2/3" />
+                  <Skeleton className="h-4 w-1/4" />
+                </div>
+              ))}
+            </div>
+          ) : filtered.length === 0 ? (
             <p className="py-20 text-center text-muted-foreground">
               No products match your filters.
             </p>

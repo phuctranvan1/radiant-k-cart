@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/useCart";
+import { useWishlist } from "@/lib/useWishlist";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Star, Minus, Plus, Heart, Truck, Shield } from "lucide-react";
 
 export const Route = createFileRoute("/products/$slug")({
@@ -33,12 +35,37 @@ type Product = {
   review_count: number | null;
 };
 
+function ProductDetailSkeleton() {
+  return (
+    <div className="container mx-auto px-4 py-12">
+      <Skeleton className="h-4 w-32 mb-6" />
+      <div className="grid md:grid-cols-2 gap-12 mt-6">
+        <Skeleton className="aspect-square rounded-2xl" />
+        <div className="space-y-4">
+          <Skeleton className="h-3 w-24" />
+          <Skeleton className="h-10 w-3/4" />
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-12 w-40" />
+          <Skeleton className="h-20 w-full" />
+          <div className="flex gap-4">
+            <Skeleton className="h-12 w-32" />
+            <Skeleton className="h-12 flex-1" />
+            <Skeleton className="h-12 w-12" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ProductDetail() {
   const { slug } = Route.useParams();
   const [p, setP] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
   const [tab, setTab] = useState<"desc" | "ingredients" | "how">("desc");
   const { addItem } = useCart();
+  const { toggle, isWishlisted } = useWishlist();
 
   useEffect(() => {
     supabase
@@ -46,10 +73,14 @@ function ProductDetail() {
       .select("*")
       .eq("slug", slug)
       .maybeSingle()
-      .then(({ data }) => setP(data));
+      .then(({ data }) => {
+        setP(data);
+        setLoading(false);
+      });
   }, [slug]);
 
-  if (!p) return <div className="container py-20 text-center text-muted-foreground">Loading…</div>;
+  if (loading) return <ProductDetailSkeleton />;
+  if (!p) return notFound();
 
   const onSale = p.sale_price && p.sale_price < p.price;
 
@@ -117,8 +148,18 @@ function ProductDetail() {
             >
               {p.stock === 0 ? "Out of stock" : "Add to bag"}
             </Button>
-            <Button size="lg" variant="outline" className="border-gold text-gold">
-              <Heart size={18} />
+            <Button
+              size="lg"
+              variant="outline"
+              className={`border-gold ${isWishlisted(p.id) ? "bg-gold/10" : ""}`}
+              onClick={() => toggle(p.id)}
+              aria-label={isWishlisted(p.id) ? "Remove from wishlist" : "Save to wishlist"}
+            >
+              <Heart
+                size={18}
+                className={isWishlisted(p.id) ? "fill-current" : ""}
+                style={{ color: "var(--gold)" }}
+              />
             </Button>
           </div>
 
@@ -140,7 +181,7 @@ function ProductDetail() {
               ].map((t) => (
                 <button
                   key={t.id}
-                  onClick={() => setTab(t.id as any)}
+                  onClick={() => setTab(t.id as "desc" | "ingredients" | "how")}
                   className={`pb-2 border-b-2 ${tab === t.id ? "border-gold text-gold" : "border-transparent text-muted-foreground"}`}
                 >
                   {t.label}

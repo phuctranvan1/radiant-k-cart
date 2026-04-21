@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { ShoppingBag, Search, User as UserIcon, Menu, X, Sparkles } from "lucide-react";
+import { ShoppingBag, Search, User as UserIcon, Menu, X, Sparkles, Heart } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { useCart } from "@/lib/useCart";
+import { useWishlist } from "@/lib/useWishlist";
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
@@ -16,6 +17,7 @@ const navLinks = [
 export function Header() {
   const { user, isAdmin, signOut } = useAuth();
   const { count } = useCart();
+  const { ids: wishlistIds } = useWishlist();
   const [open, setOpen] = useState(false);
 
   return (
@@ -81,6 +83,19 @@ export function Header() {
               </Button>
             </Link>
           )}
+          {/* Wishlist icon */}
+          <Link
+            to="/wishlist"
+            className="p-2 hover:text-gold transition-colors relative"
+            aria-label="Wishlist"
+          >
+            <Heart size={20} />
+            {wishlistIds.length > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 bg-gradient-gold text-primary-foreground text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                {wishlistIds.length}
+              </span>
+            )}
+          </Link>
           <Link
             to="/cart"
             className="p-2 hover:text-gold transition-colors relative"
@@ -105,6 +120,9 @@ export function Header() {
                 {l.label}
               </Link>
             ))}
+            <Link to="/wishlist" className="py-2 text-sm" onClick={() => setOpen(false)}>
+              Wishlist {wishlistIds.length > 0 && `(${wishlistIds.length})`}
+            </Link>
             <Link to="/auth" className="py-2 text-sm" onClick={() => setOpen(false)}>
               Account
             </Link>

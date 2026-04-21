@@ -34,21 +34,6 @@ export function ChatWidget() {
     setLoading(true);
 
     let acc = "";
-    const upsert = (chunk: string) => {
-      acc += chunk;
-      setMessages((p) => {
-        const last = p[p.length - 1];
-        if (
-          last?.role === "assistant" &&
-          last.content !== acc.slice(0, last.content.length).slice(0, -chunk.length)
-            ? false
-            : last?.role === "assistant"
-        ) {
-          return p.map((m, i) => (i === p.length - 1 ? { ...m, content: acc } : m));
-        }
-        return [...p, { role: "assistant", content: acc }];
-      });
-    };
 
     try {
       const resp = await fetch(CHAT_URL, {
@@ -91,7 +76,9 @@ export function ChatWidget() {
             break;
           }
           try {
-            const parsed = JSON.parse(json);
+            const parsed = JSON.parse(json) as {
+              choices?: { delta?: { content?: string } }[];
+            };
             const content = parsed.choices?.[0]?.delta?.content;
             if (content) {
               acc += content;

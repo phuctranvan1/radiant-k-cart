@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as SupportRouteImport } from './routes/support'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ProductsRouteImport } from './routes/products'
@@ -25,6 +26,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 
+const WishlistRoute = WishlistRouteImport.update({
+  id: '/wishlist',
+  path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SupportRoute = SupportRouteImport.update({
   id: '/support',
   path: '/support',
@@ -115,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/products': typeof ProductsRouteWithChildren
   '/search': typeof SearchRoute
   '/support': typeof SupportRoute
+  '/wishlist': typeof WishlistRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
 }
@@ -132,6 +139,7 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsRouteWithChildren
   '/search': typeof SearchRoute
   '/support': typeof SupportRoute
+  '/wishlist': typeof WishlistRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
 }
@@ -150,6 +158,7 @@ export interface FileRoutesById {
   '/products': typeof ProductsRouteWithChildren
   '/search': typeof SearchRoute
   '/support': typeof SupportRoute
+  '/wishlist': typeof WishlistRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
 }
@@ -169,6 +178,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/search'
     | '/support'
+    | '/wishlist'
     | '/categories/$slug'
     | '/products/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -186,6 +196,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/search'
     | '/support'
+    | '/wishlist'
     | '/categories/$slug'
     | '/products/$slug'
   id:
@@ -203,6 +214,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/search'
     | '/support'
+    | '/wishlist'
     | '/categories/$slug'
     | '/products/$slug'
   fileRoutesById: FileRoutesById
@@ -221,11 +233,19 @@ export interface RootRouteChildren {
   ProductsRoute: typeof ProductsRouteWithChildren
   SearchRoute: typeof SearchRoute
   SupportRoute: typeof SupportRoute
+  WishlistRoute: typeof WishlistRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wishlist': {
+      id: '/wishlist'
+      path: '/wishlist'
+      fullPath: '/wishlist'
+      preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/support': {
       id: '/support'
       path: '/support'
@@ -360,8 +380,18 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsRoute: ProductsRouteWithChildren,
   SearchRoute: SearchRoute,
   SupportRoute: SupportRoute,
+  WishlistRoute: WishlistRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

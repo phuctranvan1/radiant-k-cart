@@ -4,6 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { ProductCard } from "@/components/ProductCard";
 import { Input } from "@/components/ui/input";
 import { Search as SearchIcon } from "lucide-react";
+import type { Database } from "@/integrations/supabase/types";
+
+type ProductRow = Database["public"]["Tables"]["products"]["Row"];
 
 export const Route = createFileRoute("/search")({
   head: () => ({ meta: [{ title: "Search — GLOW" }] }),
@@ -12,7 +15,7 @@ export const Route = createFileRoute("/search")({
 
 function SearchPage() {
   const [q, setQ] = useState("");
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<ProductRow[]>([]);
 
   useEffect(() => {
     const term = q.trim();

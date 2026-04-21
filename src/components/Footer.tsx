@@ -49,6 +49,11 @@ export function Footer() {
                 Sets & Gifts
               </Link>
             </li>
+            <li>
+              <Link to="/wishlist" className="hover:text-foreground">
+                Wishlist
+              </Link>
+            </li>
           </ul>
         </div>
         <div>

@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import type { Database } from "@/integrations/supabase/types";
+
+type Order = Database["public"]["Tables"]["orders"]["Row"];
 
 export const Route = createFileRoute("/account")({
   head: () => ({ meta: [{ title: "My Account — GLOW" }] }),
@@ -12,7 +15,7 @@ export const Route = createFileRoute("/account")({
 function AccountPage() {
   const { user, isAdmin, signOut, loading } = useAuth();
   const navigate = useNavigate();
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/auth" });

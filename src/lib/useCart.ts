@@ -32,10 +32,10 @@ export function useCart() {
         .select("product_id, quantity, products(id,name,price,sale_price,image_url,slug,stock)")
         .eq("user_id", user.id);
       setItems(
-        (data ?? []).map((r: any) => ({
+        (data ?? []).map((r) => ({
           product_id: r.product_id,
           quantity: r.quantity,
-          product: r.products,
+          product: r.products as CartLine["product"],
         })),
       );
     } else {

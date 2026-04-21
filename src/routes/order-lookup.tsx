@@ -7,6 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Search } from "lucide-react";
 import { toast } from "sonner";
+import type { Database } from "@/integrations/supabase/types";
+
+type LookupOrder = Database["public"]["Functions"]["lookup_order"]["Returns"][number];
+type LookupOrderItem = Database["public"]["Functions"]["lookup_order_items"]["Returns"][number];
 
 export const Route = createFileRoute("/order-lookup")({
   head: () => ({ meta: [{ title: "Track Order — GLOW" }] }),
@@ -19,8 +23,8 @@ const schema = z.object({
 });
 
 function OrderLookup() {
-  const [order, setOrder] = useState<any>(null);
-  const [items, setItems] = useState<any[]>([]);
+  const [order, setOrder] = useState<LookupOrder | null>(null);
+  const [items, setItems] = useState<LookupOrderItem[]>([]);
   const [loading, setLoading] = useState(false);
 
   const lookup = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -36,18 +40,18 @@ function OrderLookup() {
       _order_number: parsed.data.order_number,
       _email: parsed.data.email,
     });
-    if (!o || (o as any[]).length === 0) {
+    if (!o || o.length === 0) {
       toast.error("Order not found");
       setLoading(false);
       setOrder(null);
       return;
     }
-    setOrder((o as any[])[0]);
+    setOrder(o[0]);
     const { data: it } = await supabase.rpc("lookup_order_items", {
       _order_number: parsed.data.order_number,
       _email: parsed.data.email,
     });
-    setItems((it as any[]) ?? []);
+    setItems(it ?? []);
     setLoading(false);
   };
 

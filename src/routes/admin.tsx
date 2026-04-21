@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { Database } from "@/integrations/supabase/types";
 import {
   Dialog,
   DialogContent,
@@ -23,6 +24,14 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Plus, Trash2, Edit } from "lucide-react";
+
+type AdminProduct = Database["public"]["Tables"]["products"]["Row"] & {
+  categories: { name: string } | null;
+};
+type AdminCategory = Database["public"]["Tables"]["categories"]["Row"];
+type AdminOrder = Database["public"]["Tables"]["orders"]["Row"];
+type AdminPromo = Database["public"]["Tables"]["promo_codes"]["Row"];
+type AdminTicket = Database["public"]["Tables"]["support_tickets"]["Row"];
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — GLOW" }] }),
@@ -72,9 +81,9 @@ function AdminPage() {
 }
 
 function ProductsAdmin() {
-  const [products, setProducts] = useState<any[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
-  const [editing, setEditing] = useState<any>(null);
+  const [products, setProducts] = useState<AdminProduct[]>([]);
+  const [categories, setCategories] = useState<AdminCategory[]>([]);
+  const [editing, setEditing] = useState<AdminProduct | null>(null);
   const [open, setOpen] = useState(false);
 
   const refresh = () => {
@@ -82,7 +91,7 @@ function ProductsAdmin() {
       .from("products")
       .select("*, categories(name)")
       .order("created_at", { ascending: false })
-      .then(({ data }) => setProducts(data ?? []));
+      .then(({ data }) => setProducts((data ?? []) as AdminProduct[]));
   };
   useEffect(() => {
     refresh();
@@ -261,7 +270,7 @@ function ProductsAdmin() {
 }
 
 function OrdersAdmin() {
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<AdminOrder[]>([]);
   const refresh = () =>
     supabase
       .from("orders")
@@ -308,7 +317,7 @@ function OrdersAdmin() {
 }
 
 function PromosAdmin() {
-  const [promos, setPromos] = useState<any[]>([]);
+  const [promos, setPromos] = useState<AdminPromo[]>([]);
   const refresh = () =>
     supabase
       .from("promo_codes")
@@ -400,7 +409,7 @@ function PromosAdmin() {
 }
 
 function TicketsAdmin() {
-  const [tickets, setTickets] = useState<any[]>([]);
+  const [tickets, setTickets] = useState<AdminTicket[]>([]);
   useEffect(() => {
     supabase
       .from("support_tickets")

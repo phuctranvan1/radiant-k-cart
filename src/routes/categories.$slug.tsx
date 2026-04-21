@@ -2,6 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ProductCard } from "@/components/ProductCard";
+import type { Database } from "@/integrations/supabase/types";
+
+type CategoryRow = Database["public"]["Tables"]["categories"]["Row"];
+type ProductRow = Database["public"]["Tables"]["products"]["Row"];
 
 export const Route = createFileRoute("/categories/$slug")({
   component: CategoryPage,
@@ -9,8 +13,8 @@ export const Route = createFileRoute("/categories/$slug")({
 
 function CategoryPage() {
   const { slug } = Route.useParams();
-  const [products, setProducts] = useState<any[]>([]);
-  const [category, setCategory] = useState<any>(null);
+  const [products, setProducts] = useState<ProductRow[]>([]);
+  const [category, setCategory] = useState<CategoryRow | null>(null);
 
   useEffect(() => {
     (async () => {
