@@ -45,6 +45,9 @@ export function ProductCard({ product }: { product: Product }) {
                 src={product.image_url}
                 alt={product.name}
                 loading="lazy"
+                ref={(img) => {
+                  if (img?.complete) img.classList.add("loaded");
+                }}
                 onLoad={(e) => e.currentTarget.classList.add("loaded")}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1200ms] ease-out"
               />

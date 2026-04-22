@@ -72,15 +72,36 @@ function Index() {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/20" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/40" />
-          <div className="orb" style={{ width: 400, height: 400, background: "var(--gold)", top: "-100px", left: "10%" }} />
-          <div className="orb" style={{ width: 300, height: 300, background: "oklch(0.62 0.18 25)", bottom: "-80px", right: "15%", animationDelay: "3s" }} />
+          <div
+            className="orb"
+            style={{
+              width: 400,
+              height: 400,
+              background: "var(--gold)",
+              top: "-100px",
+              left: "10%",
+            }}
+          />
+          <div
+            className="orb"
+            style={{
+              width: 300,
+              height: 300,
+              background: "oklch(0.62 0.18 25)",
+              bottom: "-80px",
+              right: "15%",
+              animationDelay: "3s",
+            }}
+          />
         </div>
         <div className="relative container mx-auto px-4 py-32 md:py-48 max-w-3xl">
-          <div className="reveal inline-flex items-center gap-2 mb-6 px-4 py-1.5 glass rounded-full text-[11px] tracking-[0.3em] text-gold gold-ring">
-            <Sparkles size={12} className="animate-pulse" /> NEW SEASON · K-BEAUTY EDIT
+          <div className="reveal inline-flex items-center gap-2 mb-6 px-4 py-1.5 glass rounded-full text-[11px] tracking-[0.3em] gold-ring">
+            <Sparkles size={12} className="animate-pulse" style={{ color: "var(--gold)" }} />
+            <span className="text-gold">NEW SEASON · K-BEAUTY EDIT</span>
           </div>
           <h1 className="reveal reveal-delay-1 font-display text-5xl md:text-7xl lg:text-8xl leading-[1.02] mb-6">
-            The art of <span className="text-gold-shine italic">glass skin</span>,<br />distilled.
+            The art of <span className="text-gold-shine italic">glass skin</span>,<br />
+            distilled.
           </h1>
           <p className="reveal reveal-delay-2 text-lg text-muted-foreground mb-8 max-w-xl leading-relaxed">
             Discover our curated edit of luxury Korean cosmetics — from gold-infused serums to dewy
@@ -88,12 +109,19 @@ function Index() {
           </p>
           <div className="reveal reveal-delay-3 flex flex-wrap gap-3">
             <Link to="/products">
-              <Button size="lg" className="btn-luxe bg-gradient-gold text-primary-foreground hover:opacity-95 px-8 shadow-gold">
+              <Button
+                size="lg"
+                className="btn-luxe bg-gradient-gold text-primary-foreground hover:opacity-95 px-8 shadow-gold"
+              >
                 Shop the Edit
               </Button>
             </Link>
             <Link to="/about">
-              <Button size="lg" variant="outline" className="border-gold text-gold hover:bg-gold/10 backdrop-blur">
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-gold text-gold hover:bg-gold/10 backdrop-blur"
+              >
                 Our Story
               </Button>
             </Link>
@@ -107,12 +135,18 @@ function Index() {
           <div className="marquee-track text-muted-foreground/60 font-display italic text-2xl md:text-3xl">
             {Array.from({ length: 2 }).map((_, i) => (
               <div key={i} className="flex items-center gap-16 whitespace-nowrap px-8">
-                <span>SULWHASOO</span><span className="text-gold">✦</span>
-                <span>LANEIGE</span><span className="text-gold">✦</span>
-                <span>BEAUTY OF JOSEON</span><span className="text-gold">✦</span>
-                <span>COSRX</span><span className="text-gold">✦</span>
-                <span>HERA</span><span className="text-gold">✦</span>
-                <span>INNISFREE</span><span className="text-gold">✦</span>
+                <span>SULWHASOO</span>
+                <span className="text-gold">✦</span>
+                <span>LANEIGE</span>
+                <span className="text-gold">✦</span>
+                <span>BEAUTY OF JOSEON</span>
+                <span className="text-gold">✦</span>
+                <span>COSRX</span>
+                <span className="text-gold">✦</span>
+                <span>HERA</span>
+                <span className="text-gold">✦</span>
+                <span>INNISFREE</span>
+                <span className="text-gold">✦</span>
               </div>
             ))}
           </div>
@@ -143,23 +177,26 @@ function Index() {
       <section className="container mx-auto px-4 py-16 md:py-20">
         <div className="text-center mb-10 md:mb-12 reveal-on-scroll">
           <p className="text-xs tracking-[0.3em] text-gold mb-3">SHOP BY CATEGORY</p>
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">Curated for every ritual</h2>
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">
+            Curated for every ritual
+          </h2>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
           {categories.map((c, i) => (
-            <Link
-              key={c.id}
-              to="/categories/$slug"
-              params={{ slug: c.slug }}
-              className={`luxe-card rounded-xl p-5 md:p-6 text-center group reveal-on-scroll delay-${(i % 4) + 1}`}
-            >
-              <div className="w-14 h-14 md:w-16 md:h-16 mx-auto mb-3 rounded-full bg-gradient-gold flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                <Sparkles className="text-primary-foreground" size={22} />
-              </div>
-              <p className="font-display text-base md:text-lg group-hover:text-gold transition-colors">
-                {c.name}
-              </p>
-            </Link>
+            <div key={c.id} className={`reveal-on-scroll stagger-${(i % 4) + 1}`}>
+              <Link
+                to="/categories/$slug"
+                params={{ slug: c.slug }}
+                className="luxe-card rounded-xl p-5 md:p-6 text-center group block"
+              >
+                <div className="w-14 h-14 md:w-16 md:h-16 mx-auto mb-3 rounded-full bg-gradient-gold flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                  <Sparkles className="text-primary-foreground" size={22} />
+                </div>
+                <p className="font-display text-base md:text-lg group-hover:text-gold transition-colors">
+                  {c.name}
+                </p>
+              </Link>
+            </div>
           ))}
         </div>
       </section>
@@ -177,7 +214,7 @@ function Index() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {featured.map((p, i) => (
-            <div key={p.id} className={`reveal-on-scroll delay-${(i % 4) + 1}`}>
+            <div key={p.id} className={`reveal-on-scroll stagger-${(i % 4) + 1}`}>
               <ProductCard product={p} />
             </div>
           ))}
@@ -187,17 +224,35 @@ function Index() {
       {/* PROMO BANNER */}
       <section className="container mx-auto px-4 py-12">
         <div className="relative luxe-card rounded-2xl p-8 md:p-12 text-center overflow-hidden gold-ring reveal-on-scroll">
-          <div className="orb" style={{ width: 250, height: 250, background: "var(--gold)", top: "-60px", left: "20%", opacity: 0.25 }} />
+          <div
+            className="orb"
+            style={{
+              width: 250,
+              height: 250,
+              background: "var(--gold)",
+              top: "-60px",
+              left: "20%",
+              opacity: 0.25,
+            }}
+          />
           <div className="relative">
-            <Sparkles className="mx-auto mb-4 animate-pulse" size={32} style={{ color: "var(--gold)" }} />
+            <Sparkles
+              className="mx-auto mb-4 animate-pulse"
+              size={32}
+              style={{ color: "var(--gold)" }}
+            />
             <h3 className="font-display text-2xl sm:text-3xl md:text-5xl mb-3">
               20% off orders over <span className="text-gold-shine">$80</span>
             </h3>
             <p className="text-muted-foreground mb-6">
-              Use code <span className="text-gold font-mono font-bold tracking-widest">GLOW20</span> at checkout
+              Use code <span className="text-gold font-mono font-bold tracking-widest">GLOW20</span>{" "}
+              at checkout
             </p>
             <Link to="/products">
-              <Button size="lg" className="btn-luxe bg-gradient-gold text-primary-foreground shadow-gold">
+              <Button
+                size="lg"
+                className="btn-luxe bg-gradient-gold text-primary-foreground shadow-gold"
+              >
                 Shop now
               </Button>
             </Link>
@@ -214,7 +269,7 @@ function Index() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {newest.map((p, i) => (
-              <div key={p.id} className={`reveal-on-scroll delay-${(i % 4) + 1}`}>
+              <div key={p.id} className={`reveal-on-scroll stagger-${(i % 4) + 1}`}>
                 <ProductCard product={p} />
               </div>
             ))}
