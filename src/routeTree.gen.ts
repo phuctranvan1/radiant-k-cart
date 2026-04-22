@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as SupportRouteImport } from './routes/support'
 import { Route as SearchRouteImport } from './routes/search'
-import { Route as ProductsRouteImport } from './routes/products'
 import { Route as PolicyRouteImport } from './routes/policy'
 import { Route as OrderLookupRouteImport } from './routes/order-lookup'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -23,6 +22,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProductsIndexRouteImport } from './routes/products.index'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 
@@ -39,11 +39,6 @@ const SupportRoute = SupportRouteImport.update({
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProductsRoute = ProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PolicyRoute = PolicyRouteImport.update({
@@ -96,10 +91,15 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProductsIndexRoute = ProductsIndexRouteImport.update({
+  id: '/products/',
+  path: '/products/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProductsSlugRoute = ProductsSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => ProductsRoute,
+  id: '/products/$slug',
+  path: '/products/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
   id: '/categories/$slug',
@@ -118,12 +118,12 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/order-lookup': typeof OrderLookupRoute
   '/policy': typeof PolicyRoute
-  '/products': typeof ProductsRouteWithChildren
   '/search': typeof SearchRoute
   '/support': typeof SupportRoute
   '/wishlist': typeof WishlistRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/products/': typeof ProductsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -136,12 +136,12 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/order-lookup': typeof OrderLookupRoute
   '/policy': typeof PolicyRoute
-  '/products': typeof ProductsRouteWithChildren
   '/search': typeof SearchRoute
   '/support': typeof SupportRoute
   '/wishlist': typeof WishlistRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/products': typeof ProductsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -155,12 +155,12 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/order-lookup': typeof OrderLookupRoute
   '/policy': typeof PolicyRoute
-  '/products': typeof ProductsRouteWithChildren
   '/search': typeof SearchRoute
   '/support': typeof SupportRoute
   '/wishlist': typeof WishlistRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/products/': typeof ProductsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -175,12 +175,12 @@ export interface FileRouteTypes {
     | '/contact'
     | '/order-lookup'
     | '/policy'
-    | '/products'
     | '/search'
     | '/support'
     | '/wishlist'
     | '/categories/$slug'
     | '/products/$slug'
+    | '/products/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -193,12 +193,12 @@ export interface FileRouteTypes {
     | '/contact'
     | '/order-lookup'
     | '/policy'
-    | '/products'
     | '/search'
     | '/support'
     | '/wishlist'
     | '/categories/$slug'
     | '/products/$slug'
+    | '/products'
   id:
     | '__root__'
     | '/'
@@ -211,12 +211,12 @@ export interface FileRouteTypes {
     | '/contact'
     | '/order-lookup'
     | '/policy'
-    | '/products'
     | '/search'
     | '/support'
     | '/wishlist'
     | '/categories/$slug'
     | '/products/$slug'
+    | '/products/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -230,11 +230,12 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   OrderLookupRoute: typeof OrderLookupRoute
   PolicyRoute: typeof PolicyRoute
-  ProductsRoute: typeof ProductsRouteWithChildren
   SearchRoute: typeof SearchRoute
   SupportRoute: typeof SupportRoute
   WishlistRoute: typeof WishlistRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
+  ProductsSlugRoute: typeof ProductsSlugRoute
+  ProductsIndexRoute: typeof ProductsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -258,13 +259,6 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof SearchRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/products': {
-      id: '/products'
-      path: '/products'
-      fullPath: '/products'
-      preLoaderRoute: typeof ProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/policy': {
@@ -337,12 +331,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/products/': {
+      id: '/products/'
+      path: '/products'
+      fullPath: '/products/'
+      preLoaderRoute: typeof ProductsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/products/$slug': {
       id: '/products/$slug'
-      path: '/$slug'
+      path: '/products/$slug'
       fullPath: '/products/$slug'
       preLoaderRoute: typeof ProductsSlugRouteImport
-      parentRoute: typeof ProductsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/categories/$slug': {
       id: '/categories/$slug'
@@ -353,18 +354,6 @@ declare module '@tanstack/react-router' {
     }
   }
 }
-
-interface ProductsRouteChildren {
-  ProductsSlugRoute: typeof ProductsSlugRoute
-}
-
-const ProductsRouteChildren: ProductsRouteChildren = {
-  ProductsSlugRoute: ProductsSlugRoute,
-}
-
-const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
-  ProductsRouteChildren,
-)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -377,11 +366,12 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   OrderLookupRoute: OrderLookupRoute,
   PolicyRoute: PolicyRoute,
-  ProductsRoute: ProductsRouteWithChildren,
   SearchRoute: SearchRoute,
   SupportRoute: SupportRoute,
   WishlistRoute: WishlistRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
+  ProductsSlugRoute: ProductsSlugRoute,
+  ProductsIndexRoute: ProductsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

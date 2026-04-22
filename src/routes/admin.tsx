@@ -299,170 +299,163 @@ function OrdersAdmin() {
       .eq("id", id);
     toast.success("Status updated");
     refresh();
-    const [orders, setOrders] = useState<Order[]>([]);
-    const refresh = () => supabase.from("orders").select("*").order("created_at", { ascending: false }).then(({ data }) => setOrders(data ?? []));
-    useEffect(() => { refresh(); }, []);
-    const updateStatus = async (id: string, status: OrderStatus) => {
-      await supabase.from("orders").update({ status }).eq("id", id);
-      toast.success("Status updated"); refresh();
-    };
-    return (
-      <div className="mt-6 luxe-card rounded-xl divide-y divide-border">
-        {orders.length === 0 ? (
-          <p className="p-6 text-muted-foreground">No orders yet.</p>
-        ) : (
-          orders.map((o) => (
-            <div key={o.id} className="p-4 flex items-center gap-4">
-              <div className="flex-1 min-w-0">
-                <p className="font-mono text-gold">{o.order_number}</p>
-                <p className="text-xs text-muted-foreground">
-                  {o.full_name} · {o.email} · {new Date(o.created_at).toLocaleDateString()}
-                </p>
-              </div>
-              <p className="font-semibold">${Number(o.total).toFixed(2)}</p>
-              <Select value={o.status} onValueChange={(v) => updateStatus(o.id, v as OrderStatus)}>
-                <SelectTrigger className="w-36">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {["pending", "paid", "processing", "shipped", "delivered", "cancelled"].map((s) => (
-                    <SelectItem key={s} value={s}>
-                      {s}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+  };
+  return (
+    <div className="mt-6 luxe-card rounded-xl divide-y divide-border">
+      {orders.length === 0 ? (
+        <p className="p-6 text-muted-foreground">No orders yet.</p>
+      ) : (
+        orders.map((o) => (
+          <div key={o.id} className="p-4 flex items-center gap-4">
+            <div className="flex-1 min-w-0">
+              <p className="font-mono text-gold">{o.order_number}</p>
+              <p className="text-xs text-muted-foreground">
+                {o.full_name} · {o.email} · {new Date(o.created_at).toLocaleDateString()}
+              </p>
             </div>
-          ))
-        )}
-      </div>
-    );
-  }
-
-  function PromosAdmin() {
-    const [promos, setPromos] = useState<AdminPromo[]>([]);
-    const refresh = () =>
-      supabase
-        .from("promo_codes")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .then(({ data }) => setPromos(data ?? []));
-    useEffect(() => {
-      refresh();
-    }, []);
-    const create = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      const fd = new FormData(e.currentTarget);
-      const { error } = await supabase.from("promo_codes").insert({
-        code: String(fd.get("code")).trim().toUpperCase(),
-        description: String(fd.get("description") || "") || null,
-        discount_type: String(fd.get("discount_type")),
-        discount_value: Number(fd.get("discount_value")),
-        min_order: Number(fd.get("min_order") || 0),
-        active: true,
-      });
-      if (error) return toast.error(error.message);
-      toast.success("Promo created");
-      (e.target as HTMLFormElement).reset();
-      refresh();
-    };
-    const del = async (id: string) => {
-      await supabase.from("promo_codes").delete().eq("id", id);
-      refresh();
-    };
-    return (
-      <div className="mt-6 grid lg:grid-cols-[1fr_300px] gap-6">
-        <div className="luxe-card rounded-xl divide-y divide-border">
-          {promos.map((p) => (
-            <div key={p.id} className="p-4 flex items-center gap-4">
-              <div className="flex-1">
-                <p className="font-mono text-gold">{p.code}</p>
-                <p className="text-xs text-muted-foreground">
-                  {p.discount_type === "percent"
-                    ? `${p.discount_value}% off`
-                    : `$${p.discount_value} off`}
-                  {(p.min_order ?? 0) > 0 && ` · min $${p.min_order}`} · {p.uses} uses
-                </p>
-              </div>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => del(p.id)}
-                className="text-destructive"
-              >
-                <Trash2 size={14} />
-              </Button>
-            </div>
-          ))}
-        </div>
-        <form onSubmit={create} className="luxe-card rounded-xl p-4 space-y-3 h-fit">
-          <h3 className="font-display text-lg">New promo code</h3>
-          <div>
-            <Label>Code</Label>
-            <Input name="code" required />
-          </div>
-          <div>
-            <Label>Description</Label>
-            <Input name="description" />
-          </div>
-          <div>
-            <Label>Type</Label>
-            <Select name="discount_type" defaultValue="percent">
-              <SelectTrigger>
+            <p className="font-semibold">${Number(o.total).toFixed(2)}</p>
+            <Select value={o.status} onValueChange={(v) => updateStatus(o.id, v)}>
+              <SelectTrigger className="w-36">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="percent">Percent</SelectItem>
-                <SelectItem value="fixed">Fixed $</SelectItem>
+                {["pending", "paid", "processing", "shipped", "delivered", "cancelled"].map((s) => (
+                  <SelectItem key={s} value={s}>
+                    {s}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
-          <div>
-            <Label>Value</Label>
-            <Input name="discount_value" type="number" step="0.01" required />
-          </div>
-          <div>
-            <Label>Min order ($)</Label>
-            <Input name="min_order" type="number" step="0.01" defaultValue="0" />
-          </div>
-          <Button type="submit" className="w-full bg-gradient-gold text-primary-foreground">
-            Create
-          </Button>
-        </form>
-      </div>
-    );
-  }
+        ))
+      )}
+    </div>
+  );
+}
 
-  function TicketsAdmin() {
-    const [tickets, setTickets] = useState<AdminTicket[]>([]);
-    const [tickets, setTickets] = useState<SupportTicket[]>([]);
-    useEffect(() => {
-      supabase
-        .from("support_tickets")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .then(({ data }) => setTickets(data ?? []));
-    }, []);
-    return (
-      <div className="mt-6 luxe-card rounded-xl divide-y divide-border">
-        {tickets.length === 0 ? (
-          <p className="p-6 text-muted-foreground">No support tickets.</p>
-        ) : (
-          tickets.map((t) => (
-            <div key={t.id} className="p-4">
-              <div className="flex justify-between mb-1">
-                <p className="font-medium">{t.subject}</p>
-                <span className="text-xs text-muted-foreground">
-                  {new Date(t.created_at).toLocaleDateString()}
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground mb-2">
-                {t.name} · {t.email}
+function PromosAdmin() {
+  const [promos, setPromos] = useState<AdminPromo[]>([]);
+  const refresh = () =>
+    supabase
+      .from("promo_codes")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .then(({ data }) => setPromos(data ?? []));
+  useEffect(() => {
+    refresh();
+  }, []);
+  const create = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const { error } = await supabase.from("promo_codes").insert({
+      code: String(fd.get("code")).trim().toUpperCase(),
+      description: String(fd.get("description") || "") || null,
+      discount_type: String(fd.get("discount_type")),
+      discount_value: Number(fd.get("discount_value")),
+      min_order: Number(fd.get("min_order") || 0),
+      active: true,
+    });
+    if (error) return toast.error(error.message);
+    toast.success("Promo created");
+    (e.target as HTMLFormElement).reset();
+    refresh();
+  };
+  const del = async (id: string) => {
+    await supabase.from("promo_codes").delete().eq("id", id);
+    refresh();
+  };
+  return (
+    <div className="mt-6 grid lg:grid-cols-[1fr_300px] gap-6">
+      <div className="luxe-card rounded-xl divide-y divide-border">
+        {promos.map((p) => (
+          <div key={p.id} className="p-4 flex items-center gap-4">
+            <div className="flex-1">
+              <p className="font-mono text-gold">{p.code}</p>
+              <p className="text-xs text-muted-foreground">
+                {p.discount_type === "percent"
+                  ? `${p.discount_value}% off`
+                  : `$${p.discount_value} off`}
+                {(p.min_order ?? 0) > 0 && ` · min $${p.min_order}`} · {p.uses} uses
               </p>
-              <p className="text-sm">{t.message}</p>
             </div>
-          ))
-        )}
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => del(p.id)}
+              className="text-destructive"
+            >
+              <Trash2 size={14} />
+            </Button>
+          </div>
+        ))}
       </div>
-    );
-  }
+      <form onSubmit={create} className="luxe-card rounded-xl p-4 space-y-3 h-fit">
+        <h3 className="font-display text-lg">New promo code</h3>
+        <div>
+          <Label>Code</Label>
+          <Input name="code" required />
+        </div>
+        <div>
+          <Label>Description</Label>
+          <Input name="description" />
+        </div>
+        <div>
+          <Label>Type</Label>
+          <Select name="discount_type" defaultValue="percent">
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="percent">Percent</SelectItem>
+              <SelectItem value="fixed">Fixed $</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Label>Value</Label>
+          <Input name="discount_value" type="number" step="0.01" required />
+        </div>
+        <div>
+          <Label>Min order ($)</Label>
+          <Input name="min_order" type="number" step="0.01" defaultValue="0" />
+        </div>
+        <Button type="submit" className="w-full bg-gradient-gold text-primary-foreground">
+          Create
+        </Button>
+      </form>
+    </div>
+  );
+}
+
+function TicketsAdmin() {
+  const [tickets, setTickets] = useState<AdminTicket[]>([]);
+  useEffect(() => {
+    supabase
+      .from("support_tickets")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .then(({ data }) => setTickets(data ?? []));
+  }, []);
+  return (
+    <div className="mt-6 luxe-card rounded-xl divide-y divide-border">
+      {tickets.length === 0 ? (
+        <p className="p-6 text-muted-foreground">No support tickets.</p>
+      ) : (
+        tickets.map((t) => (
+          <div key={t.id} className="p-4">
+            <div className="flex justify-between mb-1">
+              <p className="font-medium">{t.subject}</p>
+              <span className="text-xs text-muted-foreground">
+                {new Date(t.created_at).toLocaleDateString()}
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground mb-2">
+              {t.name} · {t.email}
+            </p>
+            <p className="text-sm">{t.message}</p>
+          </div>
+        ))
+      )}
+    </div>
+  );
+}
