@@ -59,46 +59,41 @@ function Index() {
   }, []);
 
   return (
-    <div>
+    <div className="bg-mesh">
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
           <img
             src={heroImg}
             alt="Luxury K-beauty serums"
-            className="w-full h-full object-cover opacity-60"
+            className="w-full h-full object-cover opacity-50 scale-105"
             width={1920}
             height={1080}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/40" />
+          <div className="orb" style={{ width: 400, height: 400, background: "var(--gold)", top: "-100px", left: "10%" }} />
+          <div className="orb" style={{ width: 300, height: 300, background: "oklch(0.62 0.18 25)", bottom: "-80px", right: "15%", animationDelay: "3s" }} />
         </div>
-        <div className="relative container mx-auto px-4 py-32 md:py-44 max-w-3xl">
-          <div className="inline-flex items-center gap-2 mb-6 px-3 py-1 border border-gold rounded-full text-xs tracking-widest text-gold">
-            <Sparkles size={12} /> NEW SEASON · K-BEAUTY EDIT
+        <div className="relative container mx-auto px-4 py-32 md:py-48 max-w-3xl">
+          <div className="reveal inline-flex items-center gap-2 mb-6 px-4 py-1.5 glass rounded-full text-[11px] tracking-[0.3em] text-gold gold-ring">
+            <Sparkles size={12} className="animate-pulse" /> NEW SEASON · K-BEAUTY EDIT
           </div>
-          <h1 className="font-display text-5xl md:text-7xl leading-[1.05] mb-6">
-            The art of <span className="text-gold italic">glass skin</span>, distilled.
+          <h1 className="reveal reveal-delay-1 font-display text-5xl md:text-7xl lg:text-8xl leading-[1.02] mb-6">
+            The art of <span className="text-gold-shine italic">glass skin</span>,<br />distilled.
           </h1>
-          <p className="text-lg text-muted-foreground mb-8 max-w-xl leading-relaxed">
+          <p className="reveal reveal-delay-2 text-lg text-muted-foreground mb-8 max-w-xl leading-relaxed">
             Discover our curated edit of luxury Korean cosmetics — from gold-infused serums to dewy
             cushions, handpicked from Seoul's most coveted ateliers.
           </p>
-          <div className="flex flex-wrap gap-3">
+          <div className="reveal reveal-delay-3 flex flex-wrap gap-3">
             <Link to="/products">
-              <Button
-                size="lg"
-                className="bg-gradient-gold text-primary-foreground hover:opacity-90 px-8"
-              >
+              <Button size="lg" className="btn-luxe bg-gradient-gold text-primary-foreground hover:opacity-95 px-8 shadow-gold">
                 Shop the Edit
               </Button>
             </Link>
             <Link to="/about">
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-gold text-gold hover:bg-gold/10"
-              >
+              <Button size="lg" variant="outline" className="border-gold text-gold hover:bg-gold/10 backdrop-blur">
                 Our Story
               </Button>
             </Link>
@@ -106,17 +101,37 @@ function Index() {
         </div>
       </section>
 
+      {/* BRAND MARQUEE */}
+      <section className="border-y border-border/50 py-6 bg-card/20">
+        <div className="marquee">
+          <div className="marquee-track text-muted-foreground/60 font-display italic text-2xl md:text-3xl">
+            {Array.from({ length: 2 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-16 whitespace-nowrap px-8">
+                <span>SULWHASOO</span><span className="text-gold">✦</span>
+                <span>LANEIGE</span><span className="text-gold">✦</span>
+                <span>BEAUTY OF JOSEON</span><span className="text-gold">✦</span>
+                <span>COSRX</span><span className="text-gold">✦</span>
+                <span>HERA</span><span className="text-gold">✦</span>
+                <span>INNISFREE</span><span className="text-gold">✦</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* TRUST BAR */}
-      <section className="border-y border-border bg-card/30">
-        <div className="container mx-auto px-4 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <section className="border-b border-border/50 bg-card/20">
+        <div className="container mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {[
             { icon: Truck, t: "Free Worldwide Shipping", s: "On orders over $80" },
             { icon: Shield, t: "Authentic Guarantee", s: "Sourced direct from Seoul" },
             { icon: Heart, t: "Cruelty-Free", s: "Always & forever" },
             { icon: Sparkles, t: "AI Beauty Advisor", s: "24/7 personal guidance" },
           ].map((f) => (
-            <div key={f.t} className="flex flex-col items-center gap-1">
-              <f.icon className="w-5 h-5 mb-1" style={{ color: "var(--gold)" }} />
+            <div key={f.t} className="hover-float flex flex-col items-center gap-1.5">
+              <div className="w-10 h-10 mb-1 rounded-full glass flex items-center justify-center">
+                <f.icon className="w-4 h-4" style={{ color: "var(--gold)" }} />
+              </div>
               <p className="text-xs font-semibold tracking-wider">{f.t}</p>
               <p className="text-[10px] text-muted-foreground">{f.s}</p>
             </div>
@@ -169,18 +184,22 @@ function Index() {
 
       {/* PROMO BANNER */}
       <section className="container mx-auto px-4 py-12">
-        <div className="luxe-card rounded-2xl p-12 text-center bg-gradient-to-br from-card to-secondary border-gold">
-          <Sparkles className="mx-auto mb-4" size={32} style={{ color: "var(--gold)" }} />
-          <h3 className="font-display text-3xl md:text-4xl mb-3">20% off orders over $80</h3>
-          <p className="text-muted-foreground mb-6">
-            Use code <span className="text-gold font-mono font-bold tracking-widest">GLOW20</span>{" "}
-            at checkout
-          </p>
-          <Link to="/products">
-            <Button size="lg" className="bg-gradient-gold text-primary-foreground">
-              Shop now
-            </Button>
-          </Link>
+        <div className="relative luxe-card rounded-2xl p-12 text-center overflow-hidden gold-ring">
+          <div className="orb" style={{ width: 250, height: 250, background: "var(--gold)", top: "-60px", left: "20%", opacity: 0.25 }} />
+          <div className="relative">
+            <Sparkles className="mx-auto mb-4 animate-pulse" size={32} style={{ color: "var(--gold)" }} />
+            <h3 className="font-display text-3xl md:text-5xl mb-3">
+              20% off orders over <span className="text-gold-shine">$80</span>
+            </h3>
+            <p className="text-muted-foreground mb-6">
+              Use code <span className="text-gold font-mono font-bold tracking-widest">GLOW20</span> at checkout
+            </p>
+            <Link to="/products">
+              <Button size="lg" className="btn-luxe bg-gradient-gold text-primary-foreground shadow-gold">
+                Shop now
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 

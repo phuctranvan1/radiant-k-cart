@@ -45,25 +45,24 @@ export function ProductCard({ product }: { product: Product }) {
                 src={product.image_url}
                 alt={product.name}
                 loading="lazy"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1200ms] ease-out"
               />
             )}
+            <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             {product.is_new && (
-              <span className="absolute top-3 left-3 bg-gradient-gold text-primary-foreground text-[10px] font-bold tracking-widest px-2 py-1 rounded">
+              <span className="absolute top-3 left-3 bg-gradient-gold text-primary-foreground text-[10px] font-bold tracking-widest px-2.5 py-1 rounded-full shadow-gold">
                 NEW
               </span>
             )}
             {onSale && !product.is_new && (
-              <span className="absolute top-3 left-3 bg-destructive text-destructive-foreground text-[10px] font-bold tracking-widest px-2 py-1 rounded">
+              <span className="absolute top-3 left-3 bg-destructive text-destructive-foreground text-[10px] font-bold tracking-widest px-2.5 py-1 rounded-full">
                 SALE
               </span>
             )}
-
-            {/* Quick-add overlay */}
-            <div className="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+            <div className="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
               <Button
                 size="sm"
-                className="w-full bg-gradient-gold text-primary-foreground gap-2 text-xs"
+                className="btn-luxe w-full bg-gradient-gold text-primary-foreground gap-2 text-xs shadow-gold"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();

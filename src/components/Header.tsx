@@ -21,10 +21,24 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/80 border-b border-border">
+    <header className="sticky top-0 z-40 glass border-b border-border/40">
       {/* Promo bar */}
-      <div className="bg-gradient-gold text-primary-foreground text-center text-xs py-2 font-medium tracking-wider">
-        ✨ FREE SHIPPING WORLDWIDE OVER $80 · USE CODE WELCOME10 FOR 10% OFF YOUR FIRST ORDER ✨
+      <div className="bg-gradient-gold text-primary-foreground text-center text-[11px] py-2 font-medium tracking-[0.2em] overflow-hidden">
+        <div className="marquee">
+          <div className="marquee-track">
+            {Array.from({ length: 2 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-12 whitespace-nowrap px-6">
+                <span>✨ FREE SHIPPING WORLDWIDE OVER $80</span>
+                <span>·</span>
+                <span>USE CODE WELCOME10 FOR 10% OFF</span>
+                <span>·</span>
+                <span>NEW DROPS EVERY FRIDAY</span>
+                <span>·</span>
+                <span>AUTHENTIC FROM SEOUL</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="container mx-auto px-4 flex items-center justify-between h-16 gap-4">
@@ -33,8 +47,13 @@ export function Header() {
         </button>
 
         <Link to="/" className="flex items-center gap-2 group">
-          <Sparkles className="text-gold w-5 h-5" style={{ color: "var(--gold)" }} />
-          <span className="font-display text-2xl font-semibold tracking-wide text-gold">GLOW</span>
+          <Sparkles
+            className="w-5 h-5 group-hover:rotate-12 transition-transform duration-500"
+            style={{ color: "var(--gold)" }}
+          />
+          <span className="font-display text-2xl font-semibold tracking-wide text-gold-shine">
+            GLOW
+          </span>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8">
