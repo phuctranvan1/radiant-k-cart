@@ -184,18 +184,22 @@ function Index() {
 
       {/* PROMO BANNER */}
       <section className="container mx-auto px-4 py-12">
-        <div className="luxe-card rounded-2xl p-12 text-center bg-gradient-to-br from-card to-secondary border-gold">
-          <Sparkles className="mx-auto mb-4" size={32} style={{ color: "var(--gold)" }} />
-          <h3 className="font-display text-3xl md:text-4xl mb-3">20% off orders over $80</h3>
-          <p className="text-muted-foreground mb-6">
-            Use code <span className="text-gold font-mono font-bold tracking-widest">GLOW20</span>{" "}
-            at checkout
-          </p>
-          <Link to="/products">
-            <Button size="lg" className="bg-gradient-gold text-primary-foreground">
-              Shop now
-            </Button>
-          </Link>
+        <div className="relative luxe-card rounded-2xl p-12 text-center overflow-hidden gold-ring">
+          <div className="orb" style={{ width: 250, height: 250, background: "var(--gold)", top: "-60px", left: "20%", opacity: 0.25 }} />
+          <div className="relative">
+            <Sparkles className="mx-auto mb-4 animate-pulse" size={32} style={{ color: "var(--gold)" }} />
+            <h3 className="font-display text-3xl md:text-5xl mb-3">
+              20% off orders over <span className="text-gold-shine">$80</span>
+            </h3>
+            <p className="text-muted-foreground mb-6">
+              Use code <span className="text-gold font-mono font-bold tracking-widest">GLOW20</span> at checkout
+            </p>
+            <Link to="/products">
+              <Button size="lg" className="btn-luxe bg-gradient-gold text-primary-foreground shadow-gold">
+                Shop now
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
