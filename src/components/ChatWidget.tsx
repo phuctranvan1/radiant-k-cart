@@ -11,13 +11,19 @@ const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([
-    { role: "assistant", content: "안녕하세요 ✨ I'm **Soomi**, your GLOW beauty advisor. Ask me about routines, ingredients, or product picks." },
+    {
+      role: "assistant",
+      content:
+        "안녕하세요 ✨ I'm **Soomi**, your GLOW beauty advisor. Ask me about routines, ingredients, or product picks.",
+    },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" }); }, [messages]);
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+  }, [messages]);
 
   const send = async () => {
     const text = input.trim();
@@ -65,15 +71,25 @@ export function ChatWidget() {
           if (line.endsWith("\r")) line = line.slice(0, -1);
           if (!line.startsWith("data: ")) continue;
           const json = line.slice(6).trim();
-          if (json === "[DONE]") { done = true; break; }
+          if (json === "[DONE]") {
+            done = true;
+            break;
+          }
           try {
-            const parsed = JSON.parse(json);
+            const parsed = JSON.parse(json) as {
+              choices?: { delta?: { content?: string } }[];
+            };
             const content = parsed.choices?.[0]?.delta?.content;
             if (content) {
               acc += content;
-              setMessages((p) => p.map((m, i) => (i === p.length - 1 ? { ...m, content: acc } : m)));
+              setMessages((p) =>
+                p.map((m, i) => (i === p.length - 1 ? { ...m, content: acc } : m)),
+              );
             }
-          } catch { buf = line + "\n" + buf; break; }
+          } catch {
+            buf = line + "\n" + buf;
+            break;
+          }
         }
       }
     } catch (e) {
@@ -91,23 +107,20 @@ export function ChatWidget() {
         onClick={() => setOpen((v) => !v)}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-gold shadow-gold flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300"
         aria-label="AI Beauty Advisor"
-        style={{ animation: !open ? "chat-pulse 3s ease-in-out infinite" : "none" }}
       >
-        <span className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${open ? "rotate-90 scale-0 opacity-0" : "rotate-0 scale-100 opacity-100"}`}>
-          <MessageCircle className="text-primary-foreground" />
-        </span>
-        <span className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${open ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-0 opacity-0"}`}>
+        {open ? (
           <X className="text-primary-foreground" />
-        </span>
+        ) : (
+          <MessageCircle className="text-primary-foreground" />
+        )}
       </button>
 
       {/* Chat panel */}
       <div
-        className={`fixed bottom-24 right-6 z-50 w-[92vw] max-w-md h-[70vh] luxe-card rounded-2xl shadow-luxe flex flex-col overflow-hidden transition-all duration-400 origin-bottom-right ${
-          open
+        className={`fixed bottom-24 right-6 z-50 w-[92vw] max-w-md h-[70vh] luxe-card rounded-2xl shadow-luxe flex flex-col overflow-hidden transition-all duration-400 origin-bottom-right ${open
             ? "scale-100 opacity-100 translate-y-0 pointer-events-auto"
             : "scale-90 opacity-0 translate-y-4 pointer-events-none"
-        }`}
+          }`}
       >
         {/* Header */}
         <div className="bg-gradient-gold p-4 flex items-center gap-3">
@@ -123,6 +136,25 @@ export function ChatWidget() {
           </div>
         </div>
 
+        <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3">
+          {messages.map((m, i) => (
+            <div
+              key={i}
+              className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+            >
+              <div
+                className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${m.role === "user"
+                    ? "bg-gradient-gold text-primary-foreground"
+                    : "bg-secondary text-foreground"
+                  }`}
+              >
+                <div className="prose prose-sm prose-invert max-w-none [&_p]:my-1 [&_strong]:text-gold">
+                  <ReactMarkdown>{m.content || "…"}</ReactMarkdown>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
         {/* Messages */}
         <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3">
           {messages.map((m, i) => (
@@ -131,11 +163,10 @@ export function ChatWidget() {
               className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
               style={{ animation: `msg-appear 0.3s ease-out ${Math.min(i * 0.05, 0.3)}s both` }}
             >
-              <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
-                m.role === "user"
+              <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${m.role === "user"
                   ? "bg-gradient-gold text-primary-foreground rounded-br-sm"
                   : "bg-secondary text-foreground rounded-bl-sm"
-              }`}>
+                }`}>
                 <div className="prose prose-sm prose-invert max-w-none [&_p]:my-1 [&_strong]:text-gold">
                   <ReactMarkdown>{m.content || "…"}</ReactMarkdown>
                 </div>
@@ -164,7 +195,12 @@ export function ChatWidget() {
             className="flex-1 bg-input rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gold transition-shadow"
             disabled={loading}
           />
-          <Button onClick={send} disabled={loading || !input.trim()} size="icon" className="rounded-full bg-gradient-gold text-primary-foreground hover:opacity-90 transition-all hover:scale-105 active:scale-95">
+          <Button
+            onClick={send}
+            disabled={loading || !input.trim()}
+            size="icon"
+            className="rounded-full bg-gradient-gold text-primary-foreground hover:opacity-90 transition-all hover:scale-105 active:scale-95"
+          >
             <Send size={16} />
           </Button>
         </div>
