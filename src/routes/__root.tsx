@@ -1,10 +1,12 @@
-import { Outlet, createRootRoute, HeadContent, Scripts, Link } from "@tanstack/react-router";
+import { Outlet, createRootRoute, HeadContent, Scripts, Link, useRouterState } from "@tanstack/react-router";
+import { useEffect } from "react";
 import appCss from "../styles.css?url";
 import { AuthProvider } from "@/lib/auth";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatWidget } from "@/components/ChatWidget";
 import { Toaster } from "@/components/ui/sonner";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 function NotFoundComponent() {
   return (
@@ -85,6 +87,23 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  useScrollReveal();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  // Smooth scroll-to-top on route change + re-init reveal observers for new content
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+    // Re-trigger reveal observation for newly mounted nodes on next frame
+    const id = window.requestAnimationFrame(() => {
+      document.querySelectorAll(".reveal-on-scroll:not(.is-visible)").forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight - 60) el.classList.add("is-visible");
+      });
+    });
+    return () => window.cancelAnimationFrame(id);
+  }, [pathname]);
+
   return (
     <AuthProvider>
       <div className="flex flex-col min-h-screen">

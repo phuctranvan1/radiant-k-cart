@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const WISHLIST_KEY = "glow_wishlist";
 
@@ -19,7 +20,15 @@ export function useWishlist() {
   }, [ids]);
 
   const toggle = useCallback((id: string) => {
-    setIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+    setIds((prev) => {
+      const has = prev.includes(id);
+      if (has) {
+        toast("Removed from wishlist");
+        return prev.filter((x) => x !== id);
+      }
+      toast.success("Saved to wishlist");
+      return [...prev, id];
+    });
   }, []);
 
   const isWishlisted = useCallback((id: string) => ids.includes(id), [ids]);

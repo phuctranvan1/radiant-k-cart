@@ -31,6 +31,7 @@ type Product = {
   sale_price: number | null;
   stock: number;
   image_url: string | null;
+  images: string[] | null;
   rating: number | null;
   review_count: number | null;
 };
@@ -64,10 +65,13 @@ function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
   const [tab, setTab] = useState<"desc" | "ingredients" | "how">("desc");
+  const [activeImg, setActiveImg] = useState(0);
   const { addItem } = useCart();
   const { toggle, isWishlisted } = useWishlist();
 
   useEffect(() => {
+    setLoading(true);
+    setActiveImg(0);
     supabase
       .from("products")
       .select("*")
@@ -83,21 +87,49 @@ function ProductDetail() {
   if (!p) return notFound();
 
   const onSale = p.sale_price && p.sale_price < p.price;
+  const gallery = [p.image_url, ...(p.images ?? [])].filter(
+    (x): x is string => typeof x === "string" && x.length > 0,
+  );
+  const currentImg = gallery[activeImg] ?? p.image_url;
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-4 py-8 md:py-12">
       <Link to="/products" className="text-sm text-muted-foreground hover:text-gold">
         ← Back to products
       </Link>
 
-      <div className="grid md:grid-cols-2 gap-12 mt-6">
-        <div className="luxe-card rounded-2xl overflow-hidden aspect-square bg-secondary">
-          {p.image_url && (
-            <img src={p.image_url} alt={p.name} className="w-full h-full object-cover" />
+      <div className="grid md:grid-cols-2 gap-8 md:gap-12 mt-6">
+        <div className="reveal-on-scroll">
+          <div className="luxe-card rounded-2xl overflow-hidden aspect-square bg-secondary relative">
+            {currentImg && (
+              <img
+                key={currentImg}
+                src={currentImg}
+                alt={p.name}
+                onLoad={(e) => e.currentTarget.classList.add("loaded")}
+                className="gallery-fade w-full h-full object-cover"
+              />
+            )}
+          </div>
+          {gallery.length > 1 && (
+            <div className="flex gap-2 mt-3 overflow-x-auto pb-1">
+              {gallery.map((src, i) => (
+                <button
+                  key={src + i}
+                  onClick={() => setActiveImg(i)}
+                  className={`shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                    activeImg === i ? "border-gold scale-105" : "border-border opacity-70 hover:opacity-100"
+                  }`}
+                  aria-label={`View image ${i + 1}`}
+                >
+                  <img src={src} alt="" className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
           )}
         </div>
 
-        <div>
+        <div className="reveal-on-scroll delay-1">
           {p.brand && (
             <p className="text-xs tracking-widest text-muted-foreground uppercase mb-2">
               {p.brand}
