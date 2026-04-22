@@ -282,5 +282,39 @@ html { scroll-behavior: smooth; }
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
+/* Hide-on-scroll header */
+.header-shell {
+  transition: transform 500ms var(--ease-out-expo), background-color 400ms var(--ease-out-expo), box-shadow 400ms var(--ease-out-expo);
+  will-change: transform;
+}
+.header-shell.is-hidden { transform: translateY(-100%); }
+.header-shell.is-scrolled { box-shadow: 0 8px 30px -12px oklch(0 0 0 / 0.55); }
+
+/* Smooth crossfade for product gallery thumbs */
+.gallery-fade { transition: opacity 500ms var(--ease-out-expo); }
+
+/* Responsive typography polish */
+@media (max-width: 640px) {
+  h1 { letter-spacing: -0.02em; }
+  .luxe-card:hover { transform: none; }
+}
+
+/* Reduced motion: disable transforms/animations for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .orb, .marquee-track, .text-gold-shine { animation: none !important; }
+  .reveal-on-scroll { opacity: 1; transform: none; }
+}
+
+/* Touch devices: keep "Add to Bag" overlay always visible */
+@media (hover: none) {
+  .group .translate-y-full { transform: translateY(0); }
+}
+
 /* Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap");
