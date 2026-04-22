@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
+import type { Tables } from "@/integrations/supabase/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +12,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Plus, Trash2, Edit } from "lucide-react";
+
+type OrderStatus = "pending" | "paid" | "processing" | "shipped" | "delivered" | "cancelled";
+type Product = Tables<"products"> & { categories: { name: string } | null };
+type Order = Tables<"orders">;
+type PromoCode = Tables<"promo_codes">;
+type SupportTicket = Tables<"support_tickets">;
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — GLOW" }] }),
@@ -49,9 +56,9 @@ function AdminPage() {
 }
 
 function ProductsAdmin() {
-  const [products, setProducts] = useState<any[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
-  const [editing, setEditing] = useState<any>(null);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Tables<"categories">[]>([]);
+  const [editing, setEditing] = useState<Product | null>(null);
   const [open, setOpen] = useState(false);
 
   const refresh = () => {
@@ -148,10 +155,10 @@ function ProductsAdmin() {
 }
 
 function OrdersAdmin() {
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const refresh = () => supabase.from("orders").select("*").order("created_at", { ascending: false }).then(({ data }) => setOrders(data ?? []));
-  useEffect(refresh, []);
-  const updateStatus = async (id: string, status: string) => {
+  useEffect(() => { refresh(); }, []);
+  const updateStatus = async (id: string, status: OrderStatus) => {
     await supabase.from("orders").update({ status }).eq("id", id);
     toast.success("Status updated"); refresh();
   };
@@ -164,7 +171,7 @@ function OrdersAdmin() {
             <p className="text-xs text-muted-foreground">{o.full_name} · {o.email} · {new Date(o.created_at).toLocaleDateString()}</p>
           </div>
           <p className="font-semibold">${Number(o.total).toFixed(2)}</p>
-          <Select value={o.status} onValueChange={(v) => updateStatus(o.id, v)}>
+          <Select value={o.status} onValueChange={(v) => updateStatus(o.id, v as OrderStatus)}>
             <SelectTrigger className="w-36"><SelectValue /></SelectTrigger>
             <SelectContent>
               {["pending","paid","processing","shipped","delivered","cancelled"].map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
@@ -177,9 +184,9 @@ function OrdersAdmin() {
 }
 
 function PromosAdmin() {
-  const [promos, setPromos] = useState<any[]>([]);
+  const [promos, setPromos] = useState<PromoCode[]>([]);
   const refresh = () => supabase.from("promo_codes").select("*").order("created_at", { ascending: false }).then(({ data }) => setPromos(data ?? []));
-  useEffect(refresh, []);
+  useEffect(() => { refresh(); }, []);
   const create = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
@@ -231,7 +238,7 @@ function PromosAdmin() {
 }
 
 function TicketsAdmin() {
-  const [tickets, setTickets] = useState<any[]>([]);
+  const [tickets, setTickets] = useState<SupportTicket[]>([]);
   useEffect(() => {
     supabase.from("support_tickets").select("*").order("created_at", { ascending: false }).then(({ data }) => setTickets(data ?? []));
   }, []);

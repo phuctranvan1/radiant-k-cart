@@ -28,16 +28,6 @@ export function ChatWidget() {
     setLoading(true);
 
     let acc = "";
-    const upsert = (chunk: string) => {
-      acc += chunk;
-      setMessages((p) => {
-        const last = p[p.length - 1];
-        if (last?.role === "assistant" && last.content !== acc.slice(0, last.content.length).slice(0, -chunk.length) ? false : last?.role === "assistant") {
-          return p.map((m, i) => (i === p.length - 1 ? { ...m, content: acc } : m));
-        }
-        return [...p, { role: "assistant", content: acc }];
-      });
-    };
 
     try {
       const resp = await fetch(CHAT_URL, {
@@ -96,55 +86,89 @@ export function ChatWidget() {
 
   return (
     <>
+      {/* Floating trigger button */}
       <button
         onClick={() => setOpen((v) => !v)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-gold shadow-gold flex items-center justify-center hover:scale-105 transition-transform"
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-gold shadow-gold flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300"
         aria-label="AI Beauty Advisor"
+        style={{ animation: !open ? "chat-pulse 3s ease-in-out infinite" : "none" }}
       >
-        {open ? <X className="text-primary-foreground" /> : <MessageCircle className="text-primary-foreground" />}
+        <span className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${open ? "rotate-90 scale-0 opacity-0" : "rotate-0 scale-100 opacity-100"}`}>
+          <MessageCircle className="text-primary-foreground" />
+        </span>
+        <span className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${open ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-0 opacity-0"}`}>
+          <X className="text-primary-foreground" />
+        </span>
       </button>
 
-      {open && (
-        <div className="fixed bottom-24 right-6 z-50 w-[92vw] max-w-md h-[70vh] luxe-card rounded-2xl shadow-luxe flex flex-col overflow-hidden">
-          <div className="bg-gradient-gold p-4 flex items-center gap-3">
-            <Sparkles className="text-primary-foreground" size={20} />
-            <div>
-              <h3 className="font-display text-lg text-primary-foreground leading-none">Soomi</h3>
-              <p className="text-[11px] text-primary-foreground/80">AI Beauty Advisor</p>
-            </div>
+      {/* Chat panel */}
+      <div
+        className={`fixed bottom-24 right-6 z-50 w-[92vw] max-w-md h-[70vh] luxe-card rounded-2xl shadow-luxe flex flex-col overflow-hidden transition-all duration-400 origin-bottom-right ${
+          open
+            ? "scale-100 opacity-100 translate-y-0 pointer-events-auto"
+            : "scale-90 opacity-0 translate-y-4 pointer-events-none"
+        }`}
+      >
+        {/* Header */}
+        <div className="bg-gradient-gold p-4 flex items-center gap-3">
+          <div className="w-9 h-9 rounded-full bg-primary-foreground/20 flex items-center justify-center">
+            <Sparkles className="text-primary-foreground" size={18} />
           </div>
-
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3">
-            {messages.map((m, i) => (
-              <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
-                  m.role === "user"
-                    ? "bg-gradient-gold text-primary-foreground"
-                    : "bg-secondary text-foreground"
-                }`}>
-                  <div className="prose prose-sm prose-invert max-w-none [&_p]:my-1 [&_strong]:text-gold">
-                    <ReactMarkdown>{m.content || "…"}</ReactMarkdown>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="p-3 border-t border-border flex gap-2">
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && send()}
-              placeholder="Ask about routines, ingredients..."
-              className="flex-1 bg-input rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gold"
-              disabled={loading}
-            />
-            <Button onClick={send} disabled={loading || !input.trim()} size="icon" className="rounded-full bg-gradient-gold text-primary-foreground hover:opacity-90">
-              <Send size={16} />
-            </Button>
+          <div>
+            <h3 className="font-display text-lg text-primary-foreground leading-none">Soomi</h3>
+            <p className="text-[11px] text-primary-foreground/80 flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 inline-block" />
+              AI Beauty Advisor
+            </p>
           </div>
         </div>
-      )}
+
+        {/* Messages */}
+        <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3">
+          {messages.map((m, i) => (
+            <div
+              key={i}
+              className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+              style={{ animation: `msg-appear 0.3s ease-out ${Math.min(i * 0.05, 0.3)}s both` }}
+            >
+              <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
+                m.role === "user"
+                  ? "bg-gradient-gold text-primary-foreground rounded-br-sm"
+                  : "bg-secondary text-foreground rounded-bl-sm"
+              }`}>
+                <div className="prose prose-sm prose-invert max-w-none [&_p]:my-1 [&_strong]:text-gold">
+                  <ReactMarkdown>{m.content || "…"}</ReactMarkdown>
+                </div>
+              </div>
+            </div>
+          ))}
+          {/* Typing indicator */}
+          {loading && messages[messages.length - 1]?.role !== "assistant" && (
+            <div className="flex justify-start" style={{ animation: "msg-appear 0.3s ease-out both" }}>
+              <div className="bg-secondary rounded-2xl rounded-bl-sm px-4 py-3 flex gap-1">
+                <span className="w-2 h-2 rounded-full bg-muted-foreground/60" style={{ animation: "typing-dot 1.4s ease-in-out infinite" }} />
+                <span className="w-2 h-2 rounded-full bg-muted-foreground/60" style={{ animation: "typing-dot 1.4s ease-in-out 0.2s infinite" }} />
+                <span className="w-2 h-2 rounded-full bg-muted-foreground/60" style={{ animation: "typing-dot 1.4s ease-in-out 0.4s infinite" }} />
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Input */}
+        <div className="p-3 border-t border-border flex gap-2">
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && send()}
+            placeholder="Ask about routines, ingredients..."
+            className="flex-1 bg-input rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gold transition-shadow"
+            disabled={loading}
+          />
+          <Button onClick={send} disabled={loading || !input.trim()} size="icon" className="rounded-full bg-gradient-gold text-primary-foreground hover:opacity-90 transition-all hover:scale-105 active:scale-95">
+            <Send size={16} />
+          </Button>
+        </div>
+      </div>
     </>
   );
 }
