@@ -129,7 +129,7 @@ function ProductDetail() {
           )}
         </div>
 
-        <div>
+        <div className="reveal-on-scroll delay-1">
           {p.brand && (
             <p className="text-xs tracking-widest text-muted-foreground uppercase mb-2">
               {p.brand}
