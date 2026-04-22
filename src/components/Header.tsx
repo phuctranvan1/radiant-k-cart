@@ -4,7 +4,9 @@ import { useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { useCart } from "@/lib/useCart";
 import { useWishlist } from "@/lib/useWishlist";
+import { useHideOnScroll } from "@/hooks/useHideOnScroll";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const navLinks = [
   { to: "/products", label: "All Products" },
@@ -19,9 +21,16 @@ export function Header() {
   const { count } = useCart();
   const { ids: wishlistIds } = useWishlist();
   const [open, setOpen] = useState(false);
+  const { hidden, scrolled } = useHideOnScroll(120);
 
   return (
-    <header className="sticky top-0 z-40 glass border-b border-border/40">
+    <header
+      className={cn(
+        "header-shell sticky top-0 z-40 glass border-b border-border/40",
+        hidden && !open && "is-hidden",
+        scrolled && "is-scrolled",
+      )}
+    >
       {/* Promo bar */}
       <div className="bg-gradient-gold text-primary-foreground text-center text-[11px] py-2 font-medium tracking-[0.2em] overflow-hidden">
         <div className="marquee">
