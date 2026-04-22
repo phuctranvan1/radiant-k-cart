@@ -168,7 +168,7 @@ function ProductsAdmin() {
               </div>
               <div>
                 <Label>Brand</Label>
-                <Input name="brand" defaultValue={editing?.brand} />
+                <Input name="brand" defaultValue={editing?.brand ?? ""} />
               </div>
               <div>
                 <Label>Price ($)</Label>
@@ -210,18 +210,23 @@ function ProductsAdmin() {
               </div>
               <div className="col-span-2">
                 <Label>Image URL</Label>
-                <Input name="image_url" defaultValue={editing?.image_url} />
+                <Input name="image_url" defaultValue={editing?.image_url ?? ""} />
               </div>
               <div className="col-span-2">
                 <Label>Description</Label>
-                <Textarea name="description" rows={3} defaultValue={editing?.description} />
+                <Textarea name="description" rows={3} defaultValue={editing?.description ?? ""} />
               </div>
               <label className="flex items-center gap-2 text-sm">
-                <input type="checkbox" name="featured" defaultChecked={editing?.featured} />{" "}
+                <input
+                  type="checkbox"
+                  name="featured"
+                  defaultChecked={editing?.featured ?? false}
+                />{" "}
                 Featured
               </label>
               <label className="flex items-center gap-2 text-sm">
-                <input type="checkbox" name="is_new" defaultChecked={editing?.is_new} /> New
+                <input type="checkbox" name="is_new" defaultChecked={editing?.is_new ?? false} />{" "}
+                New
               </label>
               <Button type="submit" className="col-span-2 bg-gradient-gold text-primary-foreground">
                 Save
@@ -277,9 +282,14 @@ function OrdersAdmin() {
       .select("*")
       .order("created_at", { ascending: false })
       .then(({ data }) => setOrders(data ?? []));
-  useEffect(refresh, []);
+  useEffect(() => {
+    refresh();
+  }, []);
   const updateStatus = async (id: string, status: string) => {
-    await supabase.from("orders").update({ status }).eq("id", id);
+    await supabase
+      .from("orders")
+      .update({ status: status as Database["public"]["Enums"]["order_status"] })
+      .eq("id", id);
     toast.success("Status updated");
     refresh();
   };
@@ -324,7 +334,9 @@ function PromosAdmin() {
       .select("*")
       .order("created_at", { ascending: false })
       .then(({ data }) => setPromos(data ?? []));
-  useEffect(refresh, []);
+  useEffect(() => {
+    refresh();
+  }, []);
   const create = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
@@ -356,7 +368,7 @@ function PromosAdmin() {
                 {p.discount_type === "percent"
                   ? `${p.discount_value}% off`
                   : `$${p.discount_value} off`}
-                {p.min_order > 0 && ` · min $${p.min_order}`} · {p.uses} uses
+                {(p.min_order ?? 0) > 0 && ` · min $${p.min_order}`} · {p.uses} uses
               </p>
             </div>
             <Button

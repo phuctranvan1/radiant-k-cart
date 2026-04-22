@@ -35,17 +35,29 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <Link to="/categories/skincare" className="hover:text-foreground">
+              <Link
+                to="/categories/$slug"
+                params={{ slug: "skincare" }}
+                className="hover:text-foreground"
+              >
                 Skincare
               </Link>
             </li>
             <li>
-              <Link to="/categories/makeup" className="hover:text-foreground">
+              <Link
+                to="/categories/$slug"
+                params={{ slug: "makeup" }}
+                className="hover:text-foreground"
+              >
                 Makeup
               </Link>
             </li>
             <li>
-              <Link to="/categories/sets-gifts" className="hover:text-foreground">
+              <Link
+                to="/categories/$slug"
+                params={{ slug: "sets-gifts" }}
+                className="hover:text-foreground"
+              >
                 Sets & Gifts
               </Link>
             </li>
