@@ -140,23 +140,23 @@ function Index() {
       </section>
 
       {/* CATEGORIES */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="text-center mb-12">
+      <section className="container mx-auto px-4 py-16 md:py-20">
+        <div className="text-center mb-10 md:mb-12 reveal-on-scroll">
           <p className="text-xs tracking-[0.3em] text-gold mb-3">SHOP BY CATEGORY</p>
-          <h2 className="font-display text-4xl md:text-5xl">Curated for every ritual</h2>
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">Curated for every ritual</h2>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {categories.map((c) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+          {categories.map((c, i) => (
             <Link
               key={c.id}
               to="/categories/$slug"
               params={{ slug: c.slug }}
-              className="luxe-card rounded-xl p-6 text-center group"
+              className={`luxe-card rounded-xl p-5 md:p-6 text-center group reveal-on-scroll delay-${(i % 4) + 1}`}
             >
-              <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-gold flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Sparkles className="text-primary-foreground" size={24} />
+              <div className="w-14 h-14 md:w-16 md:h-16 mx-auto mb-3 rounded-full bg-gradient-gold flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                <Sparkles className="text-primary-foreground" size={22} />
               </div>
-              <p className="font-display text-lg group-hover:text-gold transition-colors">
+              <p className="font-display text-base md:text-lg group-hover:text-gold transition-colors">
                 {c.name}
               </p>
             </Link>
@@ -165,30 +165,32 @@ function Index() {
       </section>
 
       {/* FEATURED */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="flex items-end justify-between mb-12">
+      <section className="container mx-auto px-4 py-16 md:py-20">
+        <div className="flex items-end justify-between mb-10 md:mb-12 reveal-on-scroll">
           <div>
             <p className="text-xs tracking-[0.3em] text-gold mb-3">BESTSELLERS</p>
-            <h2 className="font-display text-4xl md:text-5xl">The Editor's Edit</h2>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">The Editor's Edit</h2>
           </div>
           <Link to="/products" className="hidden md:block text-sm text-gold hover:underline">
             View all →
           </Link>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {featured.map((p) => (
-            <ProductCard key={p.id} product={p} />
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          {featured.map((p, i) => (
+            <div key={p.id} className={`reveal-on-scroll delay-${(i % 4) + 1}`}>
+              <ProductCard product={p} />
+            </div>
           ))}
         </div>
       </section>
 
       {/* PROMO BANNER */}
       <section className="container mx-auto px-4 py-12">
-        <div className="relative luxe-card rounded-2xl p-12 text-center overflow-hidden gold-ring">
+        <div className="relative luxe-card rounded-2xl p-8 md:p-12 text-center overflow-hidden gold-ring reveal-on-scroll">
           <div className="orb" style={{ width: 250, height: 250, background: "var(--gold)", top: "-60px", left: "20%", opacity: 0.25 }} />
           <div className="relative">
             <Sparkles className="mx-auto mb-4 animate-pulse" size={32} style={{ color: "var(--gold)" }} />
-            <h3 className="font-display text-3xl md:text-5xl mb-3">
+            <h3 className="font-display text-2xl sm:text-3xl md:text-5xl mb-3">
               20% off orders over <span className="text-gold-shine">$80</span>
             </h3>
             <p className="text-muted-foreground mb-6">
@@ -205,14 +207,16 @@ function Index() {
 
       {/* NEW ARRIVALS */}
       {newest.length > 0 && (
-        <section className="container mx-auto px-4 py-20">
-          <div className="text-center mb-12">
+        <section className="container mx-auto px-4 py-16 md:py-20">
+          <div className="text-center mb-10 md:mb-12 reveal-on-scroll">
             <p className="text-xs tracking-[0.3em] text-gold mb-3">JUST IN</p>
-            <h2 className="font-display text-4xl md:text-5xl">New arrivals</h2>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">New arrivals</h2>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {newest.map((p) => (
-              <ProductCard key={p.id} product={p} />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {newest.map((p, i) => (
+              <div key={p.id} className={`reveal-on-scroll delay-${(i % 4) + 1}`}>
+                <ProductCard product={p} />
+              </div>
             ))}
           </div>
         </section>
