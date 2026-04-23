@@ -18,7 +18,7 @@ function AccountPage() {
   const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
-    if (!loading && !user) navigate({ to: "/auth" });
+    if (!loading && !user) navigate({ to: "/auth", search: { redirect: "/account" } });
   }, [loading, user, navigate]);
 
   useEffect(() => {
