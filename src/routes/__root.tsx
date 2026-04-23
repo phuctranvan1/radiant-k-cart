@@ -106,16 +106,18 @@ function RootComponent() {
   }, [pathname]);
 
   return (
-    <AuthProvider>
-      <div className="flex flex-col min-h-screen">
-        <Header />
-        <main className="flex-1">
-          <Outlet />
-        </main>
-        <Footer />
-      </div>
-      <ChatWidget />
-      <Toaster />
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <main className="flex-1">
+            <Outlet />
+          </main>
+          <Footer />
+        </div>
+        <ChatWidget />
+        <Toaster />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
