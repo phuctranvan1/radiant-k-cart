@@ -1,4 +1,3 @@
-/// <reference lib="deno.ns" />
 // @ts-ignore
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
@@ -51,6 +50,7 @@ serve(async (req: { method: string; json: () => PromiseLike<{ messages: any; }> 
           JSON.stringify({ error: "Too many requests, please try again shortly." }),
           {
             status: 429,
+
             headers: { ...corsHeaders, "Content-Type": "application/json" },
           },
         );
@@ -75,8 +75,8 @@ serve(async (req: { method: string; json: () => PromiseLike<{ messages: any; }> 
     }
 
     return new Response(response.body, {
-      headers: { 
-        ...corsHeaders, 
+      headers: {
+        ...corsHeaders,
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
         "Connection": "keep-alive",
