@@ -1,7 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { useCart } from "@/lib/useCart";
+import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingBag, Lock } from "lucide-react";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({ meta: [{ title: "Your Bag — GLOW" }] }),
@@ -10,6 +12,24 @@ export const Route = createFileRoute("/cart")({
 
 function CartPage() {
   const { items, updateQty, removeItem, subtotal, count } = useCart();
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate({ to: "/auth", search: { redirect: "/cart" } });
+    }
+  }, [user, loading, navigate]);
+
+  if (loading || !user) {
+    return (
+      <div className="container mx-auto px-4 py-24 text-center max-w-md">
+        <Lock className="mx-auto mb-6" size={40} style={{ color: "var(--gold)" }} />
+        <h1 className="font-display text-3xl mb-3">Sign in required</h1>
+        <p className="text-muted-foreground">Redirecting to sign in…</p>
+      </div>
+    );
+  }
 
   if (count === 0) {
     return (
