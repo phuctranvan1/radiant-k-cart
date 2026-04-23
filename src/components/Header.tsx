@@ -6,6 +6,7 @@ import { useCart } from "@/lib/useCart";
 import { useWishlist } from "@/lib/useWishlist";
 import { useHideOnScroll } from "@/hooks/useHideOnScroll";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -13,7 +14,7 @@ const navLinks = [
   { to: "/categories/skincare", label: "Skincare" },
   { to: "/categories/makeup", label: "Makeup" },
   { to: "/categories/suncare", label: "Suncare" },
-  { to: "/categories/sets-gifts", label: "Sets" },
+  { to: "/lookbook", label: "Lookbook" },
 ];
 
 export function Header() {
