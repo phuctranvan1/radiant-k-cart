@@ -9,20 +9,26 @@ export function useWishlist() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
 
-  const [ids, setIds] = useState<string[]>(() => {
-    if (typeof window === "undefined") return [];
-    try {
-      return JSON.parse(localStorage.getItem(WISHLIST_KEY) ?? "[]") as string[];
-    } catch {
-      return [];
-    }
-  });
+  const [ids, setIds] = useState<string[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    setIsMounted(true);
+    try {
+      const stored = localStorage.getItem(WISHLIST_KEY);
+      if (stored) {
+        setIds(JSON.parse(stored) as string[]);
+      }
+    } catch {
+      setIds([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isMounted) {
       localStorage.setItem(WISHLIST_KEY, JSON.stringify(ids));
     }
-  }, [ids]);
+  }, [ids, isMounted]);
 
   const requireAuth = useCallback(() => {
     if (loading) return false;
