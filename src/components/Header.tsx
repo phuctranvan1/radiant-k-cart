@@ -151,7 +151,7 @@ export function Header() {
             <Link to="/wishlist" className="py-2 text-sm" onClick={() => setOpen(false)}>
               Wishlist {wishlistIds.length > 0 && `(${wishlistIds.length})`}
             </Link>
-            <Link to="/auth" className="py-2 text-sm" onClick={() => setOpen(false)}>
+            <Link to="/auth" search={{}} className="py-2 text-sm" onClick={() => setOpen(false)}>
               Account
             </Link>
             <Link to="/order-lookup" className="py-2 text-sm" onClick={() => setOpen(false)}>
