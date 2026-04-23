@@ -119,7 +119,9 @@ function ProductDetail() {
                   key={src + i}
                   onClick={() => setActiveImg(i)}
                   className={`shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
-                    activeImg === i ? "border-gold scale-105" : "border-border opacity-70 hover:opacity-100"
+                    activeImg === i
+                      ? "border-gold scale-105"
+                      : "border-border opacity-70 hover:opacity-100"
                   }`}
                   aria-label={`View image ${i + 1}`}
                 >

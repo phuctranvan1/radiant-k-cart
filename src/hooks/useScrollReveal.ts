@@ -11,9 +11,9 @@ export function useScrollReveal() {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (reduce) {
-      document.querySelectorAll<HTMLElement>(".reveal-on-scroll").forEach((el) =>
-        el.classList.add("is-visible"),
-      );
+      document
+        .querySelectorAll<HTMLElement>(".reveal-on-scroll")
+        .forEach((el) => el.classList.add("is-visible"));
       return;
     }
 

@@ -12,8 +12,7 @@ export const Route = createFileRoute("/lookbook")({
       { property: "og:title", content: "Lookbook — GLOW" },
       {
         property: "og:description",
-        content:
-          "Editorial stories, rituals & textures from Seoul's finest beauty houses.",
+        content: "Editorial stories, rituals & textures from Seoul's finest beauty houses.",
       },
     ],
   }),
@@ -56,8 +55,21 @@ function LookbookPage() {
       {/* Editorial cover */}
       <header className="relative h-[80vh] min-h-[600px] flex items-center justify-center text-center overflow-hidden">
         <div className="absolute inset-0 bg-mesh opacity-60" />
-        <div className="orb" style={{ top: "10%", left: "10%", width: 400, height: 400, background: "var(--gold)" }} />
-        <div className="orb" style={{ bottom: "5%", right: "15%", width: 320, height: 320, background: "var(--gold-deep)", animationDelay: "3s" }} />
+        <div
+          className="orb"
+          style={{ top: "10%", left: "10%", width: 400, height: 400, background: "var(--gold)" }}
+        />
+        <div
+          className="orb"
+          style={{
+            bottom: "5%",
+            right: "15%",
+            width: 320,
+            height: 320,
+            background: "var(--gold-deep)",
+            animationDelay: "3s",
+          }}
+        />
         <div className="relative z-10 px-6 reveal">
           <p className="text-xs tracking-[0.5em] text-gold mb-6">VOLUME I · MMXXVI</p>
           <h1 className="font-display text-7xl md:text-9xl leading-[0.9] mb-6">
@@ -99,9 +111,7 @@ function LookbookPage() {
               </div>
               <div className={`max-w-md ${reverse ? "lg:order-1 lg:ml-auto" : ""}`}>
                 <p className="text-xs tracking-[0.4em] text-gold mb-4">{s.issue}</p>
-                <h2 className="font-display text-5xl md:text-6xl leading-[0.95] mb-3">
-                  {s.title}
-                </h2>
+                <h2 className="font-display text-5xl md:text-6xl leading-[0.95] mb-3">{s.title}</h2>
                 <p className="font-display italic text-xl text-muted-foreground mb-6">
                   {s.subtitle}
                 </p>

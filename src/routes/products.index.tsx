@@ -12,6 +12,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import { useI18n } from "@/lib/i18n";
+import { useCurrency } from "@/lib/currency";
 
 export const Route = createFileRoute("/products/")({
   head: () => ({
@@ -45,6 +47,8 @@ function ProductsPage() {
   const [category, setCategory] = useState("all");
   const [sort, setSort] = useState("featured");
   const [maxPrice, setMaxPrice] = useState(100);
+  const { t } = useI18n();
+  const { fmt } = useCurrency();
 
   useEffect(() => {
     supabase
@@ -83,32 +87,32 @@ function ProductsPage() {
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="text-center mb-10">
-        <p className="text-xs tracking-[0.3em] text-gold mb-3">THE COLLECTION</p>
-        <h1 className="font-display text-5xl">All Products</h1>
+        <p className="text-xs tracking-[0.3em] text-gold mb-3">{t("products.theCollection")}</p>
+        <h1 className="font-display text-5xl">{t("products.allProducts")}</h1>
       </div>
 
       <div className="grid lg:grid-cols-[260px_1fr] gap-8">
         <aside className="space-y-6 luxe-card rounded-xl p-6 h-fit">
           <div>
             <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">
-              Search
+              {t("products.search")}
             </label>
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search products..."
+              placeholder={t("products.searchPlaceholder")}
             />
           </div>
           <div>
             <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">
-              Category
+              {t("products.category")}
             </label>
             <Select value={category} onValueChange={setCategory}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All categories</SelectItem>
+                <SelectItem value="all">{t("products.allCategories")}</SelectItem>
                 {categories.map((c) => (
                   <SelectItem key={c.id} value={c.id}>
                     {c.name}
@@ -119,7 +123,7 @@ function ProductsPage() {
           </div>
           <div>
             <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">
-              Max price: <span className="text-gold">${maxPrice}</span>
+              {t("products.maxPrice")}: <span className="text-gold">{fmt(maxPrice)}</span>
             </label>
             <Slider
               value={[maxPrice]}
@@ -131,17 +135,17 @@ function ProductsPage() {
           </div>
           <div>
             <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">
-              Sort
+              {t("products.sort")}
             </label>
             <Select value={sort} onValueChange={setSort}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="featured">Featured</SelectItem>
-                <SelectItem value="price-low">Price: Low to High</SelectItem>
-                <SelectItem value="price-high">Price: High to Low</SelectItem>
-                <SelectItem value="rating">Top Rated</SelectItem>
+                <SelectItem value="featured">{t("products.featured")}</SelectItem>
+                <SelectItem value="price-low">{t("products.priceLow")}</SelectItem>
+                <SelectItem value="price-high">{t("products.priceHigh")}</SelectItem>
+                <SelectItem value="rating">{t("products.topRated")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -149,7 +153,7 @@ function ProductsPage() {
 
         <div>
           <p className="text-sm text-muted-foreground mb-4">
-            {loadingProducts ? "Loading..." : `${filtered.length} products`}
+            {loadingProducts ? t("products.loading") : `${filtered.length} ${t("products.count")}`}
           </p>
           {loadingProducts ? (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
@@ -163,9 +167,7 @@ function ProductsPage() {
               ))}
             </div>
           ) : filtered.length === 0 ? (
-            <p className="py-20 text-center text-muted-foreground">
-              No products match your filters.
-            </p>
+            <p className="py-20 text-center text-muted-foreground">{t("products.noMatch")}</p>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
               {filtered.map((p) => (

@@ -2,6 +2,8 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useCart } from "@/lib/useCart";
 import { useAuth } from "@/lib/auth";
+import { useI18n } from "@/lib/i18n";
+import { useCurrency } from "@/lib/currency";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2, ShoppingBag, Lock } from "lucide-react";
 
@@ -14,6 +16,8 @@ function CartPage() {
   const { items, updateQty, removeItem, subtotal, count } = useCart();
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const { t } = useI18n();
+  const { fmt } = useCurrency();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -25,8 +29,8 @@ function CartPage() {
     return (
       <div className="container mx-auto px-4 py-24 text-center max-w-md">
         <Lock className="mx-auto mb-6" size={40} style={{ color: "var(--gold)" }} />
-        <h1 className="font-display text-3xl mb-3">Sign in required</h1>
-        <p className="text-muted-foreground">Redirecting to sign in…</p>
+        <h1 className="font-display text-3xl mb-3">{t("cart.signInRequired")}</h1>
+        <p className="text-muted-foreground">{t("cart.redirecting")}</p>
       </div>
     );
   }
@@ -35,23 +39,23 @@ function CartPage() {
     return (
       <div className="container mx-auto px-4 py-24 text-center max-w-md">
         <ShoppingBag className="mx-auto mb-6" size={48} style={{ color: "var(--gold)" }} />
-        <h1 className="font-display text-4xl mb-3">Your bag is empty</h1>
-        <p className="text-muted-foreground mb-8">
-          Discover our collection of luxury K-beauty essentials.
-        </p>
+        <h1 className="font-display text-4xl mb-3">{t("cart.empty")}</h1>
+        <p className="text-muted-foreground mb-8">{t("cart.emptyDesc")}</p>
         <Link to="/products">
           <Button size="lg" className="bg-gradient-gold text-primary-foreground">
-            Start shopping
+            {t("cart.startShopping")}
           </Button>
         </Link>
       </div>
     );
   }
 
+  const shipping = subtotal >= 80 ? 0 : 10;
+
   return (
     <div className="container mx-auto px-4 py-12 max-w-6xl">
       <h1 className="font-display text-4xl mb-8">
-        Your Bag <span className="text-muted-foreground text-2xl">({count})</span>
+        {t("cart.title")} <span className="text-muted-foreground text-2xl">({count})</span>
       </h1>
 
       <div className="grid lg:grid-cols-[1fr_360px] gap-8">
@@ -85,7 +89,7 @@ function CartPage() {
                       {item.product.name}
                     </Link>
                     <p className="text-gold font-semibold mt-1">
-                      ${(item.product.sale_price ?? item.product.price).toFixed(2)}
+                      {fmt(item.product.sale_price ?? item.product.price)}
                     </p>
                   </div>
                   <div className="flex items-center border border-border rounded">
@@ -115,31 +119,31 @@ function CartPage() {
         </div>
 
         <aside className="luxe-card rounded-xl p-6 h-fit sticky top-24">
-          <h2 className="font-display text-2xl mb-4">Order Summary</h2>
+          <h2 className="font-display text-2xl mb-4">{t("cart.orderSummary")}</h2>
           <div className="space-y-2 text-sm pb-4 border-b border-border">
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span className="text-muted-foreground">{t("cart.subtotal")}</span>
+              <span>{fmt(subtotal)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Shipping</span>
-              <span>{subtotal >= 80 ? "Free" : "$10.00"}</span>
+              <span className="text-muted-foreground">{t("cart.shipping")}</span>
+              <span>{shipping === 0 ? t("cart.free") : fmt(shipping)}</span>
             </div>
           </div>
           <div className="flex justify-between py-4 text-lg font-semibold">
-            <span>Total</span>
-            <span className="text-gold">${(subtotal + (subtotal >= 80 ? 0 : 10)).toFixed(2)}</span>
+            <span>{t("cart.total")}</span>
+            <span className="text-gold">{fmt(subtotal + shipping)}</span>
           </div>
           <Link to="/checkout">
             <Button size="lg" className="w-full bg-gradient-gold text-primary-foreground">
-              Checkout
+              {t("cart.checkout")}
             </Button>
           </Link>
           <Link
             to="/products"
             className="block text-center mt-4 text-sm text-muted-foreground hover:text-gold"
           >
-            Continue shopping
+            {t("cart.continueShopping")}
           </Link>
         </aside>
       </div>

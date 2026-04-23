@@ -1,8 +1,17 @@
-import { Outlet, createRootRoute, HeadContent, Scripts, Link, useRouterState } from "@tanstack/react-router";
+import {
+  Outlet,
+  createRootRoute,
+  HeadContent,
+  Scripts,
+  Link,
+  useRouterState,
+} from "@tanstack/react-router";
 import { useEffect } from "react";
 import appCss from "../styles.css?url";
 import { AuthProvider } from "@/lib/auth";
 import { ThemeProvider } from "@/lib/useTheme";
+import { I18nProvider } from "@/lib/i18n";
+import { CurrencyProvider } from "@/lib/currency";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatWidget } from "@/components/ChatWidget";
@@ -106,18 +115,22 @@ function RootComponent() {
   }, [pathname]);
 
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="flex-1">
-            <Outlet />
-          </main>
-          <Footer />
-        </div>
-        <ChatWidget />
-        <Toaster />
-      </AuthProvider>
-    </ThemeProvider>
+    <I18nProvider>
+      <CurrencyProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <div className="flex flex-col min-h-screen">
+              <Header />
+              <main className="flex-1">
+                <Outlet />
+              </main>
+              <Footer />
+            </div>
+            <ChatWidget />
+            <Toaster />
+          </AuthProvider>
+        </ThemeProvider>
+      </CurrencyProvider>
+    </I18nProvider>
   );
 }

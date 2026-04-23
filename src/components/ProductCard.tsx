@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { Heart, ShoppingBag, Star } from "lucide-react";
 import { useCart } from "@/lib/useCart";
 import { useWishlist } from "@/lib/useWishlist";
+import { useI18n } from "@/lib/i18n";
+import { useCurrency } from "@/lib/currency";
 import { Button } from "@/components/ui/button";
 
 type Product = {
@@ -21,13 +23,15 @@ export function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart();
   const { toggle, isWishlisted } = useWishlist();
   const wishlisted = isWishlisted(product.id);
+  const { t } = useI18n();
+  const { fmt } = useCurrency();
 
   return (
     <div className="group relative block">
       {/* Wishlist button */}
       <button
         onClick={() => toggle(product.id)}
-        aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+        aria-label={wishlisted ? t("product.removeFromWishlist") : t("product.addToWishlist")}
         className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-background/80 backdrop-blur flex items-center justify-center border border-border hover:border-gold transition-colors"
       >
         <Heart
@@ -55,12 +59,12 @@ export function ProductCard({ product }: { product: Product }) {
             <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             {product.is_new && (
               <span className="absolute top-3 left-3 bg-gradient-gold text-primary-foreground text-[10px] font-bold tracking-widest px-2.5 py-1 rounded-full shadow-gold">
-                NEW
+                {t("product.new")}
               </span>
             )}
             {onSale && !product.is_new && (
               <span className="absolute top-3 left-3 bg-destructive text-destructive-foreground text-[10px] font-bold tracking-widest px-2.5 py-1 rounded-full">
-                SALE
+                {t("product.sale")}
               </span>
             )}
             <div className="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
@@ -73,7 +77,7 @@ export function ProductCard({ product }: { product: Product }) {
                   void addItem(product.id, 1);
                 }}
               >
-                <ShoppingBag size={13} /> Add to Bag
+                <ShoppingBag size={13} /> {t("product.addToBag")}
               </Button>
             </div>
           </div>
@@ -90,15 +94,13 @@ export function ProductCard({ product }: { product: Product }) {
               <div className="flex items-baseline gap-2">
                 {onSale ? (
                   <>
-                    <span className="text-gold font-semibold">
-                      ${product.sale_price?.toFixed(2)}
-                    </span>
+                    <span className="text-gold font-semibold">{fmt(product.sale_price!)}</span>
                     <span className="text-xs text-muted-foreground line-through">
-                      ${product.price.toFixed(2)}
+                      {fmt(product.price)}
                     </span>
                   </>
                 ) : (
-                  <span className="font-semibold">${product.price.toFixed(2)}</span>
+                  <span className="font-semibold">{fmt(product.price)}</span>
                 )}
               </div>
               {product.rating && (

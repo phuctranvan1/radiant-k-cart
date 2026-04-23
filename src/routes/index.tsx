@@ -5,6 +5,8 @@ import { ProductCard } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Truck, Shield, Heart } from "lucide-react";
 import heroImg from "@/assets/hero-luxury.jpg";
+import { useI18n } from "@/lib/i18n";
+import { useCurrency } from "@/lib/currency";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -37,6 +39,8 @@ function Index() {
   const [featured, setFeatured] = useState<Product[]>([]);
   const [newest, setNewest] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const { t } = useI18n();
+  const { fmt } = useCurrency();
 
   useEffect(() => {
     supabase
@@ -97,15 +101,15 @@ function Index() {
         <div className="relative container mx-auto px-4 py-32 md:py-48 max-w-3xl">
           <div className="reveal inline-flex items-center gap-2 mb-6 px-4 py-1.5 glass rounded-full text-[11px] tracking-[0.3em] gold-ring">
             <Sparkles size={12} className="animate-pulse" style={{ color: "var(--gold)" }} />
-            <span className="text-gold">NEW SEASON · K-BEAUTY EDIT</span>
+            <span className="text-gold">{t("home.newSeason")}</span>
           </div>
           <h1 className="reveal reveal-delay-1 font-display text-5xl md:text-7xl lg:text-8xl leading-[1.02] mb-6">
-            The art of <span className="text-gold-shine italic">glass skin</span>,<br />
-            distilled.
+            {t("home.heroTitle1")}{" "}
+            <span className="text-gold-shine italic">{t("home.heroTitle2")}</span>,<br />
+            {t("home.heroTitle3")}
           </h1>
           <p className="reveal reveal-delay-2 text-lg text-muted-foreground mb-8 max-w-xl leading-relaxed">
-            Discover our curated edit of luxury Korean cosmetics — from gold-infused serums to dewy
-            cushions, handpicked from Seoul's most coveted ateliers.
+            {t("home.heroDesc")}
           </p>
           <div className="reveal reveal-delay-3 flex flex-wrap gap-3">
             <Link to="/products">
@@ -113,7 +117,7 @@ function Index() {
                 size="lg"
                 className="btn-luxe bg-gradient-gold text-primary-foreground hover:opacity-95 px-8 shadow-gold"
               >
-                Shop the Edit
+                {t("home.shopEdit")}
               </Button>
             </Link>
             <Link to="/about">
@@ -122,7 +126,7 @@ function Index() {
                 variant="outline"
                 className="border-gold text-gold hover:bg-gold/10 backdrop-blur"
               >
-                Our Story
+                {t("home.ourStory")}
               </Button>
             </Link>
           </div>
@@ -157,10 +161,10 @@ function Index() {
       <section className="border-b border-border/50 bg-card/20">
         <div className="container mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {[
-            { icon: Truck, t: "Free Worldwide Shipping", s: "On orders over $80" },
-            { icon: Shield, t: "Authentic Guarantee", s: "Sourced direct from Seoul" },
-            { icon: Heart, t: "Cruelty-Free", s: "Always & forever" },
-            { icon: Sparkles, t: "AI Beauty Advisor", s: "24/7 personal guidance" },
+            { icon: Truck, t: t("trust.freeShipping"), s: t("trust.freeShippingDesc") },
+            { icon: Shield, t: t("trust.authentic"), s: t("trust.authenticDesc") },
+            { icon: Heart, t: t("trust.crueltyFree"), s: t("trust.crueltyFreeDesc") },
+            { icon: Sparkles, t: t("trust.advisor"), s: t("trust.advisorDesc") },
           ].map((f) => (
             <div key={f.t} className="hover-float flex flex-col items-center gap-1.5">
               <div className="w-10 h-10 mb-1 rounded-full glass flex items-center justify-center">
@@ -176,9 +180,9 @@ function Index() {
       {/* CATEGORIES */}
       <section className="container mx-auto px-4 py-16 md:py-20">
         <div className="text-center mb-10 md:mb-12 reveal-on-scroll">
-          <p className="text-xs tracking-[0.3em] text-gold mb-3">SHOP BY CATEGORY</p>
+          <p className="text-xs tracking-[0.3em] text-gold mb-3">{t("home.shopByCategory")}</p>
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">
-            Curated for every ritual
+            {t("home.curatedRitual")}
           </h2>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
@@ -205,11 +209,13 @@ function Index() {
       <section className="container mx-auto px-4 py-16 md:py-20">
         <div className="flex items-end justify-between mb-10 md:mb-12 reveal-on-scroll">
           <div>
-            <p className="text-xs tracking-[0.3em] text-gold mb-3">BESTSELLERS</p>
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">The Editor's Edit</h2>
+            <p className="text-xs tracking-[0.3em] text-gold mb-3">{t("home.bestsellers")}</p>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">
+              {t("home.editorsEdit")}
+            </h2>
           </div>
           <Link to="/products" className="hidden md:block text-sm text-gold hover:underline">
-            View all →
+            {t("home.viewAll")}
           </Link>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
@@ -242,18 +248,21 @@ function Index() {
               style={{ color: "var(--gold)" }}
             />
             <h3 className="font-display text-2xl sm:text-3xl md:text-5xl mb-3">
-              20% off orders over <span className="text-gold-shine">$80</span>
+              {t("home.promoTitle1")} <span className="text-gold-shine">{fmt(80)}</span>
             </h3>
             <p className="text-muted-foreground mb-6">
-              Use code <span className="text-gold font-mono font-bold tracking-widest">GLOW20</span>{" "}
-              at checkout
+              {t("home.promoDesc")}{" "}
+              <span className="text-gold font-mono font-bold tracking-widest">
+                {t("home.promoCode")}
+              </span>{" "}
+              {t("home.promoAt")}
             </p>
             <Link to="/products">
               <Button
                 size="lg"
                 className="btn-luxe bg-gradient-gold text-primary-foreground shadow-gold"
               >
-                Shop now
+                {t("home.shopNow")}
               </Button>
             </Link>
           </div>
@@ -264,8 +273,10 @@ function Index() {
       {newest.length > 0 && (
         <section className="container mx-auto px-4 py-16 md:py-20">
           <div className="text-center mb-10 md:mb-12 reveal-on-scroll">
-            <p className="text-xs tracking-[0.3em] text-gold mb-3">JUST IN</p>
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">New arrivals</h2>
+            <p className="text-xs tracking-[0.3em] text-gold mb-3">{t("home.justIn")}</p>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">
+              {t("home.newArrivals")}
+            </h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {newest.map((p, i) => (
