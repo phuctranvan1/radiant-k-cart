@@ -1,9 +1,12 @@
+/// <reference lib="deno.ns" />
+// @ts-ignore
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
 const SYSTEM_PROMPT = `You are Soomi, the AI beauty advisor for GLOW — a luxury Korean cosmetics boutique.
@@ -17,11 +20,15 @@ Your job:
 
 Tone: Warm, elegant, knowledgeable. Use markdown for clarity. Keep replies concise (2-4 short paragraphs max). Avoid medical claims.`;
 
-serve(async (req) => {
+serve(async (req: { method: string; json: () => PromiseLike<{ messages: any; }> | { messages: any; }; }) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
     const { messages } = await req.json();
+    if (!messages || !Array.isArray(messages)) {
+      throw new Error("Missing or invalid messages in request body");
+    }
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
 
@@ -32,7 +39,7 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: "gpt-4o-mini",
         messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
         stream: true,
       }),
@@ -68,7 +75,12 @@ serve(async (req) => {
     }
 
     return new Response(response.body, {
-      headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
+      headers: { 
+        ...corsHeaders, 
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+      },
     });
   } catch (e) {
     console.error("chat error:", e);
