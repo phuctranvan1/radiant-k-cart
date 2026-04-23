@@ -21,7 +21,8 @@ export type CartLine = {
 };
 
 export function useCart() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const [items, setItems] = useState<CartLine[]>([]);
   const [loading, setLoading] = useState(false);
 
