@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./auth";
 import { toast } from "sonner";
@@ -20,7 +21,8 @@ export type CartLine = {
 };
 
 export function useCart() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const [items, setItems] = useState<CartLine[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -61,26 +63,31 @@ export function useCart() {
   }, [refresh]);
 
   const addItem = async (product_id: string, quantity = 1) => {
-    if (user) {
-      const existing = items.find((i) => i.product_id === product_id);
-      if (existing) {
-        await supabase
-          .from("cart_items")
-          .update({ quantity: existing.quantity + quantity })
-          .eq("user_id", user.id)
-          .eq("product_id", product_id);
-      } else {
-        await supabase.from("cart_items").insert({ user_id: user.id, product_id, quantity });
-      }
-    } else {
-      const raw = localStorage.getItem(GUEST_KEY);
-      const guest: { product_id: string; quantity: number }[] = raw ? JSON.parse(raw) : [];
-      const existing = guest.find((g) => g.product_id === product_id);
-      if (existing) existing.quantity += quantity;
-      else guest.push({ product_id, quantity });
-      localStorage.setItem(GUEST_KEY, JSON.stringify(guest));
+    if (authLoading) return;
+    if (!user) {
+      toast.error("Please sign in to add items to your bag", {
+        action: {
+          label: "Sign in",
+          onClick: () =>
+            navigate({
+              to: "/auth",
+              search: { redirect: window.location.pathname + window.location.search },
+            }),
+        },
+      });
+      return;
     }
-    toast.success("Added to cart");
+    const existing = items.find((i) => i.product_id === product_id);
+    if (existing) {
+      await supabase
+        .from("cart_items")
+        .update({ quantity: existing.quantity + quantity })
+        .eq("user_id", user.id)
+        .eq("product_id", product_id);
+    } else {
+      await supabase.from("cart_items").insert({ user_id: user.id, product_id, quantity });
+    }
+    toast.success("Added to bag ✨");
     await refresh();
   };
 

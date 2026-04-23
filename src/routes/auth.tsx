@@ -13,6 +13,9 @@ import { Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({ meta: [{ title: "Sign in — GLOW" }] }),
+  validateSearch: (search: Record<string, unknown>): { redirect?: string } => ({
+    redirect: typeof search.redirect === "string" ? search.redirect : undefined,
+  }),
   component: AuthPage,
 });
 
@@ -22,12 +25,13 @@ const passSchema = z.string().min(6).max(72);
 function AuthPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { redirect } = Route.useSearch();
   const [loading, setLoading] = useState(false);
   const [otpSent, setOtpSent] = useState<string | null>(null);
 
   useEffect(() => {
-    if (user) navigate({ to: "/account" });
-  }, [user, navigate]);
+    if (user) navigate({ to: redirect || "/account" });
+  }, [user, navigate, redirect]);
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
