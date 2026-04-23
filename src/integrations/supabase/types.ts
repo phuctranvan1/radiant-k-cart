@@ -363,6 +363,97 @@ export type Database = {
         }
         Relationships: []
       }
+      review_votes: {
+        Row: {
+          created_at: string
+          id: string
+          review_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          review_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          review_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_votes_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "reviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reviews: {
+        Row: {
+          content: string
+          created_at: string
+          finish: string | null
+          helpful_count: number
+          id: string
+          image_urls: string[] | null
+          product_id: string
+          rating: number
+          scent: string | null
+          skin_type: string | null
+          texture: string | null
+          title: string | null
+          updated_at: string
+          user_id: string
+          verified_buyer: boolean
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          finish?: string | null
+          helpful_count?: number
+          id?: string
+          image_urls?: string[] | null
+          product_id: string
+          rating: number
+          scent?: string | null
+          skin_type?: string | null
+          texture?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id: string
+          verified_buyer?: boolean
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          finish?: string | null
+          helpful_count?: number
+          id?: string
+          image_urls?: string[] | null
+          product_id?: string
+          rating?: number
+          scent?: string | null
+          skin_type?: string | null
+          texture?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+          verified_buyer?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       support_tickets: {
         Row: {
           created_at: string
