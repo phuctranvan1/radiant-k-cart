@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/useCart";
 import { useWishlist } from "@/lib/useWishlist";
+import { useRecentlyViewed } from "@/lib/useRecentlyViewed";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ProductReviews } from "@/components/ProductReviews";
 import { Star, Minus, Plus, Heart, Truck, Shield } from "lucide-react";
@@ -69,6 +70,7 @@ function ProductDetail() {
   const [activeImg, setActiveImg] = useState(0);
   const { addItem } = useCart();
   const { toggle, isWishlisted } = useWishlist();
+  const { addRecentlyViewed } = useRecentlyViewed();
 
   useEffect(() => {
     setLoading(true);
@@ -81,7 +83,10 @@ function ProductDetail() {
       .then(({ data }) => {
         setP(data);
         setLoading(false);
+        if (data) addRecentlyViewed(data.id);
       });
+    // addRecentlyViewed is stable (useCallback with no deps)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
   if (loading) return <ProductDetailSkeleton />;

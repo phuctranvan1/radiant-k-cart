@@ -133,6 +133,21 @@ const translations = {
     "toast.addedToBag": "Added to bag ✨",
     "toast.signInRequired": "Please sign in to add items to your bag",
     "toast.signIn": "Sign in",
+    // Recently Viewed
+    "recentlyViewed.label": "YOUR JOURNEY",
+    "recentlyViewed.title": "Recently Viewed",
+    // Newsletter
+    "newsletter.badge": "JOIN THE GLOW CIRCLE",
+    "newsletter.heading": "Beauty secrets, delivered.",
+    "newsletter.desc":
+      "Subscribe for exclusive early access, K-beauty rituals, and members-only offers curated just for you.",
+    "newsletter.placeholder": "your@email.com",
+    "newsletter.cta": "Subscribe",
+    "newsletter.privacy": "No spam, ever. Unsubscribe anytime.",
+    "newsletter.invalidEmail": "Please enter a valid email address.",
+    "newsletter.successToast": "Welcome to the GLOW Circle ✨",
+    "newsletter.thankYou": "You're in the circle.",
+    "newsletter.thankYouDesc": "Expect beauty secrets in your inbox soon.",
     // Common
     "common.free": "Free",
   },
@@ -267,6 +282,21 @@ const translations = {
     "toast.addedToBag": "Đã thêm vào giỏ ✨",
     "toast.signInRequired": "Vui lòng đăng nhập để thêm sản phẩm vào giỏ",
     "toast.signIn": "Đăng nhập",
+    // Recently Viewed
+    "recentlyViewed.label": "HÀNH TRÌNH CỦA BẠN",
+    "recentlyViewed.title": "Đã xem gần đây",
+    // Newsletter
+    "newsletter.badge": "THAM GIA GLOW CIRCLE",
+    "newsletter.heading": "Bí quyết làm đẹp, được gửi đến bạn.",
+    "newsletter.desc":
+      "Đăng ký để nhận quyền truy cập sớm độc quyền, nghi thức K-beauty và ưu đãi dành riêng cho thành viên.",
+    "newsletter.placeholder": "email@của-bạn.com",
+    "newsletter.cta": "Đăng ký",
+    "newsletter.privacy": "Không spam. Hủy đăng ký bất cứ lúc nào.",
+    "newsletter.invalidEmail": "Vui lòng nhập địa chỉ email hợp lệ.",
+    "newsletter.successToast": "Chào mừng bạn đến với GLOW Circle ✨",
+    "newsletter.thankYou": "Bạn đã tham gia rồi.",
+    "newsletter.thankYouDesc": "Hãy chờ đón những bí quyết làm đẹp trong hộp thư của bạn.",
     // Common
     "common.free": "Miễn phí",
   },
@@ -400,6 +430,20 @@ const translations = {
     "toast.addedToBag": "장바구니에 추가되었습니다 ✨",
     "toast.signInRequired": "장바구니에 담으려면 로그인이 필요합니다",
     "toast.signIn": "로그인",
+    // Recently Viewed
+    "recentlyViewed.label": "나의 여정",
+    "recentlyViewed.title": "최근 본 상품",
+    // Newsletter
+    "newsletter.badge": "GLOW 서클 가입",
+    "newsletter.heading": "뷰티 시크릿, 당신에게 배달.",
+    "newsletter.desc": "독점 얼리 액세스, K-뷰티 루틴, 멤버 전용 혜택을 받아보세요.",
+    "newsletter.placeholder": "이메일 주소",
+    "newsletter.cta": "구독하기",
+    "newsletter.privacy": "스팸 없음. 언제든지 구독 취소 가능.",
+    "newsletter.invalidEmail": "유효한 이메일 주소를 입력해 주세요.",
+    "newsletter.successToast": "GLOW Circle에 오신 것을 환영합니다 ✨",
+    "newsletter.thankYou": "서클에 합류하셨습니다.",
+    "newsletter.thankYouDesc": "곧 뷰티 시크릿이 받은편지함에 도착할 예정입니다.",
     // Common
     "common.free": "무료",
   },
