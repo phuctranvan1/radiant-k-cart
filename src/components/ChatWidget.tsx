@@ -117,10 +117,11 @@ export function ChatWidget() {
 
       {/* Chat panel */}
       <div
-        className={`fixed bottom-24 right-6 z-50 w-[92vw] max-w-md h-[70vh] luxe-card rounded-2xl shadow-luxe flex flex-col overflow-hidden transition-all duration-400 origin-bottom-right ${open
+        className={`fixed bottom-24 right-6 z-50 w-[92vw] max-w-md h-[70vh] luxe-card rounded-2xl shadow-luxe flex flex-col overflow-hidden transition-all duration-400 origin-bottom-right ${
+          open
             ? "scale-100 opacity-100 translate-y-0 pointer-events-auto"
             : "scale-90 opacity-0 translate-y-4 pointer-events-none"
-          }`}
+        }`}
       >
         {/* Header */}
         <div className="bg-gradient-gold p-4 flex items-center gap-3">
@@ -144,10 +145,13 @@ export function ChatWidget() {
               className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
               style={{ animation: `msg-appear 0.3s ease-out ${Math.min(i * 0.05, 0.3)}s both` }}
             >
-              <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${m.role === "user"
-                  ? "bg-gradient-gold text-primary-foreground rounded-br-sm"
-                  : "bg-secondary text-foreground rounded-bl-sm"
-                }`}>
+              <div
+                className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
+                  m.role === "user"
+                    ? "bg-gradient-gold text-primary-foreground rounded-br-sm"
+                    : "bg-secondary text-foreground rounded-bl-sm"
+                }`}
+              >
                 <div className="prose prose-sm prose-invert max-w-none [&_p]:my-1 [&_strong]:text-gold">
                   <ReactMarkdown>{m.content || "…"}</ReactMarkdown>
                 </div>
@@ -156,11 +160,23 @@ export function ChatWidget() {
           ))}
           {/* Typing indicator */}
           {loading && messages[messages.length - 1]?.role !== "assistant" && (
-            <div className="flex justify-start" style={{ animation: "msg-appear 0.3s ease-out both" }}>
+            <div
+              className="flex justify-start"
+              style={{ animation: "msg-appear 0.3s ease-out both" }}
+            >
               <div className="bg-secondary rounded-2xl rounded-bl-sm px-4 py-3 flex gap-1">
-                <span className="w-2 h-2 rounded-full bg-muted-foreground/60" style={{ animation: "typing-dot 1.4s ease-in-out infinite" }} />
-                <span className="w-2 h-2 rounded-full bg-muted-foreground/60" style={{ animation: "typing-dot 1.4s ease-in-out 0.2s infinite" }} />
-                <span className="w-2 h-2 rounded-full bg-muted-foreground/60" style={{ animation: "typing-dot 1.4s ease-in-out 0.4s infinite" }} />
+                <span
+                  className="w-2 h-2 rounded-full bg-muted-foreground/60"
+                  style={{ animation: "typing-dot 1.4s ease-in-out infinite" }}
+                />
+                <span
+                  className="w-2 h-2 rounded-full bg-muted-foreground/60"
+                  style={{ animation: "typing-dot 1.4s ease-in-out 0.2s infinite" }}
+                />
+                <span
+                  className="w-2 h-2 rounded-full bg-muted-foreground/60"
+                  style={{ animation: "typing-dot 1.4s ease-in-out 0.4s infinite" }}
+                />
               </div>
             </div>
           )}

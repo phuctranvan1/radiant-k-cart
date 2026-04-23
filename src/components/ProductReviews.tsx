@@ -130,10 +130,7 @@ export function ProductReviews({ productId }: { productId: string }) {
 
       {/* Form */}
       {showForm && user && (
-        <form
-          onSubmit={handleSubmit}
-          className="luxe-card rounded-xl p-6 mb-8 space-y-4 reveal"
-        >
+        <form onSubmit={handleSubmit} className="luxe-card rounded-xl p-6 mb-8 space-y-4 reveal">
           <div>
             <Label className="mb-2 block">Your rating</Label>
             <StarRating value={rating} size={28} onChange={setRating} />
@@ -225,16 +222,13 @@ export function ProductReviews({ productId }: { productId: string }) {
           {reviews.map((r) => {
             const voted = votedIds.has(r.id);
             return (
-              <article
-                key={r.id}
-                className="luxe-card rounded-xl p-5 reveal-on-scroll is-visible"
-              >
+              <article key={r.id} className="luxe-card rounded-xl p-5 reveal-on-scroll is-visible">
                 <header className="flex items-start gap-3 mb-3">
                   <div className="w-10 h-10 rounded-full bg-gradient-gold flex items-center justify-center text-primary-foreground font-semibold text-sm shrink-0 overflow-hidden">
                     {r.author_avatar ? (
                       <img src={r.author_avatar} alt="" className="w-full h-full object-cover" />
                     ) : (
-                      r.author_name?.[0]?.toUpperCase() ?? "G"
+                      (r.author_name?.[0]?.toUpperCase() ?? "G")
                     )}
                   </div>
                   <div className="flex-1 min-w-0">

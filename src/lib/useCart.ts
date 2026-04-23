@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./auth";
+import { useI18n } from "./i18n";
 import { toast } from "sonner";
 
 const GUEST_KEY = "glow_guest_cart";
@@ -23,6 +24,7 @@ export type CartLine = {
 export function useCart() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [items, setItems] = useState<CartLine[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -65,9 +67,9 @@ export function useCart() {
   const addItem = async (product_id: string, quantity = 1) => {
     if (authLoading) return;
     if (!user) {
-      toast.error("Please sign in to add items to your bag", {
+      toast.error(t("toast.signInRequired"), {
         action: {
-          label: "Sign in",
+          label: t("toast.signIn"),
           onClick: () =>
             navigate({
               to: "/auth",
@@ -87,7 +89,7 @@ export function useCart() {
     } else {
       await supabase.from("cart_items").insert({ user_id: user.id, product_id, quantity });
     }
-    toast.success("Added to bag ✨");
+    toast.success(t("toast.addedToBag"));
     await refresh();
   };
 

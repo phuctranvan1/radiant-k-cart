@@ -5,17 +5,11 @@ import { useAuth } from "@/lib/auth";
 import { useCart } from "@/lib/useCart";
 import { useWishlist } from "@/lib/useWishlist";
 import { useHideOnScroll } from "@/hooks/useHideOnScroll";
+import { useI18n } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { cn } from "@/lib/utils";
-
-const navLinks = [
-  { to: "/products", label: "All Products" },
-  { to: "/categories/skincare", label: "Skincare" },
-  { to: "/categories/makeup", label: "Makeup" },
-  { to: "/categories/suncare", label: "Suncare" },
-  { to: "/lookbook", label: "Lookbook" },
-];
 
 export function Header() {
   const { user, isAdmin, signOut } = useAuth();
@@ -23,6 +17,15 @@ export function Header() {
   const { ids: wishlistIds } = useWishlist();
   const [open, setOpen] = useState(false);
   const { hidden, scrolled } = useHideOnScroll(120);
+  const { t } = useI18n();
+
+  const navLinks = [
+    { to: "/products", label: t("nav.allProducts") },
+    { to: "/categories/skincare", label: t("nav.skincare") },
+    { to: "/categories/makeup", label: t("nav.makeup") },
+    { to: "/categories/suncare", label: t("nav.suncare") },
+    { to: "/lookbook", label: t("nav.lookbook") },
+  ];
 
   return (
     <header
@@ -38,13 +41,15 @@ export function Header() {
           <div className="marquee-track">
             {Array.from({ length: 2 }).map((_, i) => (
               <div key={i} className="flex items-center gap-12 whitespace-nowrap px-6">
-                <span>✨ FREE SHIPPING WORLDWIDE OVER $80</span>
+                <span>
+                  ✨ {t("promo.freeShipping")} {t("promo.freeShippingAmount")}
+                </span>
                 <span>·</span>
-                <span>USE CODE WELCOME10 FOR 10% OFF</span>
+                <span>{t("promo.welcomeCode")}</span>
                 <span>·</span>
-                <span>NEW DROPS EVERY FRIDAY</span>
+                <span>{t("promo.newDrops")}</span>
                 <span>·</span>
-                <span>AUTHENTIC FROM SEOUL</span>
+                <span>{t("promo.authentic")}</span>
               </div>
             ))}
           </div>
@@ -84,12 +89,13 @@ export function Header() {
             <Search size={20} />
           </Link>
           <ThemeToggle />
+          <LocaleSwitcher />
           {user ? (
             <div className="hidden md:flex items-center gap-2">
               <Link
                 to="/account"
                 className="p-2 hover:text-gold transition-colors"
-                aria-label="Account"
+                aria-label={t("nav.account")}
               >
                 <UserIcon size={20} />
               </Link>
@@ -98,18 +104,18 @@ export function Header() {
                   to="/admin"
                   className="text-xs px-2 py-1 border border-gold rounded text-gold hover:bg-gold/10 transition"
                 >
-                  Admin
+                  {t("nav.admin")}
                 </Link>
               )}
               <Button variant="ghost" size="sm" onClick={signOut} className="text-xs">
-                Sign out
+                {t("nav.signOut")}
               </Button>
             </div>
           ) : (
             <Link to="/auth" search={{}} className="hidden md:block">
               <Button variant="ghost" size="sm" className="text-xs gap-2">
                 <UserIcon size={16} />
-                Sign in
+                {t("nav.signIn")}
               </Button>
             </Link>
           )}
@@ -117,7 +123,7 @@ export function Header() {
           <Link
             to="/wishlist"
             className="p-2 hover:text-gold transition-colors relative"
-            aria-label="Wishlist"
+            aria-label={t("nav.wishlist")}
           >
             <Heart size={20} />
             {wishlistIds.length > 0 && (
@@ -129,7 +135,7 @@ export function Header() {
           <Link
             to="/cart"
             className="p-2 hover:text-gold transition-colors relative"
-            aria-label="Cart"
+            aria-label={t("cart.title")}
           >
             <ShoppingBag size={20} />
             {count > 0 && (
@@ -151,13 +157,13 @@ export function Header() {
               </Link>
             ))}
             <Link to="/wishlist" className="py-2 text-sm" onClick={() => setOpen(false)}>
-              Wishlist {wishlistIds.length > 0 && `(${wishlistIds.length})`}
+              {t("nav.wishlist")} {wishlistIds.length > 0 && `(${wishlistIds.length})`}
             </Link>
             <Link to="/auth" search={{}} className="py-2 text-sm" onClick={() => setOpen(false)}>
-              Account
+              {t("nav.account")}
             </Link>
             <Link to="/order-lookup" className="py-2 text-sm" onClick={() => setOpen(false)}>
-              Track Order
+              {t("nav.trackOrder")}
             </Link>
           </nav>
         </div>

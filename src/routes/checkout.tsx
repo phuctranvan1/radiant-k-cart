@@ -3,6 +3,8 @@ import { useState } from "react";
 import { z } from "zod";
 import { useCart } from "@/lib/useCart";
 import { useAuth } from "@/lib/auth";
+import { useI18n } from "@/lib/i18n";
+import { useCurrency } from "@/lib/currency";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,6 +33,8 @@ function CheckoutPage() {
   const { items, subtotal, clearCart, count } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { t } = useI18n();
+  const { fmt } = useCurrency();
   const [promo, setPromo] = useState("");
   const [discount, setDiscount] = useState(0);
   const [appliedCode, setAppliedCode] = useState<string | null>(null);
@@ -125,17 +129,17 @@ function CheckoutPage() {
     return (
       <div className="container mx-auto px-4 py-24 text-center max-w-md">
         <CheckCircle2 className="mx-auto mb-6" size={56} style={{ color: "var(--gold)" }} />
-        <h1 className="font-display text-4xl mb-3">Thank you</h1>
-        <p className="text-muted-foreground mb-2">Your order is confirmed.</p>
+        <h1 className="font-display text-4xl mb-3">{t("checkout.thankYou")}</h1>
+        <p className="text-muted-foreground mb-2">{t("checkout.orderConfirmed")}</p>
         <p className="font-mono text-gold text-xl mb-8">{orderNum}</p>
-        <p className="text-sm text-muted-foreground mb-6">
-          Save your order number to track it anytime. A confirmation will be sent to your email.
-        </p>
+        <p className="text-sm text-muted-foreground mb-6">{t("checkout.saveOrderNum")}</p>
         <Link to="/order-lookup">
-          <Button className="bg-gradient-gold text-primary-foreground">Track Order</Button>
+          <Button className="bg-gradient-gold text-primary-foreground">
+            {t("checkout.trackOrder")}
+          </Button>
         </Link>
         <Link to="/products" className="block mt-4 text-sm text-muted-foreground hover:text-gold">
-          Continue shopping
+          {t("cart.continueShopping")}
         </Link>
       </div>
     );
@@ -144,9 +148,9 @@ function CheckoutPage() {
   if (count === 0) {
     return (
       <div className="container py-20 text-center">
-        <p className="text-muted-foreground mb-4">Your bag is empty.</p>
+        <p className="text-muted-foreground mb-4">{t("checkout.bagEmpty")}</p>
         <Link to="/products" className="text-gold underline">
-          Browse products
+          {t("checkout.browseProducts")}
         </Link>
       </div>
     );
@@ -154,14 +158,14 @@ function CheckoutPage() {
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-6xl">
-      <h1 className="font-display text-4xl mb-8">Checkout</h1>
+      <h1 className="font-display text-4xl mb-8">{t("checkout.title")}</h1>
       <form onSubmit={submit} className="grid lg:grid-cols-[1fr_360px] gap-8">
         <div className="space-y-6">
           <section className="luxe-card rounded-xl p-6">
-            <h2 className="font-display text-2xl mb-4">Contact</h2>
+            <h2 className="font-display text-2xl mb-4">{t("checkout.contact")}</h2>
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-2">
-                <Label>Full name</Label>
+                <Label>{t("checkout.fullName")}</Label>
                 <Input
                   name="full_name"
                   required
@@ -169,56 +173,59 @@ function CheckoutPage() {
                 />
               </div>
               <div>
-                <Label>Email</Label>
+                <Label>{t("checkout.email")}</Label>
                 <Input type="email" name="email" required defaultValue={user?.email || ""} />
               </div>
               <div>
-                <Label>Phone (optional)</Label>
+                <Label>{t("checkout.phone")}</Label>
                 <Input name="phone" />
               </div>
             </div>
           </section>
           <section className="luxe-card rounded-xl p-6">
-            <h2 className="font-display text-2xl mb-4">Shipping address</h2>
+            <h2 className="font-display text-2xl mb-4">{t("checkout.shippingAddress")}</h2>
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-2">
-                <Label>Street address</Label>
+                <Label>{t("checkout.street")}</Label>
                 <Input name="shipping_address" required />
               </div>
               <div>
-                <Label>City</Label>
+                <Label>{t("checkout.city")}</Label>
                 <Input name="shipping_city" required />
               </div>
               <div>
-                <Label>Postal code</Label>
+                <Label>{t("checkout.postal")}</Label>
                 <Input name="shipping_postal" />
               </div>
               <div className="col-span-2">
-                <Label>Country</Label>
-                <Input name="shipping_country" required defaultValue="United States" />
+                <Label>{t("checkout.country")}</Label>
+                <Input
+                  name="shipping_country"
+                  required
+                  defaultValue={t("checkout.countryDefault")}
+                />
               </div>
               <div className="col-span-2">
-                <Label>Order notes (optional)</Label>
+                <Label>{t("checkout.notes")}</Label>
                 <Textarea name="notes" rows={3} />
               </div>
             </div>
           </section>
           <section className="luxe-card rounded-xl p-6">
-            <h2 className="font-display text-2xl mb-2">Payment</h2>
+            <h2 className="font-display text-2xl mb-2">{t("checkout.payment")}</h2>
             <p className="text-sm text-muted-foreground mb-4">
               <Sparkles
                 size={14}
                 className="inline text-gold mr-1"
                 style={{ color: "var(--gold)" }}
               />
-              Demo checkout — no payment will be charged. Real payment processing can be enabled
-              later.
+              {t("checkout.paymentDemo")}
             </p>
           </section>
         </div>
 
         <aside className="luxe-card rounded-xl p-6 h-fit sticky top-24">
-          <h2 className="font-display text-2xl mb-4">Summary</h2>
+          <h2 className="font-display text-2xl mb-4">{t("checkout.summary")}</h2>
           <div className="space-y-2 max-h-60 overflow-y-auto mb-4">
             {items.map(
               (i) =>
@@ -226,15 +233,13 @@ function CheckoutPage() {
                   <div key={i.product_id} className="flex gap-2 text-sm">
                     <span className="text-muted-foreground">{i.quantity}×</span>
                     <span className="flex-1 truncate">{i.product.name}</span>
-                    <span>
-                      ${((i.product.sale_price ?? i.product.price) * i.quantity).toFixed(2)}
-                    </span>
+                    <span>{fmt((i.product.sale_price ?? i.product.price) * i.quantity)}</span>
                   </div>
                 ),
             )}
           </div>
           <div className="border-t border-border pt-4 mb-4">
-            <Label>Promo code</Label>
+            <Label>{t("checkout.promoCode")}</Label>
             <div className="flex gap-2 mt-1">
               <Input
                 value={promo}
@@ -242,28 +247,28 @@ function CheckoutPage() {
                 placeholder="WELCOME10"
               />
               <Button type="button" variant="outline" onClick={applyPromo}>
-                Apply
+                {t("checkout.apply")}
               </Button>
             </div>
           </div>
           <div className="space-y-2 text-sm border-t border-border pt-4">
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span className="text-muted-foreground">{t("cart.subtotal")}</span>
+              <span>{fmt(subtotal)}</span>
             </div>
             {discount > 0 && (
               <div className="flex justify-between text-gold">
-                <span>Discount</span>
-                <span>−${discount.toFixed(2)}</span>
+                <span>{t("checkout.discount")}</span>
+                <span>−{fmt(discount)}</span>
               </div>
             )}
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Shipping</span>
-              <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+              <span className="text-muted-foreground">{t("cart.shipping")}</span>
+              <span>{shipping === 0 ? t("common.free") : fmt(shipping)}</span>
             </div>
             <div className="flex justify-between text-lg font-semibold pt-2 border-t border-border">
-              <span>Total</span>
-              <span className="text-gold">${total.toFixed(2)}</span>
+              <span>{t("cart.total")}</span>
+              <span className="text-gold">{fmt(total)}</span>
             </div>
           </div>
           <Button
@@ -272,7 +277,7 @@ function CheckoutPage() {
             className="w-full mt-6 bg-gradient-gold text-primary-foreground"
             disabled={submitting}
           >
-            {submitting ? "Placing order..." : "Place order"}
+            {submitting ? t("checkout.placing") : t("checkout.placeOrder")}
           </Button>
         </aside>
       </form>

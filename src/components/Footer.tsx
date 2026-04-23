@@ -1,7 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { Sparkles, Instagram, Twitter, Facebook } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 export function Footer() {
+  const { t } = useI18n();
   return (
     <footer className="border-t border-border mt-24 bg-card/40">
       <div className="container mx-auto px-4 py-16 grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -10,9 +12,7 @@ export function Footer() {
             <Sparkles className="w-5 h-5" style={{ color: "var(--gold)" }} />
             <span className="font-display text-2xl font-semibold text-gold">GLOW</span>
           </Link>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            Luxury Korean beauty, curated for the modern devotee of glass skin.
-          </p>
+          <p className="text-sm text-muted-foreground leading-relaxed">{t("footer.desc")}</p>
           <div className="flex gap-3 mt-4">
             <a href="#" className="text-muted-foreground hover:text-gold">
               <Instagram size={18} />
@@ -27,11 +27,11 @@ export function Footer() {
         </div>
 
         <div>
-          <h4 className="font-display text-lg mb-4 text-gold">Shop</h4>
+          <h4 className="font-display text-lg mb-4 text-gold">{t("footer.shop")}</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li>
               <Link to="/products" className="hover:text-foreground">
-                All Products
+                {t("nav.allProducts")}
               </Link>
             </li>
             <li>
@@ -40,7 +40,7 @@ export function Footer() {
                 params={{ slug: "skincare" }}
                 className="hover:text-foreground"
               >
-                Skincare
+                {t("nav.skincare")}
               </Link>
             </li>
             <li>
@@ -49,7 +49,7 @@ export function Footer() {
                 params={{ slug: "makeup" }}
                 className="hover:text-foreground"
               >
-                Makeup
+                {t("nav.makeup")}
               </Link>
             </li>
             <li>
@@ -58,57 +58,57 @@ export function Footer() {
                 params={{ slug: "sets-gifts" }}
                 className="hover:text-foreground"
               >
-                Sets & Gifts
+                {t("footer.setsGifts")}
               </Link>
             </li>
             <li>
               <Link to="/wishlist" className="hover:text-foreground">
-                Wishlist
+                {t("nav.wishlist")}
               </Link>
             </li>
           </ul>
         </div>
         <div>
-          <h4 className="font-display text-lg mb-4 text-gold">Help</h4>
+          <h4 className="font-display text-lg mb-4 text-gold">{t("footer.help")}</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li>
               <Link to="/contact" className="hover:text-foreground">
-                Contact
+                {t("footer.contact")}
               </Link>
             </li>
             <li>
               <Link to="/support" className="hover:text-foreground">
-                Support Center
+                {t("footer.support")}
               </Link>
             </li>
             <li>
               <Link to="/order-lookup" className="hover:text-foreground">
-                Track Order
+                {t("nav.trackOrder")}
               </Link>
             </li>
             <li>
               <Link to="/policy" className="hover:text-foreground">
-                Shipping & Returns
+                {t("footer.shippingReturns")}
               </Link>
             </li>
           </ul>
         </div>
         <div>
-          <h4 className="font-display text-lg mb-4 text-gold">Brand</h4>
+          <h4 className="font-display text-lg mb-4 text-gold">{t("footer.brand")}</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li>
               <Link to="/about" className="hover:text-foreground">
-                About GLOW
+                {t("footer.about")}
               </Link>
             </li>
             <li>
               <Link to="/policy" className="hover:text-foreground">
-                Privacy Policy
+                {t("footer.privacy")}
               </Link>
             </li>
             <li>
               <Link to="/policy" className="hover:text-foreground">
-                Terms of Service
+                {t("footer.terms")}
               </Link>
             </li>
           </ul>
@@ -116,7 +116,7 @@ export function Footer() {
       </div>
       <div className="gold-divider" />
       <div className="container mx-auto px-4 py-6 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} GLOW Beauty Boutique. Crafted with devotion in Seoul.
+        © {new Date().getFullYear()} {t("footer.copyright")}
       </div>
     </footer>
   );
