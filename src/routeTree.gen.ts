@@ -14,6 +14,7 @@ import { Route as SupportRouteImport } from './routes/support'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as PolicyRouteImport } from './routes/policy'
 import { Route as OrderLookupRouteImport } from './routes/order-lookup'
+import { Route as LookbookRouteImport } from './routes/lookbook'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CartRouteImport } from './routes/cart'
@@ -49,6 +50,11 @@ const PolicyRoute = PolicyRouteImport.update({
 const OrderLookupRoute = OrderLookupRouteImport.update({
   id: '/order-lookup',
   path: '/order-lookup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LookbookRoute = LookbookRouteImport.update({
+  id: '/lookbook',
+  path: '/lookbook',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/lookbook': typeof LookbookRoute
   '/order-lookup': typeof OrderLookupRoute
   '/policy': typeof PolicyRoute
   '/search': typeof SearchRoute
@@ -134,6 +141,7 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/lookbook': typeof LookbookRoute
   '/order-lookup': typeof OrderLookupRoute
   '/policy': typeof PolicyRoute
   '/search': typeof SearchRoute
@@ -153,6 +161,7 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/lookbook': typeof LookbookRoute
   '/order-lookup': typeof OrderLookupRoute
   '/policy': typeof PolicyRoute
   '/search': typeof SearchRoute
@@ -173,6 +182,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/contact'
+    | '/lookbook'
     | '/order-lookup'
     | '/policy'
     | '/search'
@@ -191,6 +201,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/contact'
+    | '/lookbook'
     | '/order-lookup'
     | '/policy'
     | '/search'
@@ -209,6 +220,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/contact'
+    | '/lookbook'
     | '/order-lookup'
     | '/policy'
     | '/search'
@@ -228,6 +240,7 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
+  LookbookRoute: typeof LookbookRoute
   OrderLookupRoute: typeof OrderLookupRoute
   PolicyRoute: typeof PolicyRoute
   SearchRoute: typeof SearchRoute
@@ -273,6 +286,13 @@ declare module '@tanstack/react-router' {
       path: '/order-lookup'
       fullPath: '/order-lookup'
       preLoaderRoute: typeof OrderLookupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lookbook': {
+      id: '/lookbook'
+      path: '/lookbook'
+      fullPath: '/lookbook'
+      preLoaderRoute: typeof LookbookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -364,6 +384,7 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
+  LookbookRoute: LookbookRoute,
   OrderLookupRoute: OrderLookupRoute,
   PolicyRoute: PolicyRoute,
   SearchRoute: SearchRoute,
