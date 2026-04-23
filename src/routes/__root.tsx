@@ -15,6 +15,7 @@ import { CurrencyProvider } from "@/lib/currency";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatWidget } from "@/components/ChatWidget";
+import { BackToTop } from "@/components/BackToTop";
 import { Toaster } from "@/components/ui/sonner";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
@@ -127,6 +128,7 @@ function RootComponent() {
               <Footer />
             </div>
             <ChatWidget />
+            <BackToTop />
             <Toaster />
           </AuthProvider>
         </ThemeProvider>
