@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/useCart";
 import { useWishlist } from "@/lib/useWishlist";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ProductReviews } from "@/components/ProductReviews";
 import { Star, Minus, Plus, Heart, Truck, Shield } from "lucide-react";
 
 export const Route = createFileRoute("/products/$slug")({
