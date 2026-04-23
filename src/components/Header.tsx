@@ -83,6 +83,7 @@ export function Header() {
           <Link to="/search" className="p-2 hover:text-gold transition-colors" aria-label="Search">
             <Search size={20} />
           </Link>
+          <ThemeToggle />
           {user ? (
             <div className="hidden md:flex items-center gap-2">
               <Link
