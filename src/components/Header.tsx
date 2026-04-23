@@ -104,7 +104,7 @@ export function Header() {
               </Button>
             </div>
           ) : (
-            <Link to="/auth" className="hidden md:block">
+            <Link to="/auth" search={{}} className="hidden md:block">
               <Button variant="ghost" size="sm" className="text-xs gap-2">
                 <UserIcon size={16} />
                 Sign in
