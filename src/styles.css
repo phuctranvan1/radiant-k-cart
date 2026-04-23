@@ -81,6 +81,46 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Light theme — soft champagne / pearl with gold accents.
+   Maintains WCAG AAA contrast for body text vs background. */
+:root.light {
+  --background: oklch(0.985 0.006 85);
+  --foreground: oklch(0.18 0.012 60);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.012 60);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.012 60);
+  --primary: oklch(0.55 0.13 70);
+  --primary-foreground: oklch(0.98 0.005 80);
+  --secondary: oklch(0.95 0.012 80);
+  --secondary-foreground: oklch(0.20 0.012 60);
+  --muted: oklch(0.94 0.010 80);
+  --muted-foreground: oklch(0.40 0.014 70);
+  --accent: oklch(0.55 0.13 70);
+  --accent-foreground: oklch(0.98 0.005 80);
+  --border: oklch(0.85 0.012 80 / 70%);
+  --input: oklch(0.94 0.010 80);
+  --ring: oklch(0.55 0.13 70);
+  --gold: oklch(0.58 0.14 70);
+  --gold-soft: oklch(0.72 0.12 78);
+  --gold-deep: oklch(0.45 0.13 65);
+  --gradient-gold: linear-gradient(135deg, oklch(0.78 0.14 80), oklch(0.58 0.14 70) 50%, oklch(0.42 0.12 65));
+  --gradient-radial-gold: radial-gradient(ellipse 80% 60% at 50% 0%, oklch(0.78 0.14 80 / 12%), transparent 70%);
+  --gradient-mesh: radial-gradient(at 20% 10%, oklch(0.78 0.14 80 / 8%), transparent 50%),
+                   radial-gradient(at 85% 30%, oklch(0.62 0.14 25 / 5%), transparent 55%);
+  --shadow-gold: 0 10px 40px -10px oklch(0.55 0.14 70 / 0.30);
+  --shadow-luxe: 0 20px 60px -20px oklch(0.20 0.010 60 / 0.18);
+}
+
+:root.light .luxe-card {
+  background: linear-gradient(180deg, var(--card), oklch(0.96 0.008 80));
+}
+:root.light .glass {
+  background: oklch(1 0 0 / 0.75);
+  border-color: oklch(0.85 0.012 80 / 0.5);
+}
+:root.light ::-webkit-scrollbar-track { background: oklch(0.94 0.010 80); }
+
 .dark { color-scheme: dark; }
 
 @layer base {
