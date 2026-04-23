@@ -6,6 +6,7 @@ import { useCart } from "@/lib/useCart";
 import { useWishlist } from "@/lib/useWishlist";
 import { useHideOnScroll } from "@/hooks/useHideOnScroll";
 import { useI18n } from "@/lib/i18n";
+import { useCurrency } from "@/lib/currency";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
@@ -18,6 +19,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const { hidden, scrolled } = useHideOnScroll(120);
   const { t } = useI18n();
+  const { fmt } = useCurrency();
 
   const navLinks = [
     { to: "/products", label: t("nav.allProducts") },
@@ -42,7 +44,7 @@ export function Header() {
             {Array.from({ length: 2 }).map((_, i) => (
               <div key={i} className="flex items-center gap-12 whitespace-nowrap px-6">
                 <span>
-                  ✨ {t("promo.freeShipping")} {t("promo.freeShippingAmount")}
+                  ✨ {t("promo.freeShipping")} {fmt(80)}
                 </span>
                 <span>·</span>
                 <span>{t("promo.welcomeCode")}</span>

@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useCallback } from "react";
 
 export type Currency = "USD" | "VND" | "KRW";
 
-/** Static exchange rates relative to USD */
+/** Static exchange rates relative to USD (as of April 2026) */
 const RATES: Record<Currency, number> = {
   USD: 1,
   VND: 25000,

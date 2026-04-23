@@ -18,7 +18,6 @@ const translations = {
     "nav.trackOrder": "Track Order",
     // Promo bar
     "promo.freeShipping": "FREE SHIPPING WORLDWIDE OVER",
-    "promo.freeShippingAmount": "$80",
     "promo.welcomeCode": "USE CODE WELCOME10 FOR 10% OFF",
     "promo.newDrops": "NEW DROPS EVERY FRIDAY",
     "promo.authentic": "AUTHENTIC FROM SEOUL",
@@ -152,7 +151,6 @@ const translations = {
     "nav.trackOrder": "Theo dõi đơn hàng",
     // Promo bar
     "promo.freeShipping": "MIỄN PHÍ VẬN CHUYỂN TOÀN CẦU ĐƠN HÀNG TRÊN",
-    "promo.freeShippingAmount": "2.000.000 ₫",
     "promo.welcomeCode": "NHẬP CODE WELCOME10 GIẢM 10%",
     "promo.newDrops": "SẢN PHẨM MỚI MỖI THỨ SÁU",
     "promo.authentic": "CHÍNH HÃNG TỪ SEOUL",
@@ -287,7 +285,6 @@ const translations = {
     "nav.trackOrder": "주문 조회",
     // Promo bar
     "promo.freeShipping": "전 세계 무료 배송",
-    "promo.freeShippingAmount": "₩100,000 이상",
     "promo.welcomeCode": "WELCOME10 코드로 10% 할인",
     "promo.newDrops": "매주 금요일 신상품 출시",
     "promo.authentic": "서울 정품 보장",
