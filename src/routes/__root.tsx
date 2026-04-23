@@ -2,6 +2,7 @@ import { Outlet, createRootRoute, HeadContent, Scripts, Link, useRouterState } f
 import { useEffect } from "react";
 import appCss from "../styles.css?url";
 import { AuthProvider } from "@/lib/auth";
+import { ThemeProvider } from "@/lib/useTheme";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatWidget } from "@/components/ChatWidget";
