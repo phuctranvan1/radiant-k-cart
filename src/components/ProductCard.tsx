@@ -142,6 +142,9 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
         </div>
       </Link>
+      {quickView && (
+        <QuickViewModal productId={product.id} onClose={() => setQuickView(false)} />
+      )}
     </div>
   );
 }

@@ -12,10 +12,13 @@ import { AuthProvider } from "@/lib/auth";
 import { ThemeProvider } from "@/lib/useTheme";
 import { I18nProvider } from "@/lib/i18n";
 import { CurrencyProvider } from "@/lib/currency";
+import { CompareProvider } from "@/lib/useCompare";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatWidget } from "@/components/ChatWidget";
 import { BackToTop } from "@/components/BackToTop";
+import { CompareBar } from "@/components/CompareBar";
+import { CommandPalette } from "@/components/CommandPalette";
 import { Toaster } from "@/components/ui/sonner";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
@@ -120,16 +123,20 @@ function RootComponent() {
       <CurrencyProvider>
         <ThemeProvider>
           <AuthProvider>
-            <div className="flex flex-col min-h-screen">
-              <Header />
-              <main className="flex-1">
-                <Outlet />
-              </main>
-              <Footer />
-            </div>
-            <ChatWidget />
-            <BackToTop />
-            <Toaster />
+            <CompareProvider>
+              <div className="flex flex-col min-h-screen">
+                <Header />
+                <main className="flex-1">
+                  <Outlet />
+                </main>
+                <Footer />
+              </div>
+              <ChatWidget />
+              <BackToTop />
+              <CompareBar />
+              <CommandPalette />
+              <Toaster />
+            </CompareProvider>
           </AuthProvider>
         </ThemeProvider>
       </CurrencyProvider>
