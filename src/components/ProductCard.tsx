@@ -1,10 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { Heart, ShoppingBag, Star } from "lucide-react";
+import { useState } from "react";
+import { Heart, ShoppingBag, Star, Eye, GitCompareArrows } from "lucide-react";
 import { useCart } from "@/lib/useCart";
 import { useWishlist } from "@/lib/useWishlist";
+import { useCompare } from "@/lib/useCompare";
 import { useI18n } from "@/lib/i18n";
 import { useCurrency } from "@/lib/currency";
 import { Button } from "@/components/ui/button";
+import { QuickViewModal } from "@/components/QuickViewModal";
 
 type Product = {
   id: string;
@@ -22,24 +25,50 @@ export function ProductCard({ product }: { product: Product }) {
   const onSale = product.sale_price && product.sale_price < product.price;
   const { addItem } = useCart();
   const { toggle, isWishlisted } = useWishlist();
+  const { toggle: toggleCompare, isCompared } = useCompare();
   const wishlisted = isWishlisted(product.id);
+  const compared = isCompared(product.id);
   const { t } = useI18n();
   const { fmt } = useCurrency();
+  const [quickView, setQuickView] = useState(false);
 
   return (
     <div className="group relative block">
-      {/* Wishlist button */}
-      <button
-        onClick={() => toggle(product.id)}
-        aria-label={wishlisted ? t("product.removeFromWishlist") : t("product.addToWishlist")}
-        className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-background/80 backdrop-blur flex items-center justify-center border border-border hover:border-gold transition-colors"
-      >
-        <Heart
-          size={14}
-          className={wishlisted ? "fill-current" : "text-muted-foreground"}
-          style={wishlisted ? { color: "var(--gold)" } : undefined}
-        />
-      </button>
+      {/* Quick action buttons */}
+      <div className="absolute top-3 right-3 z-10 flex flex-col gap-1.5">
+        <button
+          onClick={() => toggle(product.id)}
+          aria-label={wishlisted ? t("product.removeFromWishlist") : t("product.addToWishlist")}
+          className="w-8 h-8 rounded-full bg-background/80 backdrop-blur flex items-center justify-center border border-border hover:border-gold transition-all hover-float"
+        >
+          <Heart
+            size={14}
+            className={wishlisted ? "fill-current" : "text-muted-foreground"}
+            style={wishlisted ? { color: "var(--gold)" } : undefined}
+          />
+        </button>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            setQuickView(true);
+          }}
+          aria-label="Quick view"
+          className="w-8 h-8 rounded-full bg-background/80 backdrop-blur flex items-center justify-center border border-border hover:border-gold transition-all hover-float opacity-0 group-hover:opacity-100"
+        >
+          <Eye size={14} className="text-muted-foreground" />
+        </button>
+        <button
+          onClick={() => toggleCompare(product.id)}
+          aria-label={compared ? "Remove from compare" : "Add to compare"}
+          className="w-8 h-8 rounded-full bg-background/80 backdrop-blur flex items-center justify-center border border-border hover:border-gold transition-all hover-float opacity-0 group-hover:opacity-100"
+        >
+          <GitCompareArrows
+            size={14}
+            className={compared ? "" : "text-muted-foreground"}
+            style={compared ? { color: "var(--gold)" } : undefined}
+          />
+        </button>
+      </div>
 
       <Link to="/products/$slug" params={{ slug: product.slug }} className="block">
         <div className="luxe-card rounded-xl overflow-hidden">
@@ -113,6 +142,9 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
         </div>
       </Link>
+      {quickView && (
+        <QuickViewModal productId={product.id} onClose={() => setQuickView(false)} />
+      )}
     </div>
   );
 }

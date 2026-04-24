@@ -7,6 +7,7 @@ import { useWishlist } from "@/lib/useWishlist";
 import { useRecentlyViewed } from "@/lib/useRecentlyViewed";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ProductReviews } from "@/components/ProductReviews";
+import { AIRecommendations } from "@/components/AIRecommendations";
 import { Star, Minus, Plus, Heart, Truck, Shield } from "lucide-react";
 
 export const Route = createFileRoute("/products/$slug")({
@@ -237,6 +238,7 @@ function ProductDetail() {
         </div>
         <ProductReviews productId={p.id} />
       </div>
+      <AIRecommendations productId={p.id} />
     </div>
   );
 }

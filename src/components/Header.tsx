@@ -87,9 +87,23 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-1">
-          <Link to="/search" className="p-2 hover:text-gold transition-colors" aria-label="Search">
+          <button
+            onClick={() => (window as unknown as { __openPalette?: () => void }).__openPalette?.()}
+            className="p-2 hover:text-gold transition-colors hidden md:inline-flex items-center gap-2 text-xs text-muted-foreground border border-border rounded-md px-2.5"
+            aria-label="Search"
+            title="Search (⌘K)"
+          >
+            <Search size={14} />
+            <span className="hidden xl:inline">Search</span>
+            <kbd className="hidden xl:inline text-[10px] font-mono px-1 rounded bg-secondary">⌘K</kbd>
+          </button>
+          <button
+            onClick={() => (window as unknown as { __openPalette?: () => void }).__openPalette?.()}
+            className="p-2 hover:text-gold transition-colors md:hidden"
+            aria-label="Search"
+          >
             <Search size={20} />
-          </Link>
+          </button>
           <ThemeToggle />
           <LocaleSwitcher />
           {user ? (
