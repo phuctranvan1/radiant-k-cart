@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as SupportRouteImport } from './routes/support'
+import { Route as SkinQuizRouteImport } from './routes/skin-quiz'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as PolicyRouteImport } from './routes/policy'
 import { Route as OrderLookupRouteImport } from './routes/order-lookup'
@@ -18,6 +19,7 @@ import { Route as LookbookRouteImport } from './routes/lookbook'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CartRouteImport } from './routes/cart'
+import { Route as BundlesRouteImport } from './routes/bundles'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountRouteImport } from './routes/account'
@@ -35,6 +37,11 @@ const WishlistRoute = WishlistRouteImport.update({
 const SupportRoute = SupportRouteImport.update({
   id: '/support',
   path: '/support',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SkinQuizRoute = SkinQuizRouteImport.update({
+  id: '/skin-quiz',
+  path: '/skin-quiz',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SearchRoute = SearchRouteImport.update({
@@ -70,6 +77,11 @@ const CheckoutRoute = CheckoutRouteImport.update({
 const CartRoute = CartRouteImport.update({
   id: '/cart',
   path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BundlesRoute = BundlesRouteImport.update({
+  id: '/bundles',
+  path: '/bundles',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -119,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
+  '/bundles': typeof BundlesRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
@@ -126,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/order-lookup': typeof OrderLookupRoute
   '/policy': typeof PolicyRoute
   '/search': typeof SearchRoute
+  '/skin-quiz': typeof SkinQuizRoute
   '/support': typeof SupportRoute
   '/wishlist': typeof WishlistRoute
   '/categories/$slug': typeof CategoriesSlugRoute
@@ -138,6 +152,7 @@ export interface FileRoutesByTo {
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
+  '/bundles': typeof BundlesRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
@@ -145,6 +160,7 @@ export interface FileRoutesByTo {
   '/order-lookup': typeof OrderLookupRoute
   '/policy': typeof PolicyRoute
   '/search': typeof SearchRoute
+  '/skin-quiz': typeof SkinQuizRoute
   '/support': typeof SupportRoute
   '/wishlist': typeof WishlistRoute
   '/categories/$slug': typeof CategoriesSlugRoute
@@ -158,6 +174,7 @@ export interface FileRoutesById {
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
+  '/bundles': typeof BundlesRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
@@ -165,6 +182,7 @@ export interface FileRoutesById {
   '/order-lookup': typeof OrderLookupRoute
   '/policy': typeof PolicyRoute
   '/search': typeof SearchRoute
+  '/skin-quiz': typeof SkinQuizRoute
   '/support': typeof SupportRoute
   '/wishlist': typeof WishlistRoute
   '/categories/$slug': typeof CategoriesSlugRoute
@@ -179,6 +197,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/admin'
     | '/auth'
+    | '/bundles'
     | '/cart'
     | '/checkout'
     | '/contact'
@@ -186,6 +205,7 @@ export interface FileRouteTypes {
     | '/order-lookup'
     | '/policy'
     | '/search'
+    | '/skin-quiz'
     | '/support'
     | '/wishlist'
     | '/categories/$slug'
@@ -198,6 +218,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/admin'
     | '/auth'
+    | '/bundles'
     | '/cart'
     | '/checkout'
     | '/contact'
@@ -205,6 +226,7 @@ export interface FileRouteTypes {
     | '/order-lookup'
     | '/policy'
     | '/search'
+    | '/skin-quiz'
     | '/support'
     | '/wishlist'
     | '/categories/$slug'
@@ -217,6 +239,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/admin'
     | '/auth'
+    | '/bundles'
     | '/cart'
     | '/checkout'
     | '/contact'
@@ -224,6 +247,7 @@ export interface FileRouteTypes {
     | '/order-lookup'
     | '/policy'
     | '/search'
+    | '/skin-quiz'
     | '/support'
     | '/wishlist'
     | '/categories/$slug'
@@ -237,6 +261,7 @@ export interface RootRouteChildren {
   AccountRoute: typeof AccountRoute
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
+  BundlesRoute: typeof BundlesRoute
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
@@ -244,6 +269,7 @@ export interface RootRouteChildren {
   OrderLookupRoute: typeof OrderLookupRoute
   PolicyRoute: typeof PolicyRoute
   SearchRoute: typeof SearchRoute
+  SkinQuizRoute: typeof SkinQuizRoute
   SupportRoute: typeof SupportRoute
   WishlistRoute: typeof WishlistRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
@@ -265,6 +291,13 @@ declare module '@tanstack/react-router' {
       path: '/support'
       fullPath: '/support'
       preLoaderRoute: typeof SupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skin-quiz': {
+      id: '/skin-quiz'
+      path: '/skin-quiz'
+      fullPath: '/skin-quiz'
+      preLoaderRoute: typeof SkinQuizRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/search': {
@@ -314,6 +347,13 @@ declare module '@tanstack/react-router' {
       path: '/cart'
       fullPath: '/cart'
       preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bundles': {
+      id: '/bundles'
+      path: '/bundles'
+      fullPath: '/bundles'
+      preLoaderRoute: typeof BundlesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -381,6 +421,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRoute: AccountRoute,
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
+  BundlesRoute: BundlesRoute,
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
@@ -388,6 +429,7 @@ const rootRouteChildren: RootRouteChildren = {
   OrderLookupRoute: OrderLookupRoute,
   PolicyRoute: PolicyRoute,
   SearchRoute: SearchRoute,
+  SkinQuizRoute: SkinQuizRoute,
   SupportRoute: SupportRoute,
   WishlistRoute: WishlistRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,

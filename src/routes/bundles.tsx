@@ -44,7 +44,7 @@ type Bundle = {
 
 function BundlesPage() {
   const { fmt } = useCurrency();
-  const { add } = useCart();
+  const { addItem } = useCart();
   const [bundles, setBundles] = useState<Bundle[]>([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState<string | null>(null);
@@ -82,7 +82,7 @@ function BundlesPage() {
   const addBundle = async (b: Bundle) => {
     setAdding(b.id);
     try {
-      for (const p of b.items) await add(p.id, 1);
+      for (const p of b.items) await addItem(p.id, 1);
       toast.success(`${b.name} added to bag — save ${b.discount_percent}% at checkout`);
     } finally {
       setAdding(null);
