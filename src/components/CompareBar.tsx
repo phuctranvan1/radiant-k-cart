@@ -150,8 +150,8 @@ export function CompareBar() {
 
             {/* Spec rows */}
             {rows.map((row) => (
-              <>
-                <div key={`label-${row.label}`} className="text-xs font-medium text-muted-foreground uppercase tracking-widest border-t border-border pt-3">
+              <div key={`row-${row.label}`} className="contents">
+                <div className="text-xs font-medium text-muted-foreground uppercase tracking-widest border-t border-border pt-3">
                   {row.label}
                 </div>
                 {products.map((p) => (
@@ -159,7 +159,7 @@ export function CompareBar() {
                     {row.render(p)}
                   </div>
                 ))}
-              </>
+              </div>
             ))}
           </div>
 
