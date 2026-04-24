@@ -25,7 +25,8 @@ export function Header() {
     { to: "/products", label: t("nav.allProducts") },
     { to: "/categories/skincare", label: t("nav.skincare") },
     { to: "/categories/makeup", label: t("nav.makeup") },
-    { to: "/categories/suncare", label: t("nav.suncare") },
+    { to: "/bundles", label: "Bundles" },
+    { to: "/skin-quiz", label: "Skin Quiz" },
     { to: "/lookbook", label: t("nav.lookbook") },
   ];
 
