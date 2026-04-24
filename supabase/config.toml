@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.recommend]
 verify_jwt = false
+
+[functions.skin-quiz]
+verify_jwt = false
