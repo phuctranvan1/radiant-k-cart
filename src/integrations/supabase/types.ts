@@ -14,6 +14,78 @@ export type Database = {
   }
   public: {
     Tables: {
+      bundle_items: {
+        Row: {
+          bundle_id: string
+          id: string
+          product_id: string
+          sort_order: number | null
+        }
+        Insert: {
+          bundle_id: string
+          id?: string
+          product_id: string
+          sort_order?: number | null
+        }
+        Update: {
+          bundle_id?: string
+          id?: string
+          product_id?: string
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bundle_items_bundle_id_fkey"
+            columns: ["bundle_id"]
+            isOneToOne: false
+            referencedRelation: "bundles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bundle_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bundles: {
+        Row: {
+          active: boolean
+          created_at: string
+          description: string | null
+          discount_percent: number
+          featured: boolean
+          id: string
+          image_url: string | null
+          name: string
+          slug: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          discount_percent?: number
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          name: string
+          slug: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          discount_percent?: number
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          name?: string
+          slug?: string
+        }
+        Relationships: []
+      }
       cart_items: {
         Row: {
           created_at: string
@@ -100,6 +172,60 @@ export type Database = {
           role?: string
           session_id?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      loyalty_points: {
+        Row: {
+          id: string
+          lifetime_points: number
+          points: number
+          tier: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          lifetime_points?: number
+          points?: number
+          tier?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          lifetime_points?: number
+          points?: number
+          tier?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      loyalty_transactions: {
+        Row: {
+          created_at: string
+          id: string
+          order_id: string | null
+          points: number
+          reason: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          points: number
+          reason: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          points?: number
+          reason?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -453,6 +579,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      skin_quiz_results: {
+        Row: {
+          age_range: string | null
+          ai_analysis: string | null
+          concerns: string[]
+          created_at: string
+          goals: string[]
+          id: string
+          recommended_product_ids: string[] | null
+          sensitivity: string | null
+          skin_type: string
+          user_id: string
+        }
+        Insert: {
+          age_range?: string | null
+          ai_analysis?: string | null
+          concerns?: string[]
+          created_at?: string
+          goals?: string[]
+          id?: string
+          recommended_product_ids?: string[] | null
+          sensitivity?: string | null
+          skin_type: string
+          user_id: string
+        }
+        Update: {
+          age_range?: string | null
+          ai_analysis?: string | null
+          concerns?: string[]
+          created_at?: string
+          goals?: string[]
+          id?: string
+          recommended_product_ids?: string[] | null
+          sensitivity?: string | null
+          skin_type?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       support_tickets: {
         Row: {
