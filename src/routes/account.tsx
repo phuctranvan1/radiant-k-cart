@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { LoyaltyCard } from "@/components/LoyaltyCard";
 import type { Database } from "@/integrations/supabase/types";
 
 type Order = Database["public"]["Tables"]["orders"]["Row"];
@@ -55,6 +56,10 @@ function AccountPage() {
             Sign out
           </Button>
         </div>
+      </div>
+
+      <div className="mb-8">
+        <LoyaltyCard />
       </div>
 
       <div className="luxe-card rounded-xl p-6">
