@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      badges: {
+        Row: {
+          badge_key: string
+          badge_name: string
+          description: string | null
+          earned_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          badge_key: string
+          badge_name: string
+          description?: string | null
+          earned_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          badge_key?: string
+          badge_name?: string
+          description?: string | null
+          earned_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       bundle_items: {
         Row: {
           bundle_id: string
@@ -172,6 +199,33 @@ export type Database = {
           role?: string
           session_id?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      daily_check_ins: {
+        Row: {
+          check_in_date: string
+          created_at: string
+          id: string
+          points_earned: number
+          streak: number
+          user_id: string
+        }
+        Insert: {
+          check_in_date?: string
+          created_at?: string
+          id?: string
+          points_earned?: number
+          streak?: number
+          user_id: string
+        }
+        Update: {
+          check_in_date?: string
+          created_at?: string
+          id?: string
+          points_earned?: number
+          streak?: number
+          user_id?: string
         }
         Relationships: []
       }
@@ -343,6 +397,30 @@ export type Database = {
         }
         Relationships: []
       }
+      product_views: {
+        Row: {
+          id: string
+          last_seen: string
+          product_id: string
+          session_id: string
+          user_id: string | null
+        }
+        Insert: {
+          id?: string
+          last_seen?: string
+          product_id: string
+          session_id: string
+          user_id?: string | null
+        }
+        Update: {
+          id?: string
+          last_seen?: string
+          product_id?: string
+          session_id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           brand: string | null
@@ -489,6 +567,33 @@ export type Database = {
         }
         Relationships: []
       }
+      referrals: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          referred_count: number
+          reward_points: number
+          user_id: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          referred_count?: number
+          reward_points?: number
+          user_id: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          referred_count?: number
+          reward_points?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       review_votes: {
         Row: {
           created_at: string
@@ -619,6 +724,72 @@ export type Database = {
         }
         Relationships: []
       }
+      spin_wheel_log: {
+        Row: {
+          created_at: string
+          id: string
+          prize_label: string
+          prize_points: number
+          spin_date: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          prize_label: string
+          prize_points?: number
+          spin_date?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          prize_label?: string
+          prize_points?: number
+          spin_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          created_at: string
+          discount_percent: number
+          id: string
+          interval_days: number
+          next_ship_at: string
+          product_id: string
+          quantity: number
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          discount_percent?: number
+          id?: string
+          interval_days?: number
+          next_ship_at?: string
+          product_id: string
+          quantity?: number
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          discount_percent?: number
+          id?: string
+          interval_days?: number
+          next_ship_at?: string
+          product_id?: string
+          quantity?: number
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       support_tickets: {
         Row: {
           created_at: string
@@ -649,6 +820,36 @@ export type Database = {
           status?: string
           subject?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_preferences: {
+        Row: {
+          budget_range: string | null
+          favorite_brands: string[] | null
+          favorite_categories: string[] | null
+          id: string
+          skin_type: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          budget_range?: string | null
+          favorite_brands?: string[] | null
+          favorite_categories?: string[] | null
+          id?: string
+          skin_type?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          budget_range?: string | null
+          favorite_brands?: string[] | null
+          favorite_categories?: string[] | null
+          id?: string
+          skin_type?: string | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
