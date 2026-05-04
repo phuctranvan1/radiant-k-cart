@@ -236,6 +236,7 @@
   .reveal-delay-2 { animation-delay: 240ms; }
   .reveal-delay-3 { animation-delay: 360ms; }
   .reveal-delay-4 { animation-delay: 480ms; }
+  .reveal-delay-5 { animation-delay: 600ms; }
 
   /* IntersectionObserver-driven reveals */
   .reveal-on-scroll {
@@ -311,6 +312,11 @@
   0%, 100% { transform: translate(0, 0) scale(1); }
   50% { transform: translate(20px, -30px) scale(1.1); }
 }
+@keyframes sparkle-float {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+  33% { transform: translate(-8px, -14px) scale(1.4); opacity: 1; }
+  66% { transform: translate(6px, -8px) scale(0.8); opacity: 0.5; }
+}
 .orb {
   position: absolute;
   border-radius: 9999px;
@@ -318,6 +324,11 @@
   opacity: 0.4;
   animation: float-orb 12s ease-in-out infinite;
   pointer-events: none;
+}
+.sparkle-dot {
+  animation: sparkle-float 5s ease-in-out infinite;
+  filter: blur(1px);
+  opacity: 0.7;
 }
 
 /* Smooth scroll & nicer scrollbar */
@@ -355,7 +366,7 @@ html { scroll-behavior: smooth; }
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
-  .orb, .marquee-track, .text-gold-shine { animation: none !important; }
+  .orb, .marquee-track, .text-gold-shine, .sparkle-dot { animation: none !important; }
   .reveal-on-scroll { opacity: 1; transform: none; }
 }
 

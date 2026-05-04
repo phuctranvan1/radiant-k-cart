@@ -1,15 +1,28 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { type ElementType, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ProductCard } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Truck, Shield, Heart } from "lucide-react";
+import {
+  Sparkles,
+  Truck,
+  Shield,
+  Heart,
+  Droplets,
+  Palette,
+  Sun,
+  Gift,
+  FlaskConical,
+  Flower2,
+} from "lucide-react";
 import heroImg from "@/assets/hero-luxury.jpg";
 import { useI18n } from "@/lib/i18n";
 import { useCurrency } from "@/lib/currency";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { RecentlyViewedSection } from "@/components/RecentlyViewedSection";
 import { ForYouSection } from "@/components/ForYouSection";
+import { StatsSection } from "@/components/StatsSection";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { REFERRAL_CODE_KEY } from "@/lib/referralKeys";
 
 const PARALLAX_SCALE = 1.12;
@@ -94,10 +107,20 @@ function Index() {
       .then(({ data }) => setCategories(data ?? []));
   }, []);
 
+  // Map category slug → icon
+  const CATEGORY_ICONS: Record<string, ElementType> = {
+    skincare: Droplets,
+    makeup: Palette,
+    suncare: Sun,
+    "sets-gifts": Gift,
+    serums: FlaskConical,
+    masks: Flower2,
+  };
+
   return (
     <div className="bg-mesh">
       {/* HERO */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden min-h-[80vh] flex items-center">
         <div className="absolute inset-0">
           <img
             ref={heroImgRef}
@@ -110,27 +133,64 @@ function Index() {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/20" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/40" />
+          {/* Ambient orbs */}
           <div
             className="orb"
             style={{
-              width: 400,
-              height: 400,
+              width: 500,
+              height: 500,
               background: "var(--gold)",
-              top: "-100px",
-              left: "10%",
+              top: "-150px",
+              left: "5%",
             }}
           />
           <div
             className="orb"
             style={{
-              width: 300,
-              height: 300,
+              width: 350,
+              height: 350,
               background: "oklch(0.62 0.18 25)",
-              bottom: "-80px",
-              right: "15%",
+              bottom: "-100px",
+              right: "10%",
               animationDelay: "3s",
             }}
           />
+          <div
+            className="orb"
+            style={{
+              width: 200,
+              height: 200,
+              background: "oklch(0.55 0.15 310)",
+              top: "30%",
+              right: "30%",
+              animationDelay: "6s",
+              opacity: 0.2,
+            }}
+          />
+          {/* Floating sparkle dots */}
+          <div className="hero-sparkles absolute inset-0 pointer-events-none" aria-hidden="true">
+            {[
+              { top: "15%", left: "20%", size: 6, delay: "0s" },
+              { top: "25%", left: "55%", size: 4, delay: "1.5s" },
+              { top: "60%", left: "75%", size: 8, delay: "0.8s" },
+              { top: "70%", left: "35%", size: 5, delay: "2.3s" },
+              { top: "40%", left: "85%", size: 6, delay: "3.5s" },
+              { top: "80%", left: "60%", size: 4, delay: "1.2s" },
+            ].map((s, i) => (
+              <span
+                key={i}
+                className="sparkle-dot absolute rounded-full"
+                style={{
+                  top: s.top,
+                  left: s.left,
+                  width: s.size,
+                  height: s.size,
+                  background: "var(--gold)",
+                  animationDelay: s.delay,
+                }}
+              />
+            ))}
+          </div>
         </div>
         <div className="relative container mx-auto px-4 py-32 md:py-48 max-w-3xl">
           <div className="reveal inline-flex items-center gap-2 mb-6 px-4 py-1.5 glass rounded-full text-[11px] tracking-[0.3em] gold-ring">
@@ -142,10 +202,10 @@ function Index() {
             <span className="text-gold-shine italic">{t("home.heroTitle2")}</span>,<br />
             {t("home.heroTitle3")}
           </h1>
-          <p className="reveal reveal-delay-2 text-lg text-muted-foreground mb-8 max-w-xl leading-relaxed">
+          <p className="reveal reveal-delay-2 text-lg text-muted-foreground mb-10 max-w-xl leading-relaxed">
             {t("home.heroDesc")}
           </p>
-          <div className="reveal reveal-delay-3 flex flex-wrap gap-3">
+          <div className="reveal reveal-delay-3 flex flex-wrap gap-3 mb-10">
             <Link to="/products">
               <Button
                 size="lg"
@@ -163,6 +223,21 @@ function Index() {
                 {t("home.ourStory")}
               </Button>
             </Link>
+          </div>
+          {/* Hero micro-stats */}
+          <div className="reveal reveal-delay-4 flex flex-wrap gap-6">
+            {[
+              { value: "42K+", label: "Customers" },
+              { value: "4.9★", label: "Rating" },
+              { value: "60+", label: "Countries" },
+            ].map((s) => (
+              <div key={s.label} className="flex flex-col">
+                <span className="font-display text-2xl text-gold-shine">{s.value}</span>
+                <span className="text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
+                  {s.label}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -184,6 +259,10 @@ function Index() {
                 <span>HERA</span>
                 <span className="text-gold">✦</span>
                 <span>INNISFREE</span>
+                <span className="text-gold">✦</span>
+                <span>MISSHA</span>
+                <span className="text-gold">✦</span>
+                <span>ETUDE HOUSE</span>
                 <span className="text-gold">✦</span>
               </div>
             ))}
@@ -211,6 +290,9 @@ function Index() {
         </div>
       </section>
 
+      {/* STATS */}
+      <StatsSection />
+
       {/* CATEGORIES */}
       <section className="container mx-auto px-4 py-16 md:py-20">
         <div className="text-center mb-10 md:mb-12 reveal-on-scroll">
@@ -220,22 +302,30 @@ function Index() {
           </h2>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-          {categories.map((c, i) => (
-            <div key={c.id} className={`reveal-on-scroll stagger-${(i % 4) + 1}`}>
-              <Link
-                to="/categories/$slug"
-                params={{ slug: c.slug }}
-                className="luxe-card rounded-xl p-5 md:p-6 text-center group block"
-              >
-                <div className="w-14 h-14 md:w-16 md:h-16 mx-auto mb-3 rounded-full bg-gradient-gold flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                  <Sparkles className="text-primary-foreground" size={22} />
-                </div>
-                <p className="font-display text-base md:text-lg group-hover:text-gold transition-colors">
-                  {c.name}
-                </p>
-              </Link>
-            </div>
-          ))}
+          {categories.map((c, i) => {
+            const Icon = CATEGORY_ICONS[c.slug] ?? Sparkles;
+            return (
+              <div key={c.id} className={`reveal-on-scroll stagger-${(i % 4) + 1}`}>
+                <Link
+                  to="/categories/$slug"
+                  params={{ slug: c.slug }}
+                  className="luxe-card rounded-xl p-5 md:p-6 text-center group block"
+                >
+                  <div className="w-14 h-14 md:w-16 md:h-16 mx-auto mb-3 rounded-full bg-gradient-gold flex items-center justify-center group-hover:scale-110 group-hover:shadow-gold transition-all duration-500">
+                    <Icon className="text-primary-foreground" size={22} />
+                  </div>
+                  <p className="font-display text-base md:text-lg group-hover:text-gold transition-colors">
+                    {c.name}
+                  </p>
+                  {c.description && (
+                    <p className="text-[10px] text-muted-foreground mt-1 line-clamp-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      {c.description}
+                    </p>
+                  )}
+                </Link>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -259,6 +349,13 @@ function Index() {
             </div>
           ))}
         </div>
+        <div className="mt-10 text-center md:hidden reveal-on-scroll">
+          <Link to="/products">
+            <Button variant="outline" className="border-gold text-gold hover:bg-gold/10">
+              {t("home.viewAll")}
+            </Button>
+          </Link>
+        </div>
       </section>
 
       {/* PROMO BANNER */}
@@ -267,12 +364,24 @@ function Index() {
           <div
             className="orb"
             style={{
-              width: 250,
-              height: 250,
+              width: 300,
+              height: 300,
               background: "var(--gold)",
-              top: "-60px",
-              left: "20%",
-              opacity: 0.25,
+              top: "-80px",
+              left: "15%",
+              opacity: 0.22,
+            }}
+          />
+          <div
+            className="orb"
+            style={{
+              width: 200,
+              height: 200,
+              background: "oklch(0.62 0.18 25)",
+              bottom: "-60px",
+              right: "10%",
+              opacity: 0.18,
+              animationDelay: "4s",
             }}
           />
           <div className="relative">
@@ -321,6 +430,9 @@ function Index() {
           </div>
         </section>
       )}
+
+      {/* TESTIMONIALS */}
+      <TestimonialsSection />
 
       {/* NEWSLETTER */}
       <NewsletterSignup />
