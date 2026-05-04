@@ -28,6 +28,7 @@ export function Header() {
     { to: "/bundles", label: "Bundles" },
     { to: "/skin-quiz", label: "Skin Quiz" },
     { to: "/lookbook", label: t("nav.lookbook") },
+    { to: "/referrals", label: "Refer & Earn" },
   ];
 
   return (

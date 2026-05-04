@@ -10,11 +10,13 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Sparkles } from "lucide-react";
+import { REFERRAL_CODE_KEY } from "@/lib/referralKeys";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({ meta: [{ title: "Sign in — GLOW" }] }),
-  validateSearch: (search: Record<string, unknown>): { redirect?: string } => ({
+  validateSearch: (search: Record<string, unknown>): { redirect?: string; ref?: string } => ({
     redirect: typeof search.redirect === "string" ? search.redirect : undefined,
+    ref: typeof search.ref === "string" ? search.ref : undefined,
   }),
   component: AuthPage,
 });
@@ -22,12 +24,46 @@ export const Route = createFileRoute("/auth")({
 const emailSchema = z.string().trim().email().max(255);
 const passSchema = z.string().min(6).max(72);
 
+const REFERRAL_REWARD_POINTS = 500;
+
+async function creditReferrer(code: string) {
+  try {
+    const { data: referral } = await supabase
+      .from("referrals")
+      .select("id,referred_count,reward_points")
+      .eq("code", code)
+      .maybeSingle();
+    if (!referral) return;
+    const { error } = await supabase
+      .from("referrals")
+      .update({
+        referred_count: referral.referred_count + 1,
+        reward_points: referral.reward_points + REFERRAL_REWARD_POINTS,
+      })
+      .eq("id", referral.id)
+      // Only update if counts haven't changed (optimistic lock)
+      .eq("referred_count", referral.referred_count);
+    if (!error) {
+      localStorage.removeItem(REFERRAL_CODE_KEY);
+    }
+  } catch {
+    // Silently ignore — referral crediting is best-effort
+  }
+}
+
 function AuthPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { redirect } = Route.useSearch();
+  const { redirect, ref } = Route.useSearch();
   const [loading, setLoading] = useState(false);
   const [otpSent, setOtpSent] = useState<string | null>(null);
+
+  // Store referral code from URL into localStorage so it survives navigation
+  useEffect(() => {
+    if (ref) {
+      localStorage.setItem(REFERRAL_CODE_KEY, ref);
+    }
+  }, [ref]);
 
   useEffect(() => {
     if (user) navigate({ to: redirect || "/account" });
@@ -51,6 +87,9 @@ function AuthPage() {
     });
     setLoading(false);
     if (error) return toast.error(error.message);
+    // Credit any pending referrer
+    const refCode = localStorage.getItem(REFERRAL_CODE_KEY);
+    if (refCode) creditReferrer(refCode);
     toast.success("Account created — welcome to GLOW ✨");
   };
 
