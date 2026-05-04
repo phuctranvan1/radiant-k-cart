@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ProductCard } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,11 @@ import { useI18n } from "@/lib/i18n";
 import { useCurrency } from "@/lib/currency";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { RecentlyViewedSection } from "@/components/RecentlyViewedSection";
+import { ForYouSection } from "@/components/ForYouSection";
+import { REFERRAL_CODE_KEY } from "@/lib/referralKeys";
+
+const PARALLAX_SCALE = 1.12;
+const PARALLAX_SPEED = 0.18;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -20,6 +25,9 @@ export const Route = createFileRoute("/")({
           "Discover premium K-beauty essentials handpicked from Seoul. Skincare, makeup, sun care and curated sets.",
       },
     ],
+  }),
+  validateSearch: (search: Record<string, unknown>): { ref?: string } => ({
+    ref: typeof search.ref === "string" ? search.ref : undefined,
   }),
   component: Index,
 });
@@ -43,6 +51,28 @@ function Index() {
   const [categories, setCategories] = useState<Category[]>([]);
   const { t } = useI18n();
   const { fmt } = useCurrency();
+  const { ref } = Route.useSearch();
+  const heroImgRef = useRef<HTMLImageElement>(null);
+
+  // Capture referral code from URL and persist to localStorage
+  useEffect(() => {
+    if (ref) {
+      localStorage.setItem(REFERRAL_CODE_KEY, ref);
+    }
+  }, [ref]);
+
+  // Cinematic hero parallax
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const onScroll = () => {
+      if (!heroImgRef.current) return;
+      const y = window.scrollY;
+      heroImgRef.current.style.transform = `scale(${PARALLAX_SCALE}) translateY(${y * PARALLAX_SPEED}px)`;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     supabase
@@ -70,9 +100,11 @@ function Index() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
           <img
+            ref={heroImgRef}
             src={heroImg}
             alt="Luxury K-beauty serums"
-            className="w-full h-full object-cover opacity-50 scale-105"
+            className="w-full h-full object-cover opacity-50"
+            style={{ transform: `scale(${PARALLAX_SCALE})`, willChange: "transform" }}
             width={1920}
             height={1080}
           />
@@ -292,6 +324,9 @@ function Index() {
 
       {/* NEWSLETTER */}
       <NewsletterSignup />
+
+      {/* FOR YOU */}
+      <ForYouSection />
 
       {/* RECENTLY VIEWED */}
       <RecentlyViewedSection />

@@ -8,6 +8,8 @@ import { useRecentlyViewed } from "@/lib/useRecentlyViewed";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ProductReviews } from "@/components/ProductReviews";
 import { AIRecommendations } from "@/components/AIRecommendations";
+import { LiveViewersBadge } from "@/components/LiveViewersBadge";
+import { SubscribeSaveButton } from "@/components/SubscribeSaveButton";
 import { Star, Minus, Plus, Heart, Truck, Shield } from "lucide-react";
 
 export const Route = createFileRoute("/products/$slug")({
@@ -152,6 +154,7 @@ function ProductDetail() {
                 {p.rating} <span className="text-muted-foreground">({p.review_count} reviews)</span>
               </span>
             )}
+            <LiveViewersBadge productId={p.id} />
           </div>
           <div className="flex items-baseline gap-3 mb-6">
             {onSale ? (
@@ -212,6 +215,8 @@ function ProductDetail() {
               <Shield size={14} style={{ color: "var(--gold)" }} /> Authentic guaranteed
             </div>
           </div>
+
+          <SubscribeSaveButton productId={p.id} />
 
           <div className="border-t border-border pt-6">
             <div className="flex gap-6 mb-4 text-sm">

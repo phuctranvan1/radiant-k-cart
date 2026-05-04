@@ -19,6 +19,8 @@ import { ChatWidget } from "@/components/ChatWidget";
 import { BackToTop } from "@/components/BackToTop";
 import { CompareBar } from "@/components/CompareBar";
 import { CommandPalette } from "@/components/CommandPalette";
+import { CursorParticles } from "@/components/CursorParticles";
+import { InstallPrompt } from "@/components/InstallPrompt";
 import { Toaster } from "@/components/ui/sonner";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
@@ -135,6 +137,8 @@ function RootComponent() {
               <BackToTop />
               <CompareBar />
               <CommandPalette />
+              <CursorParticles />
+              <InstallPrompt />
               <Toaster />
             </CompareProvider>
           </AuthProvider>

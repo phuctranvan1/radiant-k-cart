@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Sparkles, Loader2, ArrowRight, Check } from "lucide-react";
 import { toast } from "sonner";
 import { useCurrency } from "@/lib/currency";
+import { QUIZ_PRODUCT_IDS_KEY } from "@/components/ForYouSection";
 
 export const Route = createFileRoute("/skin-quiz")({
   head: () => ({
@@ -122,6 +123,8 @@ function SkinQuizPage() {
         .map((id) => products?.find((p) => p.id === id))
         .filter(Boolean) as ResultProduct[];
       setResult({ analysis: data.analysis, products: ordered });
+      // Persist quiz product IDs for the "For You" feed
+      localStorage.setItem(QUIZ_PRODUCT_IDS_KEY, JSON.stringify(ids.slice(0, 8)));
     } catch (e) {
       console.error(e);
       toast.error("Couldn't generate your routine. Please try again.");
@@ -177,9 +180,7 @@ function SkinQuizPage() {
                 </p>
               )}
               <h3 className="font-display text-base leading-tight mt-1">{p.name}</h3>
-              <p className="text-sm text-gold font-semibold mt-1">
-                {fmt(p.sale_price ?? p.price)}
-              </p>
+              <p className="text-sm text-gold font-semibold mt-1">{fmt(p.sale_price ?? p.price)}</p>
             </Link>
           ))}
         </div>
