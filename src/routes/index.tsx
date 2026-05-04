@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import React, { useEffect, useRef, useState } from "react";
+import { type ElementType, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ProductCard } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
@@ -108,7 +108,7 @@ function Index() {
   }, []);
 
   // Map category slug → icon
-  const CATEGORY_ICONS: Record<string, React.ElementType> = {
+  const CATEGORY_ICONS: Record<string, ElementType> = {
     skincare: Droplets,
     makeup: Palette,
     suncare: Sun,

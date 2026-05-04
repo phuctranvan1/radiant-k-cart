@@ -50,7 +50,7 @@ The store offers an immersive shopping journey: parallax hero, animated stats co
 - **AI Beauty Advisor** — embedded chat widget with smart product suggestions
 - **Skin Quiz** — 5-step questionnaire that persists recommended product IDs
 - **For You section** — personalised feed combining quiz results, wishlist, and recently viewed
-- **Lookbook** — editorial lifestyle editorial page
+- **Lookbook** — editorial lifestyle page
 - **Bundles** — curated product sets at a bundled price
 
 ### 🏆 Loyalty & Growth
