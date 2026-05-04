@@ -11,8 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as SupportRouteImport } from './routes/support'
+import { Route as SubscriptionsRouteImport } from './routes/subscriptions'
+import { Route as SkinScanRouteImport } from './routes/skin-scan'
 import { Route as SkinQuizRouteImport } from './routes/skin-quiz'
 import { Route as SearchRouteImport } from './routes/search'
+import { Route as RewardsRouteImport } from './routes/rewards'
+import { Route as ReferralsRouteImport } from './routes/referrals'
 import { Route as PolicyRouteImport } from './routes/policy'
 import { Route as OrderLookupRouteImport } from './routes/order-lookup'
 import { Route as LookbookRouteImport } from './routes/lookbook'
@@ -39,6 +43,16 @@ const SupportRoute = SupportRouteImport.update({
   path: '/support',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SubscriptionsRoute = SubscriptionsRouteImport.update({
+  id: '/subscriptions',
+  path: '/subscriptions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SkinScanRoute = SkinScanRouteImport.update({
+  id: '/skin-scan',
+  path: '/skin-scan',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SkinQuizRoute = SkinQuizRouteImport.update({
   id: '/skin-quiz',
   path: '/skin-quiz',
@@ -47,6 +61,16 @@ const SkinQuizRoute = SkinQuizRouteImport.update({
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RewardsRoute = RewardsRouteImport.update({
+  id: '/rewards',
+  path: '/rewards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReferralsRoute = ReferralsRouteImport.update({
+  id: '/referrals',
+  path: '/referrals',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PolicyRoute = PolicyRouteImport.update({
@@ -138,8 +162,12 @@ export interface FileRoutesByFullPath {
   '/lookbook': typeof LookbookRoute
   '/order-lookup': typeof OrderLookupRoute
   '/policy': typeof PolicyRoute
+  '/referrals': typeof ReferralsRoute
+  '/rewards': typeof RewardsRoute
   '/search': typeof SearchRoute
   '/skin-quiz': typeof SkinQuizRoute
+  '/skin-scan': typeof SkinScanRoute
+  '/subscriptions': typeof SubscriptionsRoute
   '/support': typeof SupportRoute
   '/wishlist': typeof WishlistRoute
   '/categories/$slug': typeof CategoriesSlugRoute
@@ -159,8 +187,12 @@ export interface FileRoutesByTo {
   '/lookbook': typeof LookbookRoute
   '/order-lookup': typeof OrderLookupRoute
   '/policy': typeof PolicyRoute
+  '/referrals': typeof ReferralsRoute
+  '/rewards': typeof RewardsRoute
   '/search': typeof SearchRoute
   '/skin-quiz': typeof SkinQuizRoute
+  '/skin-scan': typeof SkinScanRoute
+  '/subscriptions': typeof SubscriptionsRoute
   '/support': typeof SupportRoute
   '/wishlist': typeof WishlistRoute
   '/categories/$slug': typeof CategoriesSlugRoute
@@ -181,8 +213,12 @@ export interface FileRoutesById {
   '/lookbook': typeof LookbookRoute
   '/order-lookup': typeof OrderLookupRoute
   '/policy': typeof PolicyRoute
+  '/referrals': typeof ReferralsRoute
+  '/rewards': typeof RewardsRoute
   '/search': typeof SearchRoute
   '/skin-quiz': typeof SkinQuizRoute
+  '/skin-scan': typeof SkinScanRoute
+  '/subscriptions': typeof SubscriptionsRoute
   '/support': typeof SupportRoute
   '/wishlist': typeof WishlistRoute
   '/categories/$slug': typeof CategoriesSlugRoute
@@ -204,8 +240,12 @@ export interface FileRouteTypes {
     | '/lookbook'
     | '/order-lookup'
     | '/policy'
+    | '/referrals'
+    | '/rewards'
     | '/search'
     | '/skin-quiz'
+    | '/skin-scan'
+    | '/subscriptions'
     | '/support'
     | '/wishlist'
     | '/categories/$slug'
@@ -225,8 +265,12 @@ export interface FileRouteTypes {
     | '/lookbook'
     | '/order-lookup'
     | '/policy'
+    | '/referrals'
+    | '/rewards'
     | '/search'
     | '/skin-quiz'
+    | '/skin-scan'
+    | '/subscriptions'
     | '/support'
     | '/wishlist'
     | '/categories/$slug'
@@ -246,8 +290,12 @@ export interface FileRouteTypes {
     | '/lookbook'
     | '/order-lookup'
     | '/policy'
+    | '/referrals'
+    | '/rewards'
     | '/search'
     | '/skin-quiz'
+    | '/skin-scan'
+    | '/subscriptions'
     | '/support'
     | '/wishlist'
     | '/categories/$slug'
@@ -268,8 +316,12 @@ export interface RootRouteChildren {
   LookbookRoute: typeof LookbookRoute
   OrderLookupRoute: typeof OrderLookupRoute
   PolicyRoute: typeof PolicyRoute
+  ReferralsRoute: typeof ReferralsRoute
+  RewardsRoute: typeof RewardsRoute
   SearchRoute: typeof SearchRoute
   SkinQuizRoute: typeof SkinQuizRoute
+  SkinScanRoute: typeof SkinScanRoute
+  SubscriptionsRoute: typeof SubscriptionsRoute
   SupportRoute: typeof SupportRoute
   WishlistRoute: typeof WishlistRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
@@ -293,6 +345,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SupportRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/subscriptions': {
+      id: '/subscriptions'
+      path: '/subscriptions'
+      fullPath: '/subscriptions'
+      preLoaderRoute: typeof SubscriptionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skin-scan': {
+      id: '/skin-scan'
+      path: '/skin-scan'
+      fullPath: '/skin-scan'
+      preLoaderRoute: typeof SkinScanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/skin-quiz': {
       id: '/skin-quiz'
       path: '/skin-quiz'
@@ -305,6 +371,20 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rewards': {
+      id: '/rewards'
+      path: '/rewards'
+      fullPath: '/rewards'
+      preLoaderRoute: typeof RewardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/referrals': {
+      id: '/referrals'
+      path: '/referrals'
+      fullPath: '/referrals'
+      preLoaderRoute: typeof ReferralsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/policy': {
@@ -428,8 +508,12 @@ const rootRouteChildren: RootRouteChildren = {
   LookbookRoute: LookbookRoute,
   OrderLookupRoute: OrderLookupRoute,
   PolicyRoute: PolicyRoute,
+  ReferralsRoute: ReferralsRoute,
+  RewardsRoute: RewardsRoute,
   SearchRoute: SearchRoute,
   SkinQuizRoute: SkinQuizRoute,
+  SkinScanRoute: SkinScanRoute,
+  SubscriptionsRoute: SubscriptionsRoute,
   SupportRoute: SupportRoute,
   WishlistRoute: WishlistRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
