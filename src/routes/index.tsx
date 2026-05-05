@@ -23,6 +23,10 @@ import { RecentlyViewedSection } from "@/components/RecentlyViewedSection";
 import { ForYouSection } from "@/components/ForYouSection";
 import { StatsSection } from "@/components/StatsSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
+import { SpotlightHero } from "@/components/SpotlightHero";
+import { MagneticButton } from "@/components/MagneticButton";
+import { TiltCard } from "@/components/TiltCard";
+import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { REFERRAL_CODE_KEY } from "@/lib/referralKeys";
 
 const PARALLAX_SCALE = 1.12;
@@ -120,6 +124,7 @@ function Index() {
   return (
     <div className="bg-mesh">
       {/* HERO */}
+      <SpotlightHero>
       <section className="relative overflow-hidden min-h-[80vh] flex items-center">
         <div className="absolute inset-0">
           <img
@@ -206,33 +211,37 @@ function Index() {
             {t("home.heroDesc")}
           </p>
           <div className="reveal reveal-delay-3 flex flex-wrap gap-3 mb-10">
-            <Link to="/products">
-              <Button
-                size="lg"
-                className="btn-luxe bg-gradient-gold text-primary-foreground hover:opacity-95 px-8 shadow-gold"
-              >
-                {t("home.shopEdit")}
-              </Button>
-            </Link>
-            <Link to="/about">
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-gold text-gold hover:bg-gold/10 backdrop-blur"
-              >
-                {t("home.ourStory")}
-              </Button>
-            </Link>
+            <MagneticButton>
+              <Link to="/products">
+                <Button
+                  size="lg"
+                  className="btn-luxe bg-gradient-gold text-primary-foreground hover:opacity-95 px-8 shadow-gold"
+                >
+                  {t("home.shopEdit")}
+                </Button>
+              </Link>
+            </MagneticButton>
+            <MagneticButton>
+              <Link to="/about">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-gold text-gold hover:bg-gold/10 backdrop-blur"
+                >
+                  {t("home.ourStory")}
+                </Button>
+              </Link>
+            </MagneticButton>
           </div>
           {/* Hero micro-stats */}
-          <div className="reveal reveal-delay-4 flex flex-wrap gap-6">
+          <div className="reveal reveal-delay-4 flex flex-wrap gap-8">
             {[
-              { value: "42K+", label: "Customers" },
-              { value: "4.9★", label: "Rating" },
-              { value: "60+", label: "Countries" },
+              { node: <AnimatedCounter value={42000} suffix="+" />, label: "Customers" },
+              { node: <span>4.9★</span>, label: "Rating" },
+              { node: <AnimatedCounter value={60} suffix="+" />, label: "Countries" },
             ].map((s) => (
               <div key={s.label} className="flex flex-col">
-                <span className="font-display text-2xl text-gold-shine">{s.value}</span>
+                <span className="font-display text-2xl text-gold-shine">{s.node}</span>
                 <span className="text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
                   {s.label}
                 </span>
@@ -241,6 +250,7 @@ function Index() {
           </div>
         </div>
       </section>
+      </SpotlightHero>
 
       {/* BRAND MARQUEE */}
       <section className="border-y border-border/50 py-6 bg-card/20">
@@ -305,7 +315,7 @@ function Index() {
           {categories.map((c, i) => {
             const Icon = CATEGORY_ICONS[c.slug] ?? Sparkles;
             return (
-              <div key={c.id} className={`reveal-on-scroll stagger-${(i % 4) + 1}`}>
+              <TiltCard key={c.id} className={`reveal-on-scroll stagger-${(i % 4) + 1}`}>
                 <Link
                   to="/categories/$slug"
                   params={{ slug: c.slug }}
@@ -323,7 +333,7 @@ function Index() {
                     </p>
                   )}
                 </Link>
-              </div>
+              </TiltCard>
             );
           })}
         </div>

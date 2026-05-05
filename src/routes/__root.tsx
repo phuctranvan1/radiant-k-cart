@@ -21,6 +21,7 @@ import { CompareBar } from "@/components/CompareBar";
 import { CommandPalette } from "@/components/CommandPalette";
 import { CursorParticles } from "@/components/CursorParticles";
 import { InstallPrompt } from "@/components/InstallPrompt";
+import { ScrollProgressBar } from "@/components/ScrollProgressBar";
 import { Toaster } from "@/components/ui/sonner";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
@@ -138,6 +139,7 @@ function RootComponent() {
               <CompareBar />
               <CommandPalette />
               <CursorParticles />
+              <ScrollProgressBar />
               <InstallPrompt />
               <Toaster />
             </CompareProvider>
