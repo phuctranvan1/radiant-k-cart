@@ -236,22 +236,12 @@ function Index() {
           {/* Hero micro-stats */}
           <div className="reveal reveal-delay-4 flex flex-wrap gap-8">
             {[
-              { value: 42000, suffix: "+", label: "Customers" },
-              { value: 49, suffix: "★", label: "Rating", divider: 10 },
-              { value: 60, suffix: "+", label: "Countries" },
+              { node: <AnimatedCounter value={42000} suffix="+" />, label: "Customers" },
+              { node: <span>4.9★</span>, label: "Rating" },
+              { node: <AnimatedCounter value={60} suffix="+" />, label: "Countries" },
             ].map((s) => (
               <div key={s.label} className="flex flex-col">
-                <span className="font-display text-2xl text-gold-shine">
-                  {s.divider ? (
-                    <>
-                      <AnimatedCounter value={s.value} />
-                      <span className="opacity-0 w-0 inline-block">.</span>
-                    </>
-                  ) : (
-                    <AnimatedCounter value={s.value} suffix={s.suffix} />
-                  )}
-                  {s.divider && <span>{(s.value / s.divider).toFixed(1)}{s.suffix}</span>}
-                </span>
+                <span className="font-display text-2xl text-gold-shine">{s.node}</span>
                 <span className="text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
                   {s.label}
                 </span>
