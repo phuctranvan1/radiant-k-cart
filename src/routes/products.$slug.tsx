@@ -12,7 +12,70 @@ import { LiveViewersBadge } from "@/components/LiveViewersBadge";
 import { SubscribeSaveButton } from "@/components/SubscribeSaveButton";
 import { Star, Minus, Plus, Heart, Truck, Shield } from "lucide-react";
 
+const SITE_URL = "https://radiant-k-cart.lovable.app";
+
 export const Route = createFileRoute("/products/$slug")({
+  loader: async ({ params }) => {
+    const { data } = await supabase
+      .from("products")
+      .select("name,slug,brand,description,image_url,price,sale_price,stock")
+      .eq("slug", params.slug)
+      .maybeSingle();
+    return { product: data };
+  },
+  head: ({ loaderData, params }) => {
+    const p = loaderData?.product;
+    if (!p) {
+      return { meta: [{ title: "Product not found — GLOW" }] };
+    }
+    const title = `${p.name}${p.brand ? ` — ${p.brand}` : ""} | GLOW`;
+    const desc =
+      (p.description ?? `Shop ${p.name} at GLOW. Authentic luxury K-beauty, fast shipping.`).slice(
+        0,
+        160,
+      );
+    const url = `${SITE_URL}/products/${params.slug}`;
+    const price = p.sale_price ?? p.price;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "product" },
+        { property: "og:url", content: url },
+        ...(p.image_url ? [{ property: "og:image", content: p.image_url }] : []),
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: desc },
+        ...(p.image_url ? [{ name: "twitter:image", content: p.image_url }] : []),
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: p.name,
+            brand: p.brand ?? undefined,
+            description: p.description ?? undefined,
+            image: p.image_url ?? undefined,
+            offers: {
+              "@type": "Offer",
+              price,
+              priceCurrency: "USD",
+              availability:
+                (p.stock ?? 0) > 0
+                  ? "https://schema.org/InStock"
+                  : "https://schema.org/OutOfStock",
+              url,
+            },
+          }),
+        },
+      ],
+    };
+  },
   component: ProductDetail,
   notFoundComponent: () => (
     <div className="container py-20 text-center">
