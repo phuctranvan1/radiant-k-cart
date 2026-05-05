@@ -333,7 +333,7 @@ function Index() {
                     </p>
                   )}
                 </Link>
-              </div>
+              </TiltCard>
             );
           })}
         </div>
