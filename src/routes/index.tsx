@@ -32,14 +32,42 @@ import { REFERRAL_CODE_KEY } from "@/lib/referralKeys";
 const PARALLAX_SCALE = 1.12;
 const PARALLAX_SPEED = 0.18;
 
+const SITE_URL = "https://radiant-k-cart.lovable.app";
+const HOME_TITLE = "GLOW — Luxury Korean Beauty Boutique | Premium K-Beauty";
+const HOME_DESC =
+  "Shop premium Korean beauty: luxury skincare, makeup, sun care & curated sets handpicked from Seoul. Free shipping, AI skin quiz, loyalty rewards.";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "GLOW — Luxury Korean Beauty Boutique" },
+      { title: HOME_TITLE },
+      { name: "description", content: HOME_DESC },
+      { name: "keywords", content: "K-beauty, Korean skincare, luxury beauty, Sulwhasoo, Hera, glass skin, serum, makeup, suncare" },
+      { property: "og:title", content: HOME_TITLE },
+      { property: "og:description", content: HOME_DESC },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: SITE_URL },
+      { property: "og:site_name", content: "GLOW" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: HOME_TITLE },
+      { name: "twitter:description", content: HOME_DESC },
+    ],
+    links: [{ rel: "canonical", href: SITE_URL }],
+    scripts: [
       {
-        name: "description",
-        content:
-          "Discover premium K-beauty essentials handpicked from Seoul. Skincare, makeup, sun care and curated sets.",
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Store",
+          name: "GLOW",
+          description: HOME_DESC,
+          url: SITE_URL,
+          potentialAction: {
+            "@type": "SearchAction",
+            target: `${SITE_URL}/search?q={search_term_string}`,
+            "query-input": "required name=search_term_string",
+          },
+        }),
       },
     ],
   }),

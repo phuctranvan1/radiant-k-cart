@@ -7,7 +7,41 @@ import type { Database } from "@/integrations/supabase/types";
 type CategoryRow = Database["public"]["Tables"]["categories"]["Row"];
 type ProductRow = Database["public"]["Tables"]["products"]["Row"];
 
+const SITE_URL = "https://radiant-k-cart.lovable.app";
+
 export const Route = createFileRoute("/categories/$slug")({
+  loader: async ({ params }) => {
+    const { data } = await supabase
+      .from("categories")
+      .select("name,slug,description,image_url")
+      .eq("slug", params.slug)
+      .maybeSingle();
+    return { category: data };
+  },
+  head: ({ loaderData, params }) => {
+    const cat = loaderData?.category;
+    const name = cat?.name ?? "Category";
+    const title = `${name} — Luxury K-Beauty | GLOW`;
+    const desc =
+      cat?.description ??
+      `Shop ${name.toLowerCase()} from premium Korean beauty brands. Curated by GLOW.`;
+    const url = `${SITE_URL}/categories/${params.slug}`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: url },
+        ...(cat?.image_url ? [{ property: "og:image", content: cat.image_url }] : []),
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: desc },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
   component: CategoryPage,
 });
 
