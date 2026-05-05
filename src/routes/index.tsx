@@ -315,7 +315,7 @@ function Index() {
           {categories.map((c, i) => {
             const Icon = CATEGORY_ICONS[c.slug] ?? Sparkles;
             return (
-              <div key={c.id} className={`reveal-on-scroll stagger-${(i % 4) + 1}`}>
+              <TiltCard key={c.id} className={`reveal-on-scroll stagger-${(i % 4) + 1}`}>
                 <Link
                   to="/categories/$slug"
                   params={{ slug: c.slug }}
