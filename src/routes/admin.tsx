@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Plus, Trash2, Edit } from "lucide-react";
+import { AnalyticsDashboard } from "@/components/admin/AnalyticsDashboard";
 
 type AdminProduct = Database["public"]["Tables"]["products"]["Row"] & {
   categories: { name: string } | null;
@@ -63,13 +64,17 @@ function AdminPage() {
       <p className="text-xs tracking-[0.3em] text-gold mb-2">CONTROL ROOM</p>
       <h1 className="font-display text-5xl mb-8">Admin Dashboard</h1>
 
-      <Tabs defaultValue="products">
+      <Tabs defaultValue="analytics">
         <TabsList>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
           <TabsTrigger value="products">Products</TabsTrigger>
           <TabsTrigger value="orders">Orders</TabsTrigger>
           <TabsTrigger value="promos">Promo Codes</TabsTrigger>
           <TabsTrigger value="tickets">Support</TabsTrigger>
         </TabsList>
+        <TabsContent value="analytics">
+          <AnalyticsDashboard />
+        </TabsContent>
         <TabsContent value="products">
           <ProductsAdmin />
         </TabsContent>
