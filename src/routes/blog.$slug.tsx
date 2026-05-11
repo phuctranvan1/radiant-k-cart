@@ -3,9 +3,16 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
-import type { Tables } from "@/integrations/supabase/types";
-
-type Post = Tables["posts"];
+type Post = {
+  id: string;
+  slug: string;
+  title: string;
+  content: string;
+  image_url?: string | null;
+  author?: string | null;
+  created_at: string;
+  read_time?: number | null;
+};
 
 export const Route = createFileRoute("/blog/$slug")({
   component: BlogDetail,
@@ -19,6 +26,11 @@ function BlogDetail() {
   useEffect(() => {
     async function fetchPost() {
       try {
+        const { data, error } = await (supabase as any)
+          .from("posts")
+          .select("*")
+          .eq("slug", slug)
+          .single();
         const { data, error } = await supabase.from("posts").select("*").eq("slug", slug).single();
 
         if (error) throw error;
@@ -93,7 +105,7 @@ function BlogDetail() {
         </header>
 
         <div className="prose prose-invert max-w-none text-lg leading-relaxed text-muted-foreground space-y-6">
-          {post.content.split("\n\n").map((paragraph, index) => (
+          {post.content.split("\n\n").map((paragraph: string, index: number) => (
             <p key={index}>{paragraph}</p>
           ))}
         </div>
