@@ -14,6 +14,7 @@ import { Route as SupportRouteImport } from './routes/support'
 import { Route as SubscriptionsRouteImport } from './routes/subscriptions'
 import { Route as SkinScanRouteImport } from './routes/skin-scan'
 import { Route as SkinQuizRouteImport } from './routes/skin-quiz'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as RewardsRouteImport } from './routes/rewards'
 import { Route as ReferralsRouteImport } from './routes/referrals'
@@ -58,6 +59,11 @@ const SkinScanRoute = SkinScanRouteImport.update({
 const SkinQuizRoute = SkinQuizRouteImport.update({
   id: '/skin-quiz',
   path: '/skin-quiz',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SearchRoute = SearchRouteImport.update({
@@ -177,6 +183,7 @@ export interface FileRoutesByFullPath {
   '/referrals': typeof ReferralsRoute
   '/rewards': typeof RewardsRoute
   '/search': typeof SearchRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/skin-quiz': typeof SkinQuizRoute
   '/skin-scan': typeof SkinScanRoute
   '/subscriptions': typeof SubscriptionsRoute
@@ -204,6 +211,7 @@ export interface FileRoutesByTo {
   '/referrals': typeof ReferralsRoute
   '/rewards': typeof RewardsRoute
   '/search': typeof SearchRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/skin-quiz': typeof SkinQuizRoute
   '/skin-scan': typeof SkinScanRoute
   '/subscriptions': typeof SubscriptionsRoute
@@ -232,6 +240,7 @@ export interface FileRoutesById {
   '/referrals': typeof ReferralsRoute
   '/rewards': typeof RewardsRoute
   '/search': typeof SearchRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/skin-quiz': typeof SkinQuizRoute
   '/skin-scan': typeof SkinScanRoute
   '/subscriptions': typeof SubscriptionsRoute
@@ -261,6 +270,7 @@ export interface FileRouteTypes {
     | '/referrals'
     | '/rewards'
     | '/search'
+    | '/sitemap.xml'
     | '/skin-quiz'
     | '/skin-scan'
     | '/subscriptions'
@@ -288,6 +298,7 @@ export interface FileRouteTypes {
     | '/referrals'
     | '/rewards'
     | '/search'
+    | '/sitemap.xml'
     | '/skin-quiz'
     | '/skin-scan'
     | '/subscriptions'
@@ -315,6 +326,7 @@ export interface FileRouteTypes {
     | '/referrals'
     | '/rewards'
     | '/search'
+    | '/sitemap.xml'
     | '/skin-quiz'
     | '/skin-scan'
     | '/subscriptions'
@@ -343,6 +355,7 @@ export interface RootRouteChildren {
   ReferralsRoute: typeof ReferralsRoute
   RewardsRoute: typeof RewardsRoute
   SearchRoute: typeof SearchRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SkinQuizRoute: typeof SkinQuizRoute
   SkinScanRoute: typeof SkinScanRoute
   SubscriptionsRoute: typeof SubscriptionsRoute
@@ -390,6 +403,13 @@ declare module '@tanstack/react-router' {
       path: '/skin-quiz'
       fullPath: '/skin-quiz'
       preLoaderRoute: typeof SkinQuizRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/search': {
@@ -551,6 +571,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReferralsRoute: ReferralsRoute,
   RewardsRoute: RewardsRoute,
   SearchRoute: SearchRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SkinQuizRoute: SkinQuizRoute,
   SkinScanRoute: SkinScanRoute,
   SubscriptionsRoute: SubscriptionsRoute,
@@ -565,12 +586,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
