@@ -7,11 +7,11 @@ type Post = {
   id: string;
   slug: string;
   title: string;
-  excerpt?: string | null;
-  image_url?: string | null;
-  author?: string | null;
+  excerpt: string | null;
+  image_url: string | null;
+  author: string;
   created_at: string;
-  read_time?: number | null;
+  read_time: number | null;
   is_published?: boolean;
 };
 
