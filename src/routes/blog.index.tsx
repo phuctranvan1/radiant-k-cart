@@ -3,9 +3,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { BlogCard } from "@/components/BlogCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react";
-import type { Tables } from "@/integrations/supabase/types";
-
-type Post = Tables["posts"];
+type Post = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt?: string | null;
+  image_url?: string | null;
+  author?: string | null;
+  created_at: string;
+  read_time?: number | null;
+  is_published?: boolean;
+};
 
 export const Route = createFileRoute("/blog/")({
   component: BlogIndex,
@@ -18,7 +26,7 @@ function BlogIndex() {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const { data, error } = await supabase
+        const { data, error } = await (supabase as any)
           .from("posts")
           .select("*")
           .eq("is_published", true)

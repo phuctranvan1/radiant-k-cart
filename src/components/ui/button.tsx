@@ -51,7 +51,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         else (ref as React.RefObject<HTMLButtonElement>).current = node;
       }
       if (magneticProps.ref) {
-        (magneticProps.ref as React.RefObject<HTMLButtonElement>).current = node;
+        (magneticProps.ref as unknown as React.MutableRefObject<HTMLButtonElement | null>).current = node;
       }
     };
 
