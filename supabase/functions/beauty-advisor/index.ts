@@ -23,7 +23,10 @@ Deno.serve(async (req) => {
       .select("name,brand,price,sale_price,description")
       .limit(40);
     const catalog = (products ?? [])
-      .map((p) => `• ${p.brand ?? ""} ${p.name} ($${p.sale_price ?? p.price}) — ${(p.description ?? "").slice(0, 80)}`)
+      .map(
+        (p) =>
+          `• ${p.brand ?? ""} ${p.name} ($${p.sale_price ?? p.price}) — ${(p.description ?? "").slice(0, 80)}`,
+      )
       .join("\n");
 
     const system = `You are GLOW's senior K-beauty advisor. Warm, knowledgeable, never pushy. Help with routines, ingredients, and product fit. When recommending, only reference items from this live catalog and quote names exactly:\n${catalog}\n\nKeep replies concise, use markdown for structure (bold product names, bullets for routines).`;

@@ -29,10 +29,7 @@ Deno.serve(async (req) => {
       .select("id,name,brand,description,price,sale_price")
       .limit(60);
     const catalog = (products ?? [])
-      .map(
-        (p) =>
-          `- [${p.id}] ${p.brand ?? ""} ${p.name} — ${(p.description ?? "").slice(0, 80)}`,
-      )
+      .map((p) => `- [${p.id}] ${p.brand ?? ""} ${p.name} — ${(p.description ?? "").slice(0, 80)}`)
       .join("\n");
 
     const system = `You are an expert Korean dermatology consultant. Analyze a user's selfie and identify visible skin concerns (oiliness, acne, redness, hyperpigmentation, dryness, fine lines, dullness, pores). Be encouraging and never alarmist. Recommend 4 products from the catalog tailored to what you observe.`;
@@ -83,7 +80,13 @@ Deno.serve(async (req) => {
                   summary: { type: "string", description: "2-3 warm sentences" },
                   product_ids: { type: "array", items: { type: "string" }, maxItems: 4 },
                 },
-                required: ["overall_score", "skin_type_guess", "concerns", "summary", "product_ids"],
+                required: [
+                  "overall_score",
+                  "skin_type_guess",
+                  "concerns",
+                  "summary",
+                  "product_ids",
+                ],
               },
             },
           },

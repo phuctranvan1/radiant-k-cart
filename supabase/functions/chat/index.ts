@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error: Deno.serve is not typed in the current environment
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
@@ -22,7 +22,7 @@ Tone: Warm, elegant, knowledgeable. Use markdown for clarity. Keep replies conci
 serve(
   async (req: {
     method: string;
-    json: () => PromiseLike<{ messages: any }> | { messages: any };
+    json: () => PromiseLike<{ messages: unknown[] }> | { messages: unknown[] };
   }) => {
     if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 

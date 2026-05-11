@@ -64,11 +64,7 @@ function ReferralsPage() {
         <p className="text-xs tracking-[0.25em] text-muted-foreground mb-2">YOUR CODE</p>
         <p className="font-display text-5xl text-gold tracking-widest mb-5">{data?.code ?? "—"}</p>
         <div className="flex gap-2 max-w-md mx-auto">
-          <input
-            readOnly
-            value={link}
-            className="flex-1 bg-input rounded-md px-3 py-2 text-xs"
-          />
+          <input readOnly value={link} className="flex-1 bg-input rounded-md px-3 py-2 text-xs" />
           <Button variant="outline" size="icon" onClick={() => copy(link)}>
             <Copy size={14} />
           </Button>

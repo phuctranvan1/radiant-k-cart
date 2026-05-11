@@ -9,7 +9,11 @@ export const Route = createFileRoute("/skin-scan")({
   head: () => ({
     meta: [
       { title: "AI Skin Scan — GLOW" },
-      { name: "description", content: "Upload a selfie. Our AI reads your skin and curates a personalized routine in seconds." },
+      {
+        name: "description",
+        content:
+          "Upload a selfie. Our AI reads your skin and curates a personalized routine in seconds.",
+      },
     ],
   }),
   component: SkinScan,
@@ -28,7 +32,17 @@ function SkinScan() {
   const [image, setImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<Analysis | null>(null);
-  const [products, setProducts] = useState<Array<{ id: string; name: string; brand: string | null; slug: string; image_url: string | null; price: number; sale_price: number | null }>>([]);
+  const [products, setProducts] = useState<
+    Array<{
+      id: string;
+      name: string;
+      brand: string | null;
+      slug: string;
+      image_url: string | null;
+      price: number;
+      sale_price: number | null;
+    }>
+  >([]);
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -82,7 +96,8 @@ function SkinScan() {
         <p className="text-xs tracking-[0.3em] text-gold mb-3">AI VISION TECHNOLOGY</p>
         <h1 className="font-display text-5xl mb-3">AI Skin Scan</h1>
         <p className="text-muted-foreground max-w-xl mx-auto">
-          Upload a clear, well-lit selfie. Our AI dermatology consultant analyzes your skin and curates 4 perfect products.
+          Upload a clear, well-lit selfie. Our AI dermatology consultant analyzes your skin and
+          curates 4 perfect products.
         </p>
       </div>
 
@@ -118,12 +133,17 @@ function SkinScan() {
               disabled={!image || loading}
               className="flex-1 bg-gradient-gold text-primary-foreground"
             >
-              {loading ? <Loader2 className="animate-spin mr-2" size={14} /> : <Sparkles size={14} className="mr-2" />}
+              {loading ? (
+                <Loader2 className="animate-spin mr-2" size={14} />
+              ) : (
+                <Sparkles size={14} className="mr-2" />
+              )}
               {loading ? "Analyzing…" : "Analyze my skin"}
             </Button>
           </div>
           <p className="text-[11px] text-muted-foreground mt-4 text-center">
-            Photos stay on your device unless you submit them. Analysis is for guidance only — not a medical diagnosis.
+            Photos stay on your device unless you submit them. Analysis is for guidance only — not a
+            medical diagnosis.
           </p>
         </div>
 
@@ -194,7 +214,9 @@ function SkinScan() {
                   )}
                 </div>
                 <div className="p-3">
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{p.brand}</p>
+                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                    {p.brand}
+                  </p>
                   <p className="text-sm font-medium line-clamp-2">{p.name}</p>
                   <p className="text-sm text-gold mt-1">${p.sale_price ?? p.price}</p>
                 </div>

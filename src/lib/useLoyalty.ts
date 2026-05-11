@@ -28,10 +28,18 @@ export function nextTierProgress(lifetime: number) {
   if (lifetime >= TIER_THRESHOLDS.gold) {
     const span = TIER_THRESHOLDS.diamond - TIER_THRESHOLDS.gold;
     const done = lifetime - TIER_THRESHOLDS.gold;
-    return { next: "diamond" as const, remaining: TIER_THRESHOLDS.diamond - lifetime, percent: (done / span) * 100 };
+    return {
+      next: "diamond" as const,
+      remaining: TIER_THRESHOLDS.diamond - lifetime,
+      percent: (done / span) * 100,
+    };
   }
   const span = TIER_THRESHOLDS.gold;
-  return { next: "gold" as const, remaining: TIER_THRESHOLDS.gold - lifetime, percent: (lifetime / span) * 100 };
+  return {
+    next: "gold" as const,
+    remaining: TIER_THRESHOLDS.gold - lifetime,
+    percent: (lifetime / span) * 100,
+  };
 }
 
 export function useLoyalty() {

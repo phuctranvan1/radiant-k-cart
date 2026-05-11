@@ -12,6 +12,7 @@ import { AuthProvider } from "@/lib/auth";
 import { ThemeProvider } from "@/lib/useTheme";
 import { I18nProvider } from "@/lib/i18n";
 import { CurrencyProvider } from "@/lib/currency";
+import { AuraProvider } from "@/components/AuraProvider";
 import { CompareProvider } from "@/lib/useCompare";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -126,20 +127,22 @@ function RootComponent() {
         <ThemeProvider>
           <AuthProvider>
             <CompareProvider>
-              <div className="flex flex-col min-h-screen">
-                <Header />
-                <main className="flex-1">
-                  <Outlet />
-                </main>
-                <Footer />
-              </div>
-              <ChatWidget />
-              <BackToTop />
-              <CompareBar />
-              <CommandPalette />
-              <CursorParticles />
-              <InstallPrompt />
-              <Toaster />
+              <AuraProvider>
+                <div className="flex flex-col min-h-screen">
+                  <Header />
+                  <main className="flex-1">
+                    <Outlet />
+                  </main>
+                  <Footer />
+                </div>
+                <ChatWidget />
+                <BackToTop />
+                <CompareBar />
+                <CommandPalette />
+                <CursorParticles />
+                <InstallPrompt />
+                <Toaster />
+              </AuraProvider>
             </CompareProvider>
           </AuthProvider>
         </ThemeProvider>

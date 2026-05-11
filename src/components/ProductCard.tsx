@@ -71,8 +71,8 @@ export function ProductCard({ product }: { product: Product }) {
       </div>
 
       <Link to="/products/$slug" params={{ slug: product.slug }} className="block">
-        <div className="luxe-card rounded-xl overflow-hidden">
-          <div className="relative aspect-square overflow-hidden bg-secondary">
+        <div className="luxe-card border-draw rounded-xl overflow-hidden">
+          <div className="relative aspect-square overflow-hidden bg-secondary group/lens">
             {product.image_url && (
               <img
                 src={product.image_url}
@@ -85,6 +85,8 @@ export function ProductCard({ product }: { product: Product }) {
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1200ms] ease-out"
               />
             )}
+            {/* Luxury Lens Refraction Shimmer */}
+            <div className="absolute inset-0 pointer-events-none opacity-0 group-hover/lens:opacity-100 transition-opacity duration-700 bg-gradient-to-tr from-transparent via-white/10 to-transparent w-full h-full -translate-x-full group-hover/lens:translate-x-full transition-transform duration-1000 ease-in-out" />
             <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             {product.is_new && (
               <span className="absolute top-3 left-3 bg-gradient-gold text-primary-foreground text-[10px] font-bold tracking-widest px-2.5 py-1 rounded-full shadow-gold">
@@ -99,6 +101,7 @@ export function ProductCard({ product }: { product: Product }) {
             <div className="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
               <Button
                 size="sm"
+                magnetic
                 className="btn-luxe w-full bg-gradient-gold text-primary-foreground gap-2 text-xs shadow-gold"
                 onClick={(e) => {
                   e.preventDefault();
@@ -142,9 +145,7 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
         </div>
       </Link>
-      {quickView && (
-        <QuickViewModal productId={product.id} onClose={() => setQuickView(false)} />
-      )}
+      {quickView && <QuickViewModal productId={product.id} onClose={() => setQuickView(false)} />}
     </div>
   );
 }

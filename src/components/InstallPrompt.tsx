@@ -52,13 +52,15 @@ export function InstallPrompt() {
         <X size={14} />
       </button>
       <p className="text-xs tracking-[0.25em] text-gold mb-1">INSTALL APP</p>
-      <p className="font-display text-lg leading-tight mb-3">
-        Add GLOW to your home screen
-      </p>
+      <p className="font-display text-lg leading-tight mb-3">Add GLOW to your home screen</p>
       <p className="text-xs text-muted-foreground mb-3">
         Faster checkout, exclusive drops, member-only perks.
       </p>
-      <Button onClick={install} size="sm" className="w-full bg-gradient-gold text-primary-foreground">
+      <Button
+        onClick={install}
+        size="sm"
+        className="w-full bg-gradient-gold text-primary-foreground"
+      >
         <Download size={14} className="mr-2" /> Install
       </Button>
     </div>

@@ -108,14 +108,12 @@ function RewardsPage() {
     setAngle((a) => a + target);
     setTimeout(async () => {
       const today = new Date().toISOString().slice(0, 10);
-      const { error } = await supabase
-        .from("spin_wheel_log")
-        .insert({
-          user_id: user.id,
-          spin_date: today,
-          prize_label: prize.label,
-          prize_points: prize.points,
-        });
+      const { error } = await supabase.from("spin_wheel_log").insert({
+        user_id: user.id,
+        spin_date: today,
+        prize_label: prize.label,
+        prize_points: prize.points,
+      });
       if (error) toast.error(error.message);
       else {
         setSpunToday({ prize_label: prize.label });

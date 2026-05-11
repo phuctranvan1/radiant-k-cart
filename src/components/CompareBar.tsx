@@ -120,7 +120,10 @@ export function CompareBar() {
           <SheetHeader>
             <SheetTitle className="font-display text-3xl">Compare Products</SheetTitle>
           </SheetHeader>
-          <div className="mt-6 grid gap-4" style={{ gridTemplateColumns: `140px repeat(${products.length}, minmax(180px, 1fr))` }}>
+          <div
+            className="mt-6 grid gap-4"
+            style={{ gridTemplateColumns: `140px repeat(${products.length}, minmax(180px, 1fr))` }}
+          >
             {/* Header row */}
             <div />
             {products.map((p) => (

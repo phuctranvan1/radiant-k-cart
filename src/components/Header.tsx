@@ -28,13 +28,14 @@ export function Header() {
     { to: "/bundles", label: "Bundles" },
     { to: "/skin-quiz", label: "Skin Quiz" },
     { to: "/lookbook", label: t("nav.lookbook") },
+    { to: "/blog", label: "Blog" },
     { to: "/referrals", label: "Refer & Earn" },
   ];
 
   return (
     <header
       className={cn(
-        "header-shell sticky top-0 z-40 glass border-b border-border/40",
+        "header-shell sticky top-0 z-40 glass-deep border-b border-border/40",
         hidden && !open && "is-hidden",
         scrolled && "is-scrolled",
       )}
@@ -97,7 +98,9 @@ export function Header() {
           >
             <Search size={14} />
             <span className="hidden xl:inline">Search</span>
-            <kbd className="hidden xl:inline text-[10px] font-mono px-1 rounded bg-secondary">⌘K</kbd>
+            <kbd className="hidden xl:inline text-[10px] font-mono px-1 rounded bg-secondary">
+              ⌘K
+            </kbd>
           </button>
           <button
             onClick={() => (window as unknown as { __openPalette?: () => void }).__openPalette?.()}

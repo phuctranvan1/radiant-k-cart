@@ -11,7 +11,15 @@ import {
 } from "@/components/ui/command";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/lib/currency";
-import { Sparkles, Package, Tag, Search as SearchIcon, Heart, ShoppingBag, User } from "lucide-react";
+import {
+  Sparkles,
+  Package,
+  Tag,
+  Search as SearchIcon,
+  Heart,
+  ShoppingBag,
+  User,
+} from "lucide-react";
 
 type ProductHit = {
   id: string;
@@ -100,7 +108,9 @@ export function CommandPalette() {
               <CommandItem
                 key={p.id}
                 value={`${p.name} ${p.brand ?? ""}`}
-                onSelect={() => go(() => navigate({ to: "/products/$slug", params: { slug: p.slug } }))}
+                onSelect={() =>
+                  go(() => navigate({ to: "/products/$slug", params: { slug: p.slug } }))
+                }
                 className="gap-3"
               >
                 <div className="w-10 h-10 rounded bg-secondary overflow-hidden shrink-0">
@@ -127,7 +137,9 @@ export function CommandPalette() {
               {categories.map((c) => (
                 <CommandItem
                   key={c.id}
-                  onSelect={() => go(() => navigate({ to: "/categories/$slug", params: { slug: c.slug } }))}
+                  onSelect={() =>
+                    go(() => navigate({ to: "/categories/$slug", params: { slug: c.slug } }))
+                  }
                 >
                   <Tag size={14} className="mr-2" />
                   {c.name}

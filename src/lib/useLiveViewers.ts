@@ -10,8 +10,7 @@ export function useLiveViewers(productId: string | undefined) {
 
   useEffect(() => {
     if (!productId) return;
-    let sessionId =
-      typeof window !== "undefined" ? localStorage.getItem("glow_session_id") : null;
+    let sessionId = typeof window !== "undefined" ? localStorage.getItem("glow_session_id") : null;
     if (!sessionId) {
       sessionId = Math.random().toString(36).slice(2) + Date.now().toString(36);
       localStorage.setItem("glow_session_id", sessionId);
@@ -53,7 +52,12 @@ export function useLiveViewers(productId: string | undefined) {
       .channel(`viewers:${productId}`)
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "product_views", filter: `product_id=eq.${productId}` },
+        {
+          event: "*",
+          schema: "public",
+          table: "product_views",
+          filter: `product_id=eq.${productId}`,
+        },
         () => fetchCount(),
       )
       .subscribe();

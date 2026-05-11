@@ -59,7 +59,9 @@ function BundlesPage() {
       const ids = (bData ?? []).map((b) => b.id);
       const { data: itemsData } = await supabase
         .from("bundle_items")
-        .select("bundle_id,sort_order,product:products(id,name,slug,brand,price,sale_price,image_url)")
+        .select(
+          "bundle_id,sort_order,product:products(id,name,slug,brand,price,sale_price,image_url)",
+        )
         .in("bundle_id", ids.length ? ids : ["00000000-0000-0000-0000-000000000000"])
         .order("sort_order");
 
@@ -67,8 +69,8 @@ function BundlesPage() {
         ...b,
         items:
           (itemsData ?? [])
-            .filter((it: any) => it.bundle_id === b.id)
-            .map((it: any) => it.product)
+            .filter((it: { bundle_id: string; product: Product }) => it.bundle_id === b.id)
+            .map((it: { bundle_id: string; product: Product }) => it.product)
             .filter(Boolean) ?? [],
       }));
       setBundles(grouped);
@@ -76,8 +78,7 @@ function BundlesPage() {
     })();
   }, []);
 
-  const totalPrice = (b: Bundle) =>
-    b.items.reduce((sum, p) => sum + (p.sale_price ?? p.price), 0);
+  const totalPrice = (b: Bundle) => b.items.reduce((sum, p) => sum + (p.sale_price ?? p.price), 0);
 
   const addBundle = async (b: Bundle) => {
     setAdding(b.id);
@@ -133,9 +134,7 @@ function BundlesPage() {
                     </span>
                   )}
                   <div className="absolute bottom-4 right-4 bg-background/90 backdrop-blur px-4 py-2 rounded-full">
-                    <span className="font-display text-2xl text-gold">
-                      −{b.discount_percent}%
-                    </span>
+                    <span className="font-display text-2xl text-gold">−{b.discount_percent}%</span>
                   </div>
                 </div>
 

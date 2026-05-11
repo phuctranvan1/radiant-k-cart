@@ -57,6 +57,15 @@ export function CursorParticles() {
     let raf = 0;
     const tick = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Aura synchronization: get current aura position from CSS variables
+      const auraX =
+        parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--aura-x")) || 0;
+      const auraY =
+        parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--aura-y")) || 0;
+      const auraCenterX = (auraX / 100) * window.innerWidth;
+      const auraCenterY = (auraY / 100) * window.innerHeight;
+
       for (let i = parts.length - 1; i >= 0; i--) {
         const p = parts[i];
         p.x += p.vx;
@@ -66,8 +75,16 @@ export function CursorParticles() {
           parts.splice(i, 1);
           continue;
         }
+
+        // Particles "light up" when they are inside the Aura
+        const distToAura = Math.hypot(p.x - auraCenterX, p.y - auraCenterY);
+        const auraRadius = 200;
+        const isInsideAura = distToAura < auraRadius;
+        const glowIntensity = isInsideAura ? 1.2 : 1.0;
+        const color = isInsideAura ? "255, 230, 180" : "245, 207, 122";
+
         const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 4);
-        grd.addColorStop(0, `rgba(245, 207, 122, ${0.55 * p.life})`);
+        grd.addColorStop(0, `rgba(${color}, ${0.55 * p.life * glowIntensity})`);
         grd.addColorStop(1, "rgba(245, 207, 122, 0)");
         ctx.fillStyle = grd;
         ctx.beginPath();

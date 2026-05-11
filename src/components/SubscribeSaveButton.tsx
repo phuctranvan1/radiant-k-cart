@@ -36,9 +36,7 @@ export function SubscribeSaveButton({ productId }: { productId: string }) {
         <Repeat size={16} className="text-gold" />
         <p className="font-medium text-sm">Subscribe & Save 15%</p>
       </div>
-      <p className="text-xs text-muted-foreground mb-3">
-        Auto-deliver, skip, or cancel any time.
-      </p>
+      <p className="text-xs text-muted-foreground mb-3">Auto-deliver, skip, or cancel any time.</p>
       <div className="flex gap-2">
         <select
           value={interval}
@@ -49,7 +47,11 @@ export function SubscribeSaveButton({ productId }: { productId: string }) {
           <option value={60}>Every 60 days</option>
           <option value={90}>Every 90 days</option>
         </select>
-        <Button onClick={subscribe} disabled={loading} className="bg-gradient-gold text-primary-foreground">
+        <Button
+          onClick={subscribe}
+          disabled={loading}
+          className="bg-gradient-gold text-primary-foreground"
+        >
           {loading ? <Loader2 className="animate-spin" size={14} /> : "Subscribe"}
         </Button>
       </div>

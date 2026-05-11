@@ -60,7 +60,9 @@ export function QuickViewModal({
 
   const onSale = data?.sale_price && data.sale_price < data.price;
   const wishlisted = data ? isWishlisted(data.id) : false;
-  const gallery = data ? [data.image_url, ...(data.images ?? [])].filter(Boolean) as string[] : [];
+  const gallery = data
+    ? ([data.image_url, ...(data.images ?? [])].filter(Boolean) as string[])
+    : [];
 
   return (
     <Dialog open={!!productId} onOpenChange={(o) => !o && onClose()}>
@@ -112,9 +114,7 @@ export function QuickViewModal({
               <div className="flex items-baseline gap-3 mb-4">
                 {onSale ? (
                   <>
-                    <span className="font-display text-3xl text-gold">
-                      {fmt(data.sale_price!)}
-                    </span>
+                    <span className="font-display text-3xl text-gold">{fmt(data.sale_price!)}</span>
                     <span className="text-muted-foreground line-through">{fmt(data.price)}</span>
                   </>
                 ) : (

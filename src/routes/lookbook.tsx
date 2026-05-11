@@ -84,56 +84,73 @@ function LookbookPage() {
         </div>
       </header>
 
-      {/* Stories */}
-      <div className="container mx-auto px-4 max-w-7xl py-24 space-y-32">
-        {stories.map((s, i) => {
-          const reverse = i % 2 === 1;
-          return (
-            <article
-              key={s.issue}
-              className={`grid lg:grid-cols-2 gap-12 lg:gap-20 items-center reveal-on-scroll`}
-            >
-              <div
-                className={`relative aspect-[4/5] overflow-hidden rounded-sm ${
-                  reverse ? "lg:order-2" : ""
-                }`}
+      {/* Bento-Luxe Stories Grid */}
+      <div className="container mx-auto px-4 max-w-7xl py-24">
+        <div className="grid grid-cols-1 md:grid-cols-4 auto-rows-[300px] gap-6">
+          {stories.map((s, i) => {
+            const isHero = i === 0;
+            const isAccent = i === 1;
+
+            return (
+              <article
+                key={s.issue}
+                className={`group relative overflow-hidden rounded-xl reveal-on-scroll luxe-card gold-ring
+                  ${isHero ? "md:col-span-2 md:row-span-2" : ""}
+                  ${isAccent ? "md:col-span-1 md:row-span-1" : "md:col-span-1 md:row-span-1"}
+                `}
               >
-                <img
-                  src={s.image}
-                  alt={s.title}
-                  loading="lazy"
-                  onLoad={(e) => e.currentTarget.classList.add("loaded")}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-[1500ms] ease-out"
-                />
-                <span className="absolute top-6 left-6 text-[10px] tracking-[0.4em] text-background bg-gold px-3 py-1.5 rounded-full">
-                  {s.tag}
-                </span>
-              </div>
-              <div className={`max-w-md ${reverse ? "lg:order-1 lg:ml-auto" : ""}`}>
-                <p className="text-xs tracking-[0.4em] text-gold mb-4">{s.issue}</p>
-                <h2 className="font-display text-5xl md:text-6xl leading-[0.95] mb-3">{s.title}</h2>
-                <p className="font-display italic text-xl text-muted-foreground mb-6">
-                  {s.subtitle}
-                </p>
-                <div className="gold-divider w-16 mb-6" />
-                <p className="text-base leading-relaxed text-foreground/85 mb-8">{s.body}</p>
-                <Link
-                  to="/products"
-                  className="inline-flex items-center gap-2 text-sm tracking-[0.2em] text-gold border-b border-gold/40 hover:border-gold pb-1 transition-colors"
-                >
-                  EXPLORE THE EDIT →
-                </Link>
-              </div>
-            </article>
-          );
-        })}
+                <div className="absolute inset-0 z-0">
+                  <img
+                    src={s.image}
+                    alt={s.title}
+                    loading="lazy"
+                    onLoad={(e) => e.currentTarget.classList.add("loaded")}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1500ms] ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-500" />
+                </div>
+
+                <div className="relative z-10 h-full p-6 flex flex-col justify-end gap-3">
+                  <span className="text-[9px] tracking-[0.4em] text-gold font-bold mb-1">
+                    {s.tag}
+                  </span>
+                  <h2 className="font-display text-3xl leading-tight group-hover:text-gold transition-colors">
+                    {s.title}
+                  </h2>
+                  <p className="text-xs text-muted-foreground line-clamp-2 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+                    {s.body}
+                  </p>
+                  <Link
+                    to="/products"
+                    className="inline-flex items-center gap-2 text-[10px] tracking-[0.2em] text-gold border-b border-gold/40 hover:border-gold pb-1 transition-colors w-fit"
+                  >
+                    EXPLORE →
+                  </Link>
+                </div>
+              </article>
+            );
+          })}
+
+          {/* Filler Luxe Card for Bento Balance */}
+          <div className="hidden md:flex items-center justify-center p-8 rounded-xl glass-deep gold-ring text-center group cursor-pointer reveal-on-scroll">
+            <div className="space-y-4">
+              <div className="text-gold text-2xl font-display">Rituals</div>
+              <p className="text-[10px] tracking-widest text-muted-foreground uppercase">
+                Curating the
+                <br />
+                Essence of Seoul
+              </p>
+              <div className="gold-divider w-8 mx-auto" />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Closing manifesto */}
       <section className="relative py-32 text-center bg-gradient-to-b from-transparent via-secondary/30 to-transparent">
         <div className="container mx-auto px-6 max-w-3xl reveal-on-scroll">
           <p className="text-xs tracking-[0.5em] text-gold mb-6">MANIFESTO</p>
-          <p className="font-display text-3xl md:text-5xl leading-tight italic">
+          <p className="font-display text-3xl md:text-5 leading-tight italic">
             "Beauty is not a moment. It is a slow, deliberate ritual — a quiet dialogue between
             skin, light, and time."
           </p>

@@ -1,7 +1,7 @@
-import * as React from "react";
+import React from "react";
+import { useMagnetic } from "@/hooks/useMagnetic";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
@@ -34,13 +34,40 @@ const buttonVariants = cva(
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  magnetic?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, magnetic = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
+
+    // If magnetic is enabled, we use the useMagnetic hook
+    const magneticProps = useMagnetic({ enabled: magnetic });
+
+    // Combine the provided ref with the magnetic ref
+    const combinedRef = (node: HTMLButtonElement) => {
+      if (ref) {
+        if (typeof ref === "function") ref(node);
+        else (ref as React.RefObject<HTMLButtonElement>).current = node;
+      }
+      if (magneticProps.ref) {
+        (magneticProps.ref as React.RefObject<HTMLButtonElement>).current = node;
+      }
+    };
+
     return (
-      <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={combinedRef}
+        style={{
+          transform: magnetic
+            ? `translate3d(${magneticProps.position.x}px, ${magneticProps.position.y}px, 0)`
+            : undefined,
+          transition: magnetic ? "transform 0.2s cubic-bezier(0.23, 1, 0.32, 1)" : undefined,
+        }}
+        onMouseLeave={magnetic ? magneticProps.resetPosition : undefined}
+        {...props}
+      />
     );
   },
 );

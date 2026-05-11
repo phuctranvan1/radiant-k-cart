@@ -19,7 +19,14 @@ type Sub = {
   status: string;
   next_ship_at: string;
   discount_percent: number;
-  product?: { name: string; brand: string | null; image_url: string | null; price: number; sale_price: number | null; slug: string };
+  product?: {
+    name: string;
+    brand: string | null;
+    image_url: string | null;
+    price: number;
+    sale_price: number | null;
+    slug: string;
+  };
 };
 
 function SubsPage() {
@@ -32,7 +39,7 @@ function SubsPage() {
     if (!authLoading && !user) navigate({ to: "/auth", search: { redirect: "/subscriptions" } });
   }, [user, authLoading, navigate]);
 
-  const refresh = async () => {
+  const refresh = useCallback(async () => {
     if (!user) return;
     setLoading(true);
     const { data } = await supabase
@@ -49,11 +56,11 @@ function SubsPage() {
       })),
     );
     setLoading(false);
-  };
+  }, [user]);
 
   useEffect(() => {
     refresh();
-  }, [user]);
+  }, [user, refresh]);
 
   if (!user) return null;
 
@@ -65,7 +72,10 @@ function SubsPage() {
 
   const updateInterval = async (id: string, days: number) => {
     const next = new Date(Date.now() + days * 86400000).toISOString();
-    await supabase.from("subscriptions").update({ interval_days: days, next_ship_at: next }).eq("id", id);
+    await supabase
+      .from("subscriptions")
+      .update({ interval_days: days, next_ship_at: next })
+      .eq("id", id);
     refresh();
   };
 
@@ -98,9 +108,17 @@ function SubsPage() {
         <div className="space-y-4">
           {subs.map((s) => (
             <div key={s.id} className="luxe-card rounded-xl p-4 flex gap-4 items-center">
-              <Link to="/products/$slug" params={{ slug: s.product?.slug ?? "" }} className="shrink-0">
+              <Link
+                to="/products/$slug"
+                params={{ slug: s.product?.slug ?? "" }}
+                className="shrink-0"
+              >
                 {s.product?.image_url && (
-                  <img src={s.product.image_url} alt={s.product.name} className="w-20 h-20 object-cover rounded-md" />
+                  <img
+                    src={s.product.image_url}
+                    alt={s.product.name}
+                    className="w-20 h-20 object-cover rounded-md"
+                  />
                 )}
               </Link>
               <div className="flex-1 min-w-0">
