@@ -70,10 +70,7 @@ export function AnalyticsDashboard() {
   const [loading, setLoading] = useState(true);
 
   const days = RANGES.find((r) => r.key === range)!.days;
-  const since = useMemo(
-    () => new Date(Date.now() - days * 86400000).toISOString(),
-    [days],
-  );
+  const since = useMemo(() => new Date(Date.now() - days * 86400000).toISOString(), [days]);
 
   useEffect(() => {
     let cancel = false;
@@ -297,10 +294,7 @@ export function AnalyticsDashboard() {
                       />
                     ))}
                   </Pie>
-                  <Legend
-                    iconSize={8}
-                    wrapperStyle={{ fontSize: 11, color: "oklch(0.85 0 0)" }}
-                  />
+                  <Legend iconSize={8} wrapperStyle={{ fontSize: 11, color: "oklch(0.85 0 0)" }} />
                   <Tooltip
                     contentStyle={{
                       background: "oklch(0.18 0.012 60)",
@@ -391,9 +385,7 @@ export function AnalyticsDashboard() {
                   <span className="truncate pr-4">{p.name}</span>
                   <span
                     className={`text-xs px-2 py-0.5 rounded-full font-mono ${
-                      p.stock === 0
-                        ? "bg-destructive/15 text-destructive"
-                        : "bg-gold/10 text-gold"
+                      p.stock === 0 ? "bg-destructive/15 text-destructive" : "bg-gold/10 text-gold"
                     }`}
                   >
                     {p.stock === 0 ? "OUT" : `${p.stock} left`}
@@ -404,11 +396,7 @@ export function AnalyticsDashboard() {
           )}
         </div>
         <div className="space-y-4">
-          <MiniStat
-            icon={<Package size={16} />}
-            label="Total SKUs"
-            value={String(productCount)}
-          />
+          <MiniStat icon={<Package size={16} />} label="Total SKUs" value={String(productCount)} />
           <MiniStat
             icon={<Users size={16} />}
             label="Registered customers"
@@ -472,17 +460,13 @@ function MiniStat({
     <div className="luxe-card rounded-xl p-4 flex items-center gap-3">
       <div
         className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-          tone === "warn"
-            ? "bg-destructive/15 text-destructive"
-            : "bg-gold/10 text-gold"
+          tone === "warn" ? "bg-destructive/15 text-destructive" : "bg-gold/10 text-gold"
         }`}
       >
         {icon}
       </div>
       <div className="flex-1">
-        <p className="text-[10px] tracking-widest uppercase text-muted-foreground">
-          {label}
-        </p>
+        <p className="text-[10px] tracking-widest uppercase text-muted-foreground">{label}</p>
         <p className="font-display text-xl">{value}</p>
       </div>
     </div>

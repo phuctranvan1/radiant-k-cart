@@ -13,7 +13,7 @@
 
 <br />
 
-> *"Beauty is not a routine — it's a ritual."*
+> _"Beauty is not a routine — it's a ritual."_
 
 </div>
 
@@ -30,23 +30,26 @@ The store offers an immersive shopping journey: parallax hero, animated stats co
 ## 🎨 Features
 
 ### 🛒 Core Shopping
-| Feature | Description |
-|---|---|
-| **Product catalogue** | Full grid with search, category filter, sort, and price-range slider |
+
+| Feature                 | Description                                                               |
+| ----------------------- | ------------------------------------------------------------------------- |
+| **Product catalogue**   | Full grid with search, category filter, sort, and price-range slider      |
 | **Product detail page** | Image gallery, reviews, size guide, subscribe-and-save, live viewer badge |
-| **Shopping cart** | Persistent cart via `localStorage`, quantity controls, promo codes |
-| **Checkout** | Multi-step form with address, payment (demo), and order confirmation |
-| **Wishlist** | Heart toggle on every card; persisted to `localStorage`; dedicated page |
-| **Compare bar** | Pin up to 3 products and compare side-by-side |
-| **Quick View** | Modal peek without leaving the current page |
-| **Order lookup** | Track any order by order number and email |
+| **Shopping cart**       | Persistent cart via `localStorage`, quantity controls, promo codes        |
+| **Checkout**            | Multi-step form with address, payment (demo), and order confirmation      |
+| **Wishlist**            | Heart toggle on every card; persisted to `localStorage`; dedicated page   |
+| **Compare bar**         | Pin up to 3 products and compare side-by-side                             |
+| **Quick View**          | Modal peek without leaving the current page                               |
+| **Order lookup**        | Track any order by order number and email                                 |
 
 ### 🌏 Internationalisation & Currency
+
 - **3 locales**: English, Vietnamese (`vi`), Korean (`ko`)
 - **3 currencies**: USD, VND, KRW — live conversion with persistent preference
 - Locale and currency switcher in the header, saved to `localStorage`
 
 ### 💡 Discovery & Personalisation
+
 - **AI Beauty Advisor** — embedded chat widget with smart product suggestions
 - **Skin Quiz** — 5-step questionnaire that persists recommended product IDs
 - **For You section** — personalised feed combining quiz results, wishlist, and recently viewed
@@ -54,12 +57,14 @@ The store offers an immersive shopping journey: parallax hero, animated stats co
 - **Bundles** — curated product sets at a bundled price
 
 ### 🏆 Loyalty & Growth
+
 - **Rewards programme** — point accumulation, tier tracking, redemption
 - **Referral system** — unique referral links, tracking via URL `?ref=` param
 - **Subscriptions** — subscribe & save on replenishable products
 - **Newsletter** — email capture with client-side validation
 
 ### 🎯 UI / UX Highlights
+
 - **Cinematic hero** with parallax scroll, floating ambient orbs, and sparkle dots
 - **Animated stats counters** that count up on scroll into view
 - **Community testimonials** with star ratings and product attribution
@@ -73,11 +78,13 @@ The store offers an immersive shopping journey: parallax hero, animated stats co
 - **Hide-on-scroll header** — reappears on upward scroll
 
 ### 🔐 Auth & Admin
+
 - Supabase Auth (email/password)
 - Admin dashboard: manage products, orders, categories
 - Route-level auth guards
 
 ### 📱 PWA
+
 - Installable on mobile and desktop
 - `manifest.json` + service worker via Vite plugin
 - Offline-ready shell
@@ -86,25 +93,26 @@ The store offers an immersive shopping journey: parallax hero, animated stats co
 
 ## 🏗️ Tech Stack
 
-| Layer | Technology |
-|---|---|
-| **Framework** | [React 19](https://react.dev) + [TanStack Router](https://tanstack.com/router) (file-based routing) |
-| **Build tool** | [Vite 7](https://vitejs.dev) + `@cloudflare/vite-plugin` |
-| **Styling** | [Tailwind CSS v4](https://tailwindcss.com) + custom OKLCH design tokens |
-| **UI components** | [shadcn/ui](https://ui.shadcn.com) (Radix primitives + class-variance-authority) |
-| **Icons** | [Lucide React](https://lucide.dev) |
-| **Backend / DB** | [Supabase](https://supabase.com) (Postgres + Auth + Realtime) |
-| **Deployment** | [Cloudflare Pages](https://pages.cloudflare.com) via `wrangler` |
-| **State** | React context + `localStorage` hooks |
-| **Forms** | React Hook Form + Zod |
-| **Data fetching** | TanStack Query v5 |
-| **Fonts** | Cormorant Garamond (display) + Inter (sans) via Google Fonts |
+| Layer             | Technology                                                                                          |
+| ----------------- | --------------------------------------------------------------------------------------------------- |
+| **Framework**     | [React 19](https://react.dev) + [TanStack Router](https://tanstack.com/router) (file-based routing) |
+| **Build tool**    | [Vite 7](https://vitejs.dev) + `@cloudflare/vite-plugin`                                            |
+| **Styling**       | [Tailwind CSS v4](https://tailwindcss.com) + custom OKLCH design tokens                             |
+| **UI components** | [shadcn/ui](https://ui.shadcn.com) (Radix primitives + class-variance-authority)                    |
+| **Icons**         | [Lucide React](https://lucide.dev)                                                                  |
+| **Backend / DB**  | [Supabase](https://supabase.com) (Postgres + Auth + Realtime)                                       |
+| **Deployment**    | [Cloudflare Pages](https://pages.cloudflare.com) via `wrangler`                                     |
+| **State**         | React context + `localStorage` hooks                                                                |
+| **Forms**         | React Hook Form + Zod                                                                               |
+| **Data fetching** | TanStack Query v5                                                                                   |
+| **Fonts**         | Cormorant Garamond (display) + Inter (sans) via Google Fonts                                        |
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js ≥ 20 (or [Bun](https://bun.sh))
 - A [Supabase](https://supabase.com) project (free tier works)
 
@@ -203,11 +211,11 @@ GLOW uses a bespoke design system built on top of Tailwind CSS v4's native CSS v
 
 ### Colour palette
 
-| Token | Dark (default) | Light |
-|---|---|---|
-| `--background` | `oklch(0.16 0.012 60)` — Obsidian | `oklch(0.985 0.006 85)` — Pearl |
-| `--gold` | `oklch(0.82 0.15 82)` — Warm gold | `oklch(0.58 0.14 70)` — Deep gold |
-| `--card` | `oklch(0.20 0.012 60)` | `oklch(1 0 0)` — White |
+| Token          | Dark (default)                    | Light                             |
+| -------------- | --------------------------------- | --------------------------------- |
+| `--background` | `oklch(0.16 0.012 60)` — Obsidian | `oklch(0.985 0.006 85)` — Pearl   |
+| `--gold`       | `oklch(0.82 0.15 82)` — Warm gold | `oklch(0.58 0.14 70)` — Deep gold |
+| `--card`       | `oklch(0.20 0.012 60)`            | `oklch(1 0 0)` — White            |
 
 ### Key CSS utilities
 
@@ -229,13 +237,13 @@ GLOW uses a bespoke design system built on top of Tailwind CSS v4's native CSS v
 
 ### Tables
 
-| Table | Purpose |
-|---|---|
-| `products` | Product catalogue (name, slug, brand, price, images, rating, etc.) |
-| `categories` | Product categories with slug, description, sort_order |
-| `orders` | Customer orders (user_id, items JSON, status, totals) |
-| `order_items` | Individual line items per order |
-| `reviews` | Product reviews (rating, body, user_id) |
+| Table         | Purpose                                                            |
+| ------------- | ------------------------------------------------------------------ |
+| `products`    | Product catalogue (name, slug, brand, price, images, rating, etc.) |
+| `categories`  | Product categories with slug, description, sort_order              |
+| `orders`      | Customer orders (user_id, items JSON, status, totals)              |
+| `order_items` | Individual line items per order                                    |
+| `reviews`     | Product reviews (rating, body, user_id)                            |
 
 All tables use Row Level Security (RLS). Anon key has read-only access to `products` and `categories`.
 
@@ -243,13 +251,13 @@ All tables use Row Level Security (RLS). Anon key has read-only access to `produ
 
 ## 📦 Available Scripts
 
-| Command | Description |
-|---|---|
-| `npm run dev` | Start local development server |
-| `npm run build` | Production build |
+| Command           | Description                      |
+| ----------------- | -------------------------------- |
+| `npm run dev`     | Start local development server   |
+| `npm run build`   | Production build                 |
 | `npm run preview` | Preview production build locally |
-| `npm run lint` | Run ESLint |
-| `npm run format` | Run Prettier |
+| `npm run lint`    | Run ESLint                       |
+| `npm run format`  | Run Prettier                     |
 
 ---
 
@@ -293,6 +301,6 @@ MIT © GLOW Beauty — Built with ❤️ from Seoul to the world.
 
 **[Shop the Edit](https://glow.beauty)** · **[Our Story](/about)** · **[Skin Quiz](/skin-quiz)**
 
-*Authentic K-beauty, handpicked from Seoul's most coveted ateliers.*
+_Authentic K-beauty, handpicked from Seoul's most coveted ateliers._
 
 </div>

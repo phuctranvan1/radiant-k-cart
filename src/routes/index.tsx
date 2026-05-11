@@ -42,7 +42,11 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: HOME_TITLE },
       { name: "description", content: HOME_DESC },
-      { name: "keywords", content: "K-beauty, Korean skincare, luxury beauty, Sulwhasoo, Hera, glass skin, serum, makeup, suncare" },
+      {
+        name: "keywords",
+        content:
+          "K-beauty, Korean skincare, luxury beauty, Sulwhasoo, Hera, glass skin, serum, makeup, suncare",
+      },
       { property: "og:title", content: HOME_TITLE },
       { property: "og:description", content: HOME_DESC },
       { property: "og:type", content: "website" },
@@ -153,131 +157,131 @@ function Index() {
     <div className="bg-mesh">
       {/* HERO */}
       <SpotlightHero>
-      <section className="relative overflow-hidden min-h-[80vh] flex items-center">
-        <div className="absolute inset-0">
-          <img
-            ref={heroImgRef}
-            src={heroImg}
-            alt="Luxury K-beauty serums"
-            className="w-full h-full object-cover opacity-50"
-            style={{ transform: `scale(${PARALLAX_SCALE})`, willChange: "transform" }}
-            width={1920}
-            height={1080}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/40" />
-          {/* Ambient orbs */}
-          <div
-            className="orb"
-            style={{
-              width: 500,
-              height: 500,
-              background: "var(--gold)",
-              top: "-150px",
-              left: "5%",
-            }}
-          />
-          <div
-            className="orb"
-            style={{
-              width: 350,
-              height: 350,
-              background: "oklch(0.62 0.18 25)",
-              bottom: "-100px",
-              right: "10%",
-              animationDelay: "3s",
-            }}
-          />
-          <div
-            className="orb"
-            style={{
-              width: 200,
-              height: 200,
-              background: "oklch(0.55 0.15 310)",
-              top: "30%",
-              right: "30%",
-              animationDelay: "6s",
-              opacity: 0.2,
-            }}
-          />
-          {/* Floating sparkle dots */}
-          <div className="hero-sparkles absolute inset-0 pointer-events-none" aria-hidden="true">
-            {[
-              { top: "15%", left: "20%", size: 6, delay: "0s" },
-              { top: "25%", left: "55%", size: 4, delay: "1.5s" },
-              { top: "60%", left: "75%", size: 8, delay: "0.8s" },
-              { top: "70%", left: "35%", size: 5, delay: "2.3s" },
-              { top: "40%", left: "85%", size: 6, delay: "3.5s" },
-              { top: "80%", left: "60%", size: 4, delay: "1.2s" },
-            ].map((s, i) => (
-              <span
-                key={i}
-                className="sparkle-dot absolute rounded-full"
-                style={{
-                  top: s.top,
-                  left: s.left,
-                  width: s.size,
-                  height: s.size,
-                  background: "var(--gold)",
-                  animationDelay: s.delay,
-                }}
-              />
-            ))}
+        <section className="relative overflow-hidden min-h-[80vh] flex items-center">
+          <div className="absolute inset-0">
+            <img
+              ref={heroImgRef}
+              src={heroImg}
+              alt="Luxury K-beauty serums"
+              className="w-full h-full object-cover opacity-50"
+              style={{ transform: `scale(${PARALLAX_SCALE})`, willChange: "transform" }}
+              width={1920}
+              height={1080}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/40" />
+            {/* Ambient orbs */}
+            <div
+              className="orb"
+              style={{
+                width: 500,
+                height: 500,
+                background: "var(--gold)",
+                top: "-150px",
+                left: "5%",
+              }}
+            />
+            <div
+              className="orb"
+              style={{
+                width: 350,
+                height: 350,
+                background: "oklch(0.62 0.18 25)",
+                bottom: "-100px",
+                right: "10%",
+                animationDelay: "3s",
+              }}
+            />
+            <div
+              className="orb"
+              style={{
+                width: 200,
+                height: 200,
+                background: "oklch(0.55 0.15 310)",
+                top: "30%",
+                right: "30%",
+                animationDelay: "6s",
+                opacity: 0.2,
+              }}
+            />
+            {/* Floating sparkle dots */}
+            <div className="hero-sparkles absolute inset-0 pointer-events-none" aria-hidden="true">
+              {[
+                { top: "15%", left: "20%", size: 6, delay: "0s" },
+                { top: "25%", left: "55%", size: 4, delay: "1.5s" },
+                { top: "60%", left: "75%", size: 8, delay: "0.8s" },
+                { top: "70%", left: "35%", size: 5, delay: "2.3s" },
+                { top: "40%", left: "85%", size: 6, delay: "3.5s" },
+                { top: "80%", left: "60%", size: 4, delay: "1.2s" },
+              ].map((s, i) => (
+                <span
+                  key={i}
+                  className="sparkle-dot absolute rounded-full"
+                  style={{
+                    top: s.top,
+                    left: s.left,
+                    width: s.size,
+                    height: s.size,
+                    background: "var(--gold)",
+                    animationDelay: s.delay,
+                  }}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-        <div className="relative container mx-auto px-4 py-32 md:py-48 max-w-3xl">
-          <div className="reveal inline-flex items-center gap-2 mb-6 px-4 py-1.5 glass rounded-full text-[11px] tracking-[0.3em] gold-ring">
-            <Sparkles size={12} className="animate-pulse" style={{ color: "var(--gold)" }} />
-            <span className="text-gold">{t("home.newSeason")}</span>
+          <div className="relative container mx-auto px-4 py-32 md:py-48 max-w-3xl">
+            <div className="reveal inline-flex items-center gap-2 mb-6 px-4 py-1.5 glass rounded-full text-[11px] tracking-[0.3em] gold-ring">
+              <Sparkles size={12} className="animate-pulse" style={{ color: "var(--gold)" }} />
+              <span className="text-gold">{t("home.newSeason")}</span>
+            </div>
+            <h1 className="reveal reveal-delay-1 font-display text-5xl md:text-7xl lg:text-8xl leading-[1.02] mb-6">
+              {t("home.heroTitle1")}{" "}
+              <span className="text-gold-shine italic">{t("home.heroTitle2")}</span>,<br />
+              {t("home.heroTitle3")}
+            </h1>
+            <p className="reveal reveal-delay-2 text-lg text-muted-foreground mb-10 max-w-xl leading-relaxed">
+              {t("home.heroDesc")}
+            </p>
+            <div className="reveal reveal-delay-3 flex flex-wrap gap-3 mb-10">
+              <MagneticButton>
+                <Link to="/products">
+                  <Button
+                    size="lg"
+                    className="btn-luxe bg-gradient-gold text-primary-foreground hover:opacity-95 px-8 shadow-gold"
+                  >
+                    {t("home.shopEdit")}
+                  </Button>
+                </Link>
+              </MagneticButton>
+              <MagneticButton>
+                <Link to="/about">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-gold text-gold hover:bg-gold/10 backdrop-blur"
+                  >
+                    {t("home.ourStory")}
+                  </Button>
+                </Link>
+              </MagneticButton>
+            </div>
+            {/* Hero micro-stats */}
+            <div className="reveal reveal-delay-4 flex flex-wrap gap-8">
+              {[
+                { node: <AnimatedCounter value={42000} suffix="+" />, label: "Customers" },
+                { node: <span>4.9★</span>, label: "Rating" },
+                { node: <AnimatedCounter value={60} suffix="+" />, label: "Countries" },
+              ].map((s) => (
+                <div key={s.label} className="flex flex-col">
+                  <span className="font-display text-2xl text-gold-shine">{s.node}</span>
+                  <span className="text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
+                    {s.label}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
-          <h1 className="reveal reveal-delay-1 font-display text-5xl md:text-7xl lg:text-8xl leading-[1.02] mb-6">
-            {t("home.heroTitle1")}{" "}
-            <span className="text-gold-shine italic">{t("home.heroTitle2")}</span>,<br />
-            {t("home.heroTitle3")}
-          </h1>
-          <p className="reveal reveal-delay-2 text-lg text-muted-foreground mb-10 max-w-xl leading-relaxed">
-            {t("home.heroDesc")}
-          </p>
-          <div className="reveal reveal-delay-3 flex flex-wrap gap-3 mb-10">
-            <MagneticButton>
-              <Link to="/products">
-                <Button
-                  size="lg"
-                  className="btn-luxe bg-gradient-gold text-primary-foreground hover:opacity-95 px-8 shadow-gold"
-                >
-                  {t("home.shopEdit")}
-                </Button>
-              </Link>
-            </MagneticButton>
-            <MagneticButton>
-              <Link to="/about">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-gold text-gold hover:bg-gold/10 backdrop-blur"
-                >
-                  {t("home.ourStory")}
-                </Button>
-              </Link>
-            </MagneticButton>
-          </div>
-          {/* Hero micro-stats */}
-          <div className="reveal reveal-delay-4 flex flex-wrap gap-8">
-            {[
-              { node: <AnimatedCounter value={42000} suffix="+" />, label: "Customers" },
-              { node: <span>4.9★</span>, label: "Rating" },
-              { node: <AnimatedCounter value={60} suffix="+" />, label: "Countries" },
-            ].map((s) => (
-              <div key={s.label} className="flex flex-col">
-                <span className="font-display text-2xl text-gold-shine">{s.node}</span>
-                <span className="text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
-                  {s.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
       </SpotlightHero>
 
       {/* BRAND MARQUEE */}

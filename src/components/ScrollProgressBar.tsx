@@ -27,10 +27,7 @@ export function ScrollProgressBar() {
   }, []);
 
   return (
-    <div
-      aria-hidden
-      className="fixed top-0 left-0 right-0 h-[2px] z-[10000] pointer-events-none"
-    >
+    <div aria-hidden className="fixed top-0 left-0 right-0 h-[2px] z-[10000] pointer-events-none">
       <div
         className="h-full bg-gradient-gold shadow-gold transition-[width] duration-100"
         style={{ width: `${progress}%` }}

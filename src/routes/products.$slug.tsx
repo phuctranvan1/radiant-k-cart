@@ -29,11 +29,9 @@ export const Route = createFileRoute("/products/$slug")({
       return { meta: [{ title: "Product not found — GLOW" }] };
     }
     const title = `${p.name}${p.brand ? ` — ${p.brand}` : ""} | GLOW`;
-    const desc =
-      (p.description ?? `Shop ${p.name} at GLOW. Authentic luxury K-beauty, fast shipping.`).slice(
-        0,
-        160,
-      );
+    const desc = (
+      p.description ?? `Shop ${p.name} at GLOW. Authentic luxury K-beauty, fast shipping.`
+    ).slice(0, 160);
     const url = `${SITE_URL}/products/${params.slug}`;
     const price = p.sale_price ?? p.price;
     return {
@@ -66,9 +64,7 @@ export const Route = createFileRoute("/products/$slug")({
               price,
               priceCurrency: "USD",
               availability:
-                (p.stock ?? 0) > 0
-                  ? "https://schema.org/InStock"
-                  : "https://schema.org/OutOfStock",
+                (p.stock ?? 0) > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
               url,
             },
           }),

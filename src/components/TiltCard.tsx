@@ -24,9 +24,7 @@ export function TiltCard({
     el.style.transform = `perspective(800px) rotateX(${(-py * max).toFixed(2)}deg) rotateY(${(px * max).toFixed(2)}deg) translateZ(0)`;
   };
   const onLeave = () => {
-    if (ref.current)
-      ref.current.style.transform =
-        "perspective(800px) rotateX(0deg) rotateY(0deg)";
+    if (ref.current) ref.current.style.transform = "perspective(800px) rotateX(0deg) rotateY(0deg)";
   };
 
   return (
@@ -34,7 +32,10 @@ export function TiltCard({
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      style={{ transformStyle: "preserve-3d", transition: "transform 400ms cubic-bezier(0.22,1,0.36,1)" }}
+      style={{
+        transformStyle: "preserve-3d",
+        transition: "transform 400ms cubic-bezier(0.22,1,0.36,1)",
+      }}
       className={className}
     >
       {children}

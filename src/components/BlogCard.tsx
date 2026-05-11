@@ -51,9 +51,7 @@ export function BlogCard({ post }: { post: Post }) {
               {post.excerpt || "Explore our expert guide on beauty and skin care..."}
             </p>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-foreground/80">
-                By {post.author}
-              </span>
+              <span className="text-xs font-medium text-foreground/80">By {post.author}</span>
               <span className="text-xs text-gold font-semibold group-hover:underline underline-offset-4 transition-all">
                 Read More →
               </span>
