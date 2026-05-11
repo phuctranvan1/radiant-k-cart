@@ -128,7 +128,6 @@ function RootComponent() {
         <ThemeProvider>
           <AuthProvider>
             <CompareProvider>
-<<<<<<< HEAD
               <AuraProvider>
                 <div className="flex flex-col min-h-screen">
                   <Header />
@@ -142,26 +141,10 @@ function RootComponent() {
                 <CompareBar />
                 <CommandPalette />
                 <CursorParticles />
+                <ScrollProgressBar />
                 <InstallPrompt />
                 <Toaster />
               </AuraProvider>
-=======
-              <div className="flex flex-col min-h-screen">
-                <Header />
-                <main className="flex-1">
-                  <Outlet />
-                </main>
-                <Footer />
-              </div>
-              <ChatWidget />
-              <BackToTop />
-              <CompareBar />
-              <CommandPalette />
-              <CursorParticles />
-              <ScrollProgressBar />
-              <InstallPrompt />
-              <Toaster />
->>>>>>> f39a415b3d0c984f079f6d9f5ef49383c35ccd34
             </CompareProvider>
           </AuthProvider>
         </ThemeProvider>
