@@ -26,7 +26,7 @@ function BlogIndex() {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const { data, error } = await (supabase as any)
+        const { data, error } = await supabase
           .from("posts")
           .select("*")
           .eq("is_published", true)

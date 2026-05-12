@@ -99,14 +99,14 @@ export function AnalyticsDashboard() {
       if (cancel) return;
       const o = (ords ?? []) as Order[];
       setOrders(o);
-      setProductCount((prods as any)?.length ?? 0);
+      setProductCount(prods?.length ?? 0);
       // get exact count separately
       const { count: pc } = await supabase
         .from("products")
         .select("id", { count: "exact", head: true });
       if (cancel) return;
       setProductCount(pc ?? 0);
-      setLowStock((low ?? []) as any);
+      setLowStock((low ?? []) as { name: string; stock: number }[]);
       setCustomers(ucount ?? 0);
       setTickets(tcount ?? 0);
 
