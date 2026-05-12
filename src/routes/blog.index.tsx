@@ -26,14 +26,14 @@ function BlogIndex() {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const { data, error } = await supabase
+        const { data, error } = await (supabase as any)
           .from("posts")
           .select("*")
           .eq("is_published", true)
           .order("created_at", { ascending: false });
 
         if (error) throw error;
-        setPosts(data || []);
+        setPosts((data as Post[]) || []);
       } catch (error) {
         console.error("Error fetching posts:", error);
       } finally {
