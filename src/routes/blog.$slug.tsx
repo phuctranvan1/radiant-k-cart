@@ -26,10 +26,10 @@ function BlogDetail() {
   useEffect(() => {
     async function fetchPost() {
       try {
-        const { data, error } = await supabase.from("posts").select("*").eq("slug", slug).single();
+        const { data, error } = await (supabase as any).from("posts").select("*").eq("slug", slug).single();
 
         if (error) throw error;
-        setPost(data);
+        setPost(data as Post);
       } catch (error) {
         console.error("Error fetching post:", error);
       } finally {

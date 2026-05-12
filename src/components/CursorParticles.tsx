@@ -58,13 +58,10 @@ export function CursorParticles() {
     const tick = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Aura synchronization: get current aura position from CSS variables
-      const auraX =
-        parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--aura-x")) || 0;
-      const auraY =
-        parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--aura-y")) || 0;
-      const auraCenterX = (auraX / 100) * window.innerWidth;
-      const auraCenterY = (auraY / 100) * window.innerHeight;
+      // Use the cursor position itself as the aura center — avoids
+      // calling getComputedStyle every frame (a forced layout/style recalc).
+      const auraCenterX = lastX;
+      const auraCenterY = lastY;
 
       for (let i = parts.length - 1; i >= 0; i--) {
         const p = parts[i];

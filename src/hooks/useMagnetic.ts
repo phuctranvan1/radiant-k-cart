@@ -1,54 +1,65 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect } from "react";
 
-export function useMagnetic(options: { strength?: number; enabled?: boolean } = {}) {
+/**
+ * Magnetic-pull effect. Listens to mousemove ONLY while the cursor is over
+ * the element (via pointerenter/leave) and writes transform directly to
+ * the DOM — no React state, no global listeners — to keep pages with many
+ * magnetic buttons (e.g. product grids) buttery smooth.
+ */
+export function useMagnetic<T extends HTMLElement = HTMLElement>(
+  options: { strength?: number; enabled?: boolean } = {},
+) {
   const { strength = 15, enabled = true } = options;
-  const ref = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      if (!ref.current || !enabled) return;
-
-      const rect = ref.current.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-
-      const distanceX = e.clientX - centerX;
-      const distanceY = e.clientY - centerY;
-
-      // Limit the magnetic pull to a specific radius
-      const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-      const maxDistance = 100;
-
-      if (distance < maxDistance) {
-        const pull = (distance / maxDistance) * strength;
-        // We move a fraction of the distance to create the "pull" effect
-        // but cap it so it doesn't jump too far
-        setPosition({
-          x: (distanceX / maxDistance) * strength,
-          y: (distanceY / maxDistance) * strength,
-        });
-      } else {
-        setPosition({ x: 0, y: 0 });
-      }
-    },
-    [strength, enabled],
-  );
-
-  const resetPosition = useCallback(() => {
-    setPosition({ x: 0, y: 0 });
-  }, []);
+  const ref = useRef<T>(null);
 
   useEffect(() => {
-    if (enabled) {
-      window.addEventListener("mousemove", handleMouseMove);
-    }
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [handleMouseMove, enabled]);
+    const el = ref.current;
+    if (!el || !enabled) return;
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
 
-  return {
-    ref,
-    position,
-    resetPosition,
-  };
+    let raf = 0;
+    let rect: DOMRect | null = null;
+
+    const apply = (x: number, y: number) => {
+      el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    };
+
+    const onMove = (e: MouseEvent) => {
+      if (!rect) return;
+      const dx = e.clientX - (rect.left + rect.width / 2);
+      const dy = e.clientY - (rect.top + rect.height / 2);
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const max = 100;
+        const tx = (Math.max(-max, Math.min(max, dx)) / max) * strength;
+        const ty = (Math.max(-max, Math.min(max, dy)) / max) * strength;
+        apply(tx, ty);
+      });
+    };
+
+    const onEnter = () => {
+      rect = el.getBoundingClientRect();
+      el.addEventListener("mousemove", onMove);
+    };
+    const onLeave = () => {
+      el.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(raf);
+      apply(0, 0);
+    };
+
+    el.style.transition = "transform 0.25s cubic-bezier(0.23, 1, 0.32, 1)";
+    el.addEventListener("pointerenter", onEnter);
+    el.addEventListener("pointerleave", onLeave);
+
+    return () => {
+      el.removeEventListener("pointerenter", onEnter);
+      el.removeEventListener("pointerleave", onLeave);
+      el.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(raf);
+      el.style.transform = "";
+    };
+  }, [enabled, strength]);
+
+  return { ref };
 }

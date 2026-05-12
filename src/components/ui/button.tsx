@@ -41,32 +41,20 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, magnetic = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
 
-    // If magnetic is enabled, we use the useMagnetic hook
-    const magneticProps = useMagnetic({ enabled: magnetic });
+    const { ref: magneticRef } = useMagnetic<HTMLButtonElement>({ enabled: magnetic });
 
-    // Combine the provided ref with the magnetic ref
     const combinedRef = (node: HTMLButtonElement) => {
       if (ref) {
         if (typeof ref === "function") ref(node);
-        else (ref as React.RefObject<HTMLButtonElement>).current = node;
+        else (ref as React.MutableRefObject<HTMLButtonElement | null>).current = node;
       }
-      if (magneticProps.ref) {
-        (magneticProps.ref as unknown as React.MutableRefObject<HTMLButtonElement | null>).current =
-          node;
-      }
+      (magneticRef as React.MutableRefObject<HTMLButtonElement | null>).current = node;
     };
 
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={combinedRef}
-        style={{
-          transform: magnetic
-            ? `translate3d(${magneticProps.position.x}px, ${magneticProps.position.y}px, 0)`
-            : undefined,
-          transition: magnetic ? "transform 0.2s cubic-bezier(0.23, 1, 0.32, 1)" : undefined,
-        }}
-        onMouseLeave={magnetic ? magneticProps.resetPosition : undefined}
         {...props}
       />
     );

@@ -1,19 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
-/** Thin gold progress bar at the very top of the viewport. */
+/** Thin gold progress bar at the top of the viewport. Writes width directly
+ * to the DOM (no React state) so it doesn't re-render the app on every scroll. */
 export function ScrollProgressBar() {
-  const [progress, setProgress] = useState(0);
+  const fillRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     let raf = 0;
     const update = () => {
+      raf = 0;
       const h = document.documentElement;
       const max = h.scrollHeight - h.clientHeight;
-      setProgress(max > 0 ? (window.scrollY / max) * 100 : 0);
+      const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+      if (fillRef.current) fillRef.current.style.width = `${pct}%`;
     };
     const onScroll = () => {
-      cancelAnimationFrame(raf);
+      if (raf) return;
       raf = requestAnimationFrame(update);
     };
     update();
@@ -28,10 +31,7 @@ export function ScrollProgressBar() {
 
   return (
     <div aria-hidden className="fixed top-0 left-0 right-0 h-[2px] z-[10000] pointer-events-none">
-      <div
-        className="h-full bg-gradient-gold shadow-gold transition-[width] duration-100"
-        style={{ width: `${progress}%` }}
-      />
+      <div ref={fillRef} className="h-full bg-gradient-gold shadow-gold" style={{ width: "0%" }} />
     </div>
   );
 }
