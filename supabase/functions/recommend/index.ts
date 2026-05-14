@@ -34,12 +34,22 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    // 1. Fetch source product
-    const { data: source } = await supabase
-      .from("products")
-      .select("id,name,brand,description,ingredients,category_id")
-      .eq("id", product_id)
-      .maybeSingle();
+    // 1 & 2. Fetch source product and candidate pool in parallel
+    const [sourceRes, candidatesRes] = await Promise.all([
+      supabase
+        .from("products")
+        .select("id,name,brand,description,ingredients,category_id")
+        .eq("id", product_id)
+        .maybeSingle(),
+      supabase
+        .from("products")
+        .select("id,name,brand,description,ingredients,category_id")
+        .neq("id", product_id)
+        .limit(40),
+    ]);
+
+    const source = sourceRes.data;
+    const candidates = candidatesRes.data;
 
     if (!source) {
       return new Response(JSON.stringify({ error: "product not found" }), {
@@ -47,13 +57,6 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-
-    // 2. Fetch candidate pool (same category first, fall back to broad)
-    const { data: candidates } = await supabase
-      .from("products")
-      .select("id,name,brand,description,ingredients,category_id")
-      .neq("id", product_id)
-      .limit(40);
 
     const pool = (candidates ?? []) as Product[];
     if (pool.length === 0) {

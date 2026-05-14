@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, memo } from "react";
 import { MessageCircle, X, Send, Sparkles } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
@@ -8,13 +8,32 @@ type Msg = { role: "user" | "assistant"; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/beauty-advisor`;
 
+const ChatMessage = memo(({ m, i }: { m: Msg; i: number }) => (
+  <div
+    className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+    style={{ animation: `msg-appear 0.3s ease-out ${Math.min(i * 0.05, 0.3)}s both` }}
+  >
+    <div
+      className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
+        m.role === "user"
+          ? "bg-gradient-gold text-primary-foreground rounded-br-sm"
+          : "bg-secondary text-foreground rounded-bl-sm"
+      }`}
+    >
+      <div className="prose prose-sm prose-invert max-w-none [&_p]:my-1 [&_strong]:text-gold">
+        <ReactMarkdown>{m.content || "…"}</ReactMarkdown>
+      </div>
+    </div>
+  </div>
+));
+ChatMessage.displayName = "ChatMessage";
+
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([
     {
       role: "assistant",
-      content:
-        "안녕하세요 ✨ I'm **Soomi**, your GLOW beauty advisor. Ask me about routines, ingredients, or product picks.",
+      content: "안녕하세요 ✨ I'm **Soomi**, your GLOW beauty advisor. Ask me about routines, ingredients, or product picks.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -34,6 +53,8 @@ export function ChatWidget() {
     setLoading(true);
 
     let acc = "";
+    let lastUpdate = 0;
+    const THROTTLE_MS = 60;
 
     try {
       const resp = await fetch(CHAT_URL, {
@@ -53,7 +74,6 @@ export function ChatWidget() {
         return;
       }
 
-      // Push empty assistant placeholder
       setMessages((p) => [...p, { role: "assistant", content: "" }]);
 
       const reader = resp.body.getReader();
@@ -82,9 +102,13 @@ export function ChatWidget() {
             const content = parsed.choices?.[0]?.delta?.content;
             if (content) {
               acc += content;
-              setMessages((p) =>
-                p.map((m, i) => (i === p.length - 1 ? { ...m, content: acc } : m)),
-              );
+              const now = Date.now();
+              if (now - lastUpdate > THROTTLE_MS) {
+                setMessages((p) =>
+                  p.map((m, i) => (i === p.length - 1 ? { ...m, content: acc } : m)),
+                );
+                lastUpdate = now;
+              }
             }
           } catch {
             buf = line + "\n" + buf;
@@ -92,6 +116,10 @@ export function ChatWidget() {
           }
         }
       }
+      // Final update to ensure complete text is rendered
+      setMessages((p) =>
+        p.map((m, i) => (i === p.length - 1 ? { ...m, content: acc } : m)),
+      );
     } catch (e) {
       console.error(e);
       toast.error("Connection error");
@@ -140,23 +168,7 @@ export function ChatWidget() {
         {/* Messages */}
         <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3">
           {messages.map((m, i) => (
-            <div
-              key={i}
-              className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
-              style={{ animation: `msg-appear 0.3s ease-out ${Math.min(i * 0.05, 0.3)}s both` }}
-            >
-              <div
-                className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
-                  m.role === "user"
-                    ? "bg-gradient-gold text-primary-foreground rounded-br-sm"
-                    : "bg-secondary text-foreground rounded-bl-sm"
-                }`}
-              >
-                <div className="prose prose-sm prose-invert max-w-none [&_p]:my-1 [&_strong]:text-gold">
-                  <ReactMarkdown>{m.content || "…"}</ReactMarkdown>
-                </div>
-              </div>
-            </div>
+            <ChatMessage key={i} m={m} i={i} />
           ))}
           {/* Typing indicator */}
           {loading && messages[messages.length - 1]?.role !== "assistant" && (
@@ -201,7 +213,7 @@ export function ChatWidget() {
             <Send size={16} />
           </Button>
         </div>
-      </div>
+      </div
     </>
   );
 }

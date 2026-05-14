@@ -45,8 +45,9 @@ export function ForYouSection() {
       .limit(8)
       .then(({ data }) => {
         if (!data) return;
+        const productMap = new Map(data.map((p) => [p.id, p]));
         const sorted = allIds
-          .map((id) => data.find((p) => p.id === id))
+          .map((id) => productMap.get(id))
           .filter((p): p is Product => !!p)
           .slice(0, 8);
         setProducts(sorted);

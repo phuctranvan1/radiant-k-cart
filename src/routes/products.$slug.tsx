@@ -8,9 +8,11 @@ import { useRecentlyViewed } from "@/lib/useRecentlyViewed";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ProductReviews } from "@/components/ProductReviews";
 import { AIRecommendations } from "@/components/AIRecommendations";
+import { PerfectPair } from "@/components/PerfectPair";
 import { LiveViewersBadge } from "@/components/LiveViewersBadge";
 import { SubscribeSaveButton } from "@/components/SubscribeSaveButton";
 import { Star, Minus, Plus, Heart, Truck, Shield } from "lucide-react";
+
 
 const SITE_URL = "https://radiant-k-cart.lovable.app";
 
@@ -300,7 +302,10 @@ function ProductDetail() {
             </div>
           </div>
         </div>
-        <ProductReviews productId={p.id} />
+        <div className="space-y-6">
+          <PerfectPair productId={p.id} />
+          <ProductReviews productId={p.id} />
+        </div>
       </div>
       <AIRecommendations productId={p.id} />
     </div>

@@ -42,8 +42,9 @@ export function AIRecommendations({ productId }: { productId: string }) {
           .in("id", data.ids);
         if (cancelled) return;
         // Preserve AI-suggested order
+        const productMap = new Map(prods?.map((p) => [p.id, p]) ?? []);
         const ordered = data.ids
-          .map((id: string) => prods?.find((p) => p.id === id))
+          .map((id: string) => productMap.get(id))
           .filter(Boolean) as Product[];
         setProducts(ordered);
       } catch {

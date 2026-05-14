@@ -39,33 +39,34 @@ export function useReviews(product_id: string | undefined) {
       .order("created_at", { ascending: false });
 
     const list = (data ?? []) as Review[];
-    // Fetch author profiles
     const userIds = [...new Set(list.map((r) => r.user_id))];
-    if (userIds.length) {
-      const { data: profiles } = await supabase
-        .from("profiles")
-        .select("user_id, display_name, avatar_url")
-        .in("user_id", userIds);
-      const map = new Map(profiles?.map((p) => [p.user_id, p]) ?? []);
-      list.forEach((r) => {
-        const p = map.get(r.user_id);
-        r.author_name = p?.display_name ?? "GLOW Member";
-        r.author_avatar = p?.avatar_url ?? null;
-      });
-    }
-    setReviews(list);
 
-    if (user) {
-      const { data: votes } = await supabase
-        .from("review_votes")
-        .select("review_id")
-        .eq("user_id", user.id)
-        .in(
-          "review_id",
-          list.map((r) => r.id),
-        );
-      setVotedIds(new Set(votes?.map((v) => v.review_id) ?? []));
-    }
+    await Promise.all([
+      (async () => {
+        if (!userIds.length) return;
+        const { data: profiles } = await supabase
+          .from("profiles")
+          .select("user_id, display_name, avatar_url")
+          .in("user_id", userIds);
+        const map = new Map(profiles?.map((p) => [p.user_id, p]) ?? []);
+        list.forEach((r) => {
+          const p = map.get(r.user_id);
+          r.author_name = p?.display_name ?? "GLOW Member";
+          r.author_avatar = p?.avatar_url ?? null;
+        });
+      })(),
+      (async () => {
+        if (!user) return;
+        const { data: votes } = await supabase
+          .from("review_votes")
+          .select("review_id")
+          .eq("user_id", user.id)
+          .in("review_id", list.map((r) => r.id));
+        setVotedIds(new Set(votes?.map((v) => v.review_id) ?? []));
+      })(),
+    ]);
+
+    setReviews(list);
     setLoading(false);
   }, [product_id, user]);
 

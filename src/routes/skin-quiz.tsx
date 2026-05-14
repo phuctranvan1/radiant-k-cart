@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -80,6 +80,7 @@ function SkinQuizPage() {
     null,
   );
   const { fmt } = useCurrency();
+  const navigate = useNavigate();
 
   const current = STEPS[step];
   const value = answers[current.key as keyof Answers];
@@ -113,6 +114,25 @@ function SkinQuizPage() {
         },
       });
       if (error) throw error;
+
+      // Trigger routine generation
+      const { data: routineData, error: routineError } = await supabase.functions.invoke("generate-routine", {
+        body: {
+          skinProfile: {
+            type: answers.skinType,
+            concerns: answers.concerns,
+            goals: answers.goals,
+            ageRange: answers.ageRange,
+            sensitivity: answers.sensitivity,
+          },
+          user_id: (await supabase.auth.getUser()).data.user?.id,
+        },
+      });
+
+      if (routineError) {
+        console.error("Routine generation failed:", routineError);
+      }
+
       const ids: string[] = data.product_ids || [];
       const { data: products } = await supabase
         .from("products")
@@ -125,6 +145,9 @@ function SkinQuizPage() {
       setResult({ analysis: data.analysis, products: ordered });
       // Persist quiz product IDs for the "For You" feed
       localStorage.setItem(QUIZ_PRODUCT_IDS_KEY, JSON.stringify(ids.slice(0, 8)));
+
+      // After a short delay to let user see the result, or immediately navigate
+      // Let's add a button to the result screen instead of automatic redirect
     } catch (e) {
       console.error(e);
       toast.error("Couldn't generate your routine. Please try again.");
@@ -185,7 +208,14 @@ function SkinQuizPage() {
           ))}
         </div>
 
-        <div className="text-center mt-12">
+        <div className="text-center mt-12 flex flex-col items-center gap-4">
+          <Button
+            size="lg"
+            className="bg-gradient-gold text-primary-foreground shadow-gold px-10"
+            onClick={() => navigate({ to: "/routine" })}
+          >
+            View My Full Routine <ArrowRight size={16} className="ml-2" />
+          </Button>
           <Button
             variant="outline"
             onClick={() => {
